@@ -17,6 +17,9 @@ Dashboard elements will include:
 
 ## Data Preparation
 
+See R/snippets.R for example code.
+
+Data preparation is described in notebooks/ReadInData.R.
 
 ## Exploratory Analysis
 
