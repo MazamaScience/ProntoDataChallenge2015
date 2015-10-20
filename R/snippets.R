@@ -9,7 +9,7 @@
 # * 'lubridate' for powerful date functions
 
 # Load the improved station metadata
-load('data/station.RData')
+load('data/Mazama_station.RData')
 
 # ----- Trip data -------------------------------------------------------------
 
