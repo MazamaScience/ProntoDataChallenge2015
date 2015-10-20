@@ -1,2 +1,2 @@
-data/*.csv
+data/2015_*_data.csv
 .Rproj.user

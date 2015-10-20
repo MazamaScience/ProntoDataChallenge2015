@@ -103,6 +103,7 @@ station <- cbind(station,distanceMatrix)
 
 save(station,file='data/station.RData')
 
+readr::write_csv(station,path='data/Mazama_station.csv')
 
 # ----- END -------------------------------------------------------------------
 
