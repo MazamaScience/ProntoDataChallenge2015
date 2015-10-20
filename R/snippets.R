@@ -8,18 +8,8 @@
 # * 'readr' for easy data ingest
 # * 'lubridate' for powerful date functions
 
-# ----- Station metadata ------------------------------------------------------
-
-station <- readr::read_csv('data/2015_station_data.csv')
-head(station)
-
-# Convert date
-station$online <- lubridate::mdy(station$online,tz="America/Los_Angeles")
-
-# TODO:  add elevation and other data from Google with ggmap::revgeocode()
-# TODO:  come up with other metrics of proximity to:  quiet streets, transit, work and play destinations
-# TODO:  get recent cencus tract level data and use MazamaScienceUtils:: to get demographic data for each station
-# TODO:  add columns with distance to other stations
+# Load the improved station metadata
+load('data/Mazama_station.RData')
 
 # ----- Trip data -------------------------------------------------------------
 
@@ -44,6 +34,11 @@ trip$weekday <- trip$dayOfWeek <= 5
 trip$weekend <- trip$dayOfWeek > 5
 trip$timeSinceStart <- difftime(trip$starttime,trip$starttime[1])
 trip$daysInOperation <- as.numeric(trip$timeSinceStart,units="days")
+
+# Add elevation difference
+rownames(station) <- station$terminal
+# NOTE:  Access by rownames requires matrix notation
+trip$elevationDiff <- station[trip$to_station_id,'elevation'] - station[trip$from_station_id,'elevation']
 
 # TODO:  Use lubridate functions to add weekend/weekday and other
 # TODO:  Use maptools::sunriset() and and maptools::crepescule() to add daylight information
@@ -78,7 +73,7 @@ adjustedAge <- maleShortTrips$age+0.5
 plot(maleShortTrips$duration ~ adjustedAge, pch=15, col=adjustcolor('royalblue',.02))
 points(femaleShortTrips$duration ~ femaleShortTrips$age, pch=15, col=adjustcolor('salmon',.03))
 
-# ----- Some new ideas on station interconnectedness
+# ----- Various subsets -------------------------------------------------------
 
 # Top from stations
 trip %>% ###filter(weekend) %>%
@@ -100,6 +95,23 @@ trip %>% filter(from_station_id == to_station_id) %>%
   summarize(count=n()) %>%
   arrange(desc(count)) ->
   self_stations
+
+# All combinations of from-to stations
+trip %>% filter(from_station_id != to_station_id) %>%
+  group_by(from_station_id) %>%
+  summarize(count=n()) %>%
+  arrange(desc(count)) ->
+  non_self_stations
+
+non_self <- dplyr::filter(trip, from_station_id != to_station_id)
+hist(non_self$elevationDiff,breaks=seq(-150,150,2))
+plot(non_self$elevationDiff ~ non_self$hourOfDay, pch=15, col=adjustcolor('black',0.01))
+abline(h=0,lwd=4,col=adjustcolor('salmon',0.5))
+plot(non_self$elevationDiff ~ non_self$age, pch=15, col=adjustcolor('black',0.01))
+abline(h=0,lwd=4,col=adjustcolor('salmon',0.5))
+
+
+# ----- Some new ideas on station interconnectedness --------------------------
 
 # All combinations of from-to stations
 trip %>% filter(weekend) %>%

@@ -19,13 +19,19 @@ Dashboard elements will include:
 
 ## Data Preparation
 
-See R/snippets.R for example code.
+ * R/createStationDF.R
+   * regularize names
+   * convert to proper data types
+   * add "Pronto shop" station
+   * add elevation
+   * add distances between stations
+   * save as Mazama_stations.csv and .RData
 
-Data preparation is described in notebooks/ReadInData.R.
+See R/snippets.R for other experimental code.
 
 ## Exploratory Analysis
 
-Exploratory analysis will be performed on the augmented Trip dataset and will be created as a set of R and iPython notebooks. (See Jake Vanderplas [python code](https://github.com/jakevdp/ProntoData).) 
+Exploratory analysis will be performed on the augmented Trip dataset and will be created as a set of R notebooks. (See also Jake Vanderplas [python analysis](https://github.com/jakevdp/ProntoData).) 
 
 ## Databrowser
 
