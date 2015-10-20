@@ -26,7 +26,7 @@ opts_chunk$set(warning=FALSE, message=FALSE, tidy=FALSE)
 #+ station.csv
 
 # Read station data and take a quick look
-station <- readr::read_csv('../data/2015_station_data.csv')
+station <- readr::read_csv('./data/2015_station_data.csv')
 head(station)
 
 # Convert dates using the *lubridate* package
