@@ -10,7 +10,7 @@
 
 # ----- Station metadata ------------------------------------------------------
 
-station <- readr::read_csv('2015_station_data.csv')
+station <- readr::read_csv('data/2015_station_data.csv')
 head(station)
 
 # Convert date
@@ -23,7 +23,7 @@ station$online <- lubridate::mdy(station$online,tz="America/Los_Angeles")
 
 # ----- Trip data -------------------------------------------------------------
 
-trip <- readr::read_csv('2015_trip_data.csv')
+trip <- readr::read_csv('data/2015_trip_data.csv')
 head(trip)
 
 # Convert starttime
@@ -39,6 +39,9 @@ trip$usertype <- as.factor(trip$usertype)
 trip$gender <- as.factor(trip$gender)
 # New columns
 trip$hourOfDay <- lubridate::hour(trip$starttime)
+trip$dayOfWeek <- lubridate::wday(trip$starttime)
+trip$weekday <- trip$dayOfWeek <= 5
+trip$weekend <- trip$dayOfWeek > 5
 trip$timeSinceStart <- difftime(trip$starttime,trip$starttime[1])
 trip$daysInOperation <- as.numeric(trip$timeSinceStart,units="days")
 
@@ -76,4 +79,73 @@ adjustedAge <- maleShortTrips$age+0.5
 plot(maleShortTrips$duration ~ adjustedAge, pch=15, col=adjustcolor('royalblue',.02))
 points(femaleShortTrips$duration ~ femaleShortTrips$age, pch=15, col=adjustcolor('salmon',.03))
 
+# ----- Some new ideas on station interconnectedness
 
+# Top from stations
+trip %>% ###filter(weekend) %>%
+  group_by(from_station_id) %>%
+  summarize(count=n()) %>%
+  arrange(desc(count)) ->
+  from_stations
+
+# Top weekend to stations
+trip %>% ###filter(weekend) %>%
+  group_by(to_station_id) %>%
+  summarize(count=n()) %>%
+  arrange(desc(count)) ->
+  to_stations
+
+# All combinations of from-to stations
+trip %>% filter(from_station_id == to_station_id) %>%
+  group_by(from_station_id) %>%
+  summarize(count=n()) %>%
+  arrange(desc(count)) ->
+  self_stations
+
+# All combinations of from-to stations
+trip %>% filter(weekend) %>%
+  group_by(from_station_id,to_station_id) %>%
+  summarize(count=n()) %>%
+  arrange(desc(count)) ->
+  from_to_stations
+
+# All combinations of from-to stations
+###trip %>% filter(usertype == 'Short-Term Pass Holder') %>%
+##trip %>% filter(usertype == 'Annual Member') %>%
+###trip %>% filter(gender == 'Female') %>%
+###trip %>% filter(daysInOperation > 200) %>%
+trip %>% filter(hourOfDay > 4) %>%
+  group_by(from_station_id,to_station_id) %>%
+  summarize(count=n()) %>%
+  arrange(desc(count)) ->
+  from_to_stations
+
+# Create a dataframe for a heatmap
+melted <- reshape2::melt(from_to_stations, measure.vars='count')
+from_to_df <- reshape2::dcast(melted, from_station_id ~ to_station_id)
+from_to_df[is.na(from_to_df)] <- 0
+from_to_matrix <- as.matrix(from_to_df[,-1])
+labRow <- from_to_df[,1]
+labCol <- colnames(from_to_df)[-1]
+
+# Add colors for the most important stations
+NUM_CATEGORIES <- 5
+fromCount <- rowSums(from_to_matrix)
+fromCodes <- .bincode(fromCount,
+                      breaks=quantile(fromCount, probs=seq(0,1,length.out=NUM_CATEGORIES+1)),
+                      include.lowest=TRUE)
+fromColors <- rev(heat.colors(NUM_CATEGORIES))[fromCodes]
+
+toCount <- colSums(from_to_matrix)
+toCodes <- .bincode(toCount,
+                    breaks=quantile(toCount, probs=seq(0,1,length.out=NUM_CATEGORIES+1)),
+                    include.lowest=TRUE)
+toColors <- rev(heat.colors(NUM_CATEGORIES))[toCodes]
+
+heatmap(as.matrix(from_to_matrix),col=rev(heat.colors(12)),
+        margins=c(6,6),
+        xlab='To Station', ylab='From Station',
+        ##Rowv=NA, Colv=NA, # to remove reordering for culstering
+        ###ColSideColors=toColors, # NOTE:  I don't understand what this is showing
+        ###RowSideColors=fromColors, # NOTE:  I don't understand what this is showing
+        labRow=labRow, labCol=labCol)
