@@ -67,7 +67,6 @@ par(mar=c(5,30,4,2)+.1)
 barplot(sort(table(trip$from_station_name)),horiz=TRUE, las=1)
 barplot(sort(table(trip$to_station_name)),horiz=TRUE, las=1)
 par(oldPar)
-
 # Interesting subsets
 femaleShortTrips <- subset(trip, duration<1200 & gender=='Female')
 maleShortTrips <- subset(trip, duration<1200 & gender=='Male')
@@ -110,14 +109,16 @@ trip %>% filter(weekend) %>%
   from_to_stations
 
 # All combinations of from-to stations
-###trip %>% filter(usertype == 'Short-Term Pass Holder') %>%
+#trip %>% filter(usertype == 'Short-Term Pass Holder') %>%
 ##trip %>% filter(usertype == 'Annual Member') %>%
 ###trip %>% filter(gender == 'Female') %>%
-###trip %>% filter(daysInOperation > 200) %>%
-trip %>% filter(hourOfDay > 4) %>%
+#trip %>% filter(daysInOperation > 200) %>%
+###trip %>% filter(hourOfDay > 4) %>%
+trip %>% filter(hourOfDay > 16) %>%
+  #filter(usertype == 'Annual Member') %>%
+  filter(usertype == 'Short-Term Pass Holder') %>%
   group_by(from_station_id,to_station_id) %>%
-  summarize(count=n()) %>%
-  arrange(desc(count)) ->
+  summarize(count=n()) ->
   from_to_stations
 
 # Create a dataframe for a heatmap
