@@ -110,13 +110,12 @@ trip %>% filter(weekend) %>%
 
 # All combinations of from-to stations
 #trip %>% filter(usertype == 'Short-Term Pass Holder') %>%
-##trip %>% filter(usertype == 'Annual Member') %>%
-###trip %>% filter(gender == 'Female') %>%
+#trip %>% filter(usertype == 'Annual Member') %>%
+#trip %>% filter(gender == 'Female') %>%
 #trip %>% filter(daysInOperation > 200) %>%
-###trip %>% filter(hourOfDay > 4) %>%
-trip %>% filter(hourOfDay > 16) %>%
+#trip %>% filter(hourOfDay > 4) %>%
+trip %>% filter(gender == 'Male' & birthyear == 1963) %>%
   #filter(usertype == 'Annual Member') %>%
-  filter(usertype == 'Short-Term Pass Holder') %>%
   group_by(from_station_id,to_station_id) %>%
   summarize(count=n()) ->
   from_to_stations
@@ -146,7 +145,7 @@ toColors <- rev(heat.colors(NUM_CATEGORIES))[toCodes]
 heatmap(as.matrix(from_to_matrix),col=rev(heat.colors(12)),
         margins=c(6,6),
         xlab='To Station', ylab='From Station',
-        ##Rowv=NA, Colv=NA, # to remove reordering for culstering
-        ###ColSideColors=toColors, # NOTE:  I don't understand what this is showing
-        ###RowSideColors=fromColors, # NOTE:  I don't understand what this is showing
+        #Rowv=NA, Colv=NA, # to remove reordering for culstering
+        ColSideColors=toColors, # NOTE:  Total trips
+        RowSideColors=fromColors, # NOTE:  Total trips
         labRow=labRow, labCol=labCol)
