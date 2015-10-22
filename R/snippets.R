@@ -8,6 +8,10 @@
 # * 'readr' for easy data ingest
 # * 'lubridate' for powerful date functions
 
+library(dplyr)
+
+oldPar <- par()
+
 # Load the improved station metadata
 load('data/Mazama_station.RData')
 
@@ -49,8 +53,6 @@ trip$elevationDiff <- station[trip$to_station_id,'elevation'] - station[trip$fro
 
 # TODO:  Recode these using dplyr and ggplot?
 
-oldPar <- par()
-
 # Simple exploratory plots
 pie(table(trip$gender))
 hist(trip$duration[trip$duration < 3600],n=50)
@@ -74,6 +76,69 @@ plot(maleShortTrips$duration ~ adjustedAge, pch=15, col=adjustcolor('royalblue',
 points(femaleShortTrips$duration ~ femaleShortTrips$age, pch=15, col=adjustcolor('salmon',.03))
 
 # ----- Various subsets -------------------------------------------------------
+
+# Morning commute
+trip %>%
+  filter(usertype == 'Annual Member') %>%
+  filter(elevationDiff != 0) %>%
+  filter(dayOfWeek <= 5) %>%
+  filter(hourOfDay > 4) %>%
+  filter(hourOfDay < 10) ->
+  morningCommute
+  
+# Top morning commute stations
+morningCommute %>%
+  group_by(from_station_name) %>%
+  summarize(count=n()) %>%
+  arrange(desc(count)) ->
+  morningCommuteFrom
+
+morningCommute %>%
+  group_by(to_station_name) %>%
+  summarize(count=n()) %>%
+  arrange(desc(count)) ->
+  morningCommuteTo
+
+# TODO:  Need to have # days in opration to adjust SLU-21
+
+par(mar=c(5,20,4,2)+.1)
+
+data <- morningCommuteFrom$count
+names(data) <- stringr::str_replace(morningCommuteFrom$from_station_name,' /.*$','')
+barplot(rev(data), horiz=TRUE, las=1)
+title('Morning Commute Departure Stations')
+abline(v=c(52,365,3*365),col=c('firebrick','goldenrod','forestgreen'),lwd=2)
+par(xpd=NA) # Allow plotting in margins
+text(52,1,'1 trip\nper week',pos=4,xpd=NA)
+text(365,1,'1 trip\nper day',pos=4,xpd=NA)
+text(3*365,1,'3 trips\nper day',pos=4,xpd=NA)
+par(xpd=FALSE) # Restore xpd
+
+data <- morningCommuteTo$count
+names(data) <- stringr::str_replace(morningCommuteTo$to_station_name,' /.*$','')
+###names(data) <- morningCommuteTo$to_station_name
+barplot(rev(data), horiz=TRUE, las=1)
+title('Morning Commute Arrival Stations')
+abline(v=c(52,365,3*365),col=c('firebrick','goldenrod','forestgreen'),lwd=2)
+par(xpd=NA) # Allow plotting in margins
+text(52,1,'1 trip\nper week',pos=4,xpd=NA)
+text(365,1,'1 trip\nper day',pos=4,xpd=NA)
+text(3*365,1,'3 trips\nper day',pos=4,xpd=NA)
+par(xpd=FALSE) # Restore xpd
+
+suppressWarnings( par(oldPar) )
+
+# Now create a matrix for heatmaps
+
+# All combinations of from-to stations
+morningCommute %>%
+  filter(from_station_id != 'Pronto shop') %>%
+  filter(to_station_id != 'Pronto shop') %>%
+  group_by(from_station_id,to_station_id) %>%
+  summarize(count=n()) ->
+  from_to_stations
+
+# ----- Station comparisons ---------------------------------------------------
 
 # Top from stations
 trip %>% ###filter(weekend) %>%
@@ -111,6 +176,31 @@ plot(non_self$elevationDiff ~ non_self$age, pch=15, col=adjustcolor('black',0.01
 abline(h=0,lwd=4,col=adjustcolor('salmon',0.5))
 
 
+# ---- Subset for d3 chord diagram --------------------------------------------
+
+trip$from_area_id <- stringr::str_replace(trip$from_station_id,'-.*$','')
+trip$to_area_id <- stringr::str_replace(trip$to_station_id,'-.*$','')
+
+# All combinations of from-to stations
+trip %>% filter(from_area_id != to_area_id) %>%
+  filter(from_area_id != 'Pronto shop') %>%
+  filter(to_area_id != 'Pronto shop') %>%
+  group_by(from_area_id,to_area_id) %>%
+  summarize(count=n()) ->
+  from_to_areas
+
+# Create a dataframe for a heatmap
+melted <- reshape2::melt(from_to_areas, measure.vars='count')
+from_to_df <- reshape2::dcast(melted, from_area_id ~ to_area_id)
+from_to_df[is.na(from_to_df)] <- 0
+from_to_matrix <- as.matrix(from_to_df[,-1])
+labRow <- from_to_df[,1]
+labCol <- colnames(from_to_df)[-1]
+
+# Can use the heatmap chunk below to display this
+
+readr::write_csv(from_to_df,'area_connections.csv')
+
 # ----- Some new ideas on station interconnectedness --------------------------
 
 # All combinations of from-to stations
@@ -122,16 +212,17 @@ trip %>% filter(weekend) %>%
 
 # All combinations of from-to stations
 #trip %>% filter(usertype == 'Short-Term Pass Holder') %>%
-##trip %>% filter(usertype == 'Annual Member') %>%
-###trip %>% filter(gender == 'Female') %>%
+#trip %>% filter(usertype == 'Annual Member') %>%
+#trip %>% filter(gender == 'Female') %>%
 #trip %>% filter(daysInOperation > 200) %>%
-###trip %>% filter(hourOfDay > 4) %>%
-trip %>% filter(hourOfDay > 16) %>%
+#trip %>% filter(hourOfDay > 4) %>%
+trip %>% filter(gender == 'Male' & birthyear == 1963) %>%
   #filter(usertype == 'Annual Member') %>%
-  filter(usertype == 'Short-Term Pass Holder') %>%
   group_by(from_station_id,to_station_id) %>%
   summarize(count=n()) ->
   from_to_stations
+
+#----------------------------------------------------
 
 # Create a dataframe for a heatmap
 melted <- reshape2::melt(from_to_stations, measure.vars='count')
@@ -157,8 +248,9 @@ toColors <- rev(heat.colors(NUM_CATEGORIES))[toCodes]
 
 heatmap(as.matrix(from_to_matrix),col=rev(heat.colors(12)),
         margins=c(6,6),
-        xlab='To Station', ylab='From Station',
-        ##Rowv=NA, Colv=NA, # to remove reordering for culstering
-        ###ColSideColors=toColors, # NOTE:  I don't understand what this is showing
-        ###RowSideColors=fromColors, # NOTE:  I don't understand what this is showing
+        #xlab='To Station', ylab='From Station',            # confusion here?
+        xlab='From Station', ylab='To Station', symm=TRUE, # confusion here?
+        #Rowv=NA, Colv=NA, # to remove reordering for culstering
+        #ColSideColors=toColors, # NOTE:  Total trips breaks are linear (heatmap exponential?)
+        #RowSideColors=fromColors, # NOTE:  Total trips
         labRow=labRow, labCol=labCol)
