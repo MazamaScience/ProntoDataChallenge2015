@@ -35,7 +35,7 @@ names(station) <- c('id','name','terminal','lat','lon','dockCount','onlineDate')
 
 # Following Jake Vanderplas' lead, we'll add a station for the 'Pronto shop', giving it a unique ID
 pronto_shop = list(id=1001, name="Pronto shop",
-                   terminal="Pronto shop",
+                   terminal="XXX-01",
                    lat=47.6173156, lon=-122.3414776,
                    dockCount=100, onlineDate='10/13/2014')
 
@@ -43,6 +43,7 @@ station <- rbind(station,pronto_shop)
 
 # Convert datestamp to POSIXct 
 station$onlineDate <- lubridate::mdy(station$onlineDate,tz="America/Los_Angeles")
+station$onlineDays <- as.numeric(difftime(lubridate::ymd('2015-10-13',tz='America/Los_Angeles'),station$onlineDate,units="days"))
 
 # ----- Add elevation data (meters) from Google API ---------------------------
 
