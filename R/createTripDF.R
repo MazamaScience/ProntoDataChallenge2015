@@ -1,66 +1,115 @@
+# createTripDF.R
+#
+# This script reads in the trip data .csv file and improves it in the 
+# following ways:
+#
+# * changes column names to adhere to MazamaScience standards
+# * changes column types
+# * adds additional metadata columns
+#
+# We will rely on the following (largely Hadley Wickham) R packages:
+#
+# * dplyr      - powerful dataframe manipulations
+# * geosphere  - acccurate great circle distances
+# * lubridate  - powerful date functions
+# * readr      - easy data ingest
 
+library(dplyr)
 
 # ----- BEGIN -----------------------------------------------------------------
 
 # Read in, assign names and types
-tripData <- readr::read_csv('./data/2015_trip_data.csv')
+trip <- readr::read_csv('./data/2015_trip_data.csv')
 
-#names(tripData)
-#[1] "tripData_id"           "starttime"         "stoptime"          "bikeid"            "tripDataduration"      "from_station_name"
-#[7] "to_station_name"   "from_station_id"   "to_station_id"     "usertype"          "gender"            "birthyear"  
+# > names(trip)
+# [1] "trip_id"           "starttime"         "stoptime"          "bikeid"            "tripduration"     
+# [6] "from_station_name" "to_station_name"   "from_station_id"   "to_station_id"     "usertype"         
+# [11] "gender"            "birthyear"        
+
+# Drop redundant columns:
+# * stopTime can be calculated from startTime + duration
+# * station names are found in the station dataset
+
+trip <- dplyr::select(trip, -stoptime, -from_station_name, -to_station_name)
+
+# > names(trip)
+# [1] "trip_id"         "starttime"       "bikeid"          "tripduration"    "from_station_id"
+# [6] "to_station_id"   "usertype"        "gender"          "birthyear"      
+
 
 # Rename to lower camelCase
-# TODO: fix toStationId vs fromStationId
-names(tripData) <- c('tripId', 'startTime', 'stopTime', 'bikeId', 'tripDuration', 'fromStationName', 
-                     'toStationName', 'fromStationId', 'toStationId', 'userType', 'gender', 'birthYear')
+names(trip) <- c('tripId', 'startTime', 'bikeId', 'duration', 'fromStationId',
+                 'toStationId', 'userType', 'gender', 'birthYear')
+
+
+# ----- Convert existing columns ----------------------------------------------
 
 # Convert dates and times to POSIXct using lubridate
-# TODO: add weekend/weekday using lubridate or other 
+trip$startTime <- lubridate::mdy_hm(trip$startTime, tz='America/Los_Angeles')
 
-tripData$startTime <- lubridate::mdy_hm(tripData$startTime, tz='America/Los_Angeles')
-tripData$stopTime <- lubridate::mdy_hm(tripData$stopTime, tz ='America/Los_Angeles')
-
-# Add more columns 
-
-tripData$tripDuration <- as.integer(tripData$tripDuration)
-tripData$age <- 2015 - tripData$birthYear
-tripData$bikeId <- stringr::str_replace(tripData$bikeId,'SEA','')
+# Convert and simplify
+# * integer seconds is plenty of resolution
+# * all bikes start with 'SEA'
+trip$tripDuration <- as.integer(trip$tripDuration)
+trip$bikeId <- stringr::str_replace(trip$bikeId,'SEA','')
 
 # Create factors
+# NOTE:  We don't createa factors for the station IDs because we will use
+# NOTE:  those as character strings to reference rows in the station dataframe.
+trip$userType <- as.factor(trip$userType)
+trip$gender <- as.factor(trip$gender)
 
-tripData$fromStationName <- as.factor(tripData$fromStationName)
-tripData$toStationName <- as.factor(tripData$toStationName)
-tripData$userType <- as.factor(tripData$userType)
-tripData$gender <- as.factor(tripData$gender)
+# NOTE:  We added a new row to the Mazama_station dataframe:
+# NOTE:  pronto_shop = list(id=1001, name="Pronto shop",
+# NOTE:                     terminal="XXX-01",
+# NOTE:                     lat=47.6173156, lon=-122.3414776,
+# NOTE:                     dockCount=100, onlineDate='10/13/2014')
+# NOTE:
+# NOTE:  We need to change 'Pronto shop' to 'XXX-01' in the stationId columns
+trip$fromStationId <- stringr::str_replace(trip$fromStationId,'Pronto shop','XXX-01')
+trip$toStationId <- stringr::str_replace(trip$toStationId,'Pronto shop','XXX-01')
 
-# New columns
 
-tripData$hourOfDay <- lubridate::hour(tripData$startTime)
-tripData$dayOfWeek <- lubridate::wday(tripData$startTime)
-tripData$weekday <- tripData$dayOfWeek <= 5
-tripData$weekend <- tripData$dayOfWeek > 5
-tripData$timeSinceStart <- difftime(tripData$startTime,tripData$startTime[1])
-tripData$daysInOperation <- as.numeric(tripData$timeSinceStart,units="days")
-tripData$tripDurationMin <- tripData$tripDuration/60
+# ----- Add new columns -------------------------------------------------------
 
-# Trip distance column 
-#create a vector to of unique station combinations to reference to station dataset
-#use reshape to create a long form of distances 
-# Trip speed column - need tripDuration/tripDistance
+# User info
+trip$age <- 2015 - trip$birthYear
 
+# Time info
+trip$timeSinceStart <- difftime(trip$startTime,trip$startTime[1])
+trip$daysSinceStart <- as.numeric(trip$timeSinceStart,units="days")
+trip$hourOfDay <- lubridate::hour(trip$startTime)
+trip$dayOfWeek <- lubridate::wday(trip$startTime)
+trip$month <- lubridate::month(trip$startTime)
+
+# Distance from the station dataframe
+load('./data/Mazama_station.RData')
+
+# Get station-station distances from the station dataframe
+# speed in units of crow-flies-meters/sec
 rownames(station) <- station$terminal
-tripData$distanceKey <- paste0('dist_', tripData$toStationId)
-tripData$distance <- station[tripData$fromStationId, tripData$distanceKey]
-tripData$speed <- tripData$distance/tripData$tripDurationMin
+trip$distanceKey <- paste0('dist_', trip$toStationId)
+trip$distance <- as.numeric(NA)
+# NOTE:  Memory Death! when we try to index into the station dataframe with arrays
+# NOTE:  trip$distance <- station[trip$fromStationId, trip$distanceKey] # Memory Death!
+# NOTE:  Try looping instead:
+for (i in 1:length(trip$distance)) {
+    trip$distance[i] <- station[trip$fromStationId[i], trip$distanceKey[i]]
+}
 
-# Masks
-tripData$femaleMask <- tripData$gender == 'Female'
-tripData$maleMask <- tripData$gender == 'Male'
-tripData$otherMask <- tripData$gender == 'Other'
-tripData$over60 <- tripData$age >= 60
+trip$speed <- trip$distance/trip$duration
+
+# Weather from the weather dataframe
+load('./data/Mazama_weather.RData')
+
+
 
 # ----- Save the dataframe ----------------------------------------------------
 
-save(tripData, file='./data/Mazama_tripData.RData')
+save(trip, file='./data/Mazama_trip.RData')
 
-readr::write_csv(tripData, path='./data/Mazama_tripData.csv')
+# NOTE:  The csv file is quite large so we won't upload it to github
+#readr::write_csv(trip, path='./data/Mazama_trip.csv')
+
+# ----- END -------------------------------------------------------------------
+

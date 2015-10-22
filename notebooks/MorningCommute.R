@@ -1,6 +1,6 @@
 #' ---
-#' title: "Reading in Data"
-#' author: "Mazama Science"
+#' title: "Morning Commute"
+#' author: "Jonathan Callahan"
 #' output: 
 #'  html_document: 
 #'    theme: spacelab
@@ -9,7 +9,7 @@
 
 #+ note, include=FALSE
 # [[[--->>> SEE http://yihui.name/knitr/options FOR COMPREHENSIVE LIST OF KNITR OPTIONS <<<---]]]
-#' -------------------------------------------------------------------------------------------------
+#' ----------------------------------------------------------------------------
 
 #+ setup, include=FALSE
 # [[[--->>> THIS CHUNK MUST EXIST TO SET GLOBAL CHUNK OPTIONS <<<---]]]
@@ -17,11 +17,24 @@ rm(list=ls())
 library(knitr)
 opts_chunk$set(warning=FALSE, message=FALSE, tidy=FALSE)
 
-#' This notebook describes how to read in CSV data for the Pronto 2015 Data Challenge.
+#' This notebook uses the Mazama_station and Mazama_trip datasets created 
+#' with the following scripts:
 #' 
-#' # Reading in CSV data #
+#' * createStationDF.R
+#' * createTripDF.R
 #' 
-#' We use Hadley Wickham's readr package which must be installed.
+#' These datasets augment the original 2015 Pronto Data Challenge data with
+#' numerous additional columns so that we can ask more interesting questions.
+#' 
+#' Throughout this analysis we will make use of a variety of R packages including:
+#' 
+#' * dplyr
+#' * reshape2
+#' * ggplot2
+#' 
+#' *R cognoscenti will recognize these as all coming from Hadley Wickham.*
+#' 
+#' 
 
 #+ station.csv
 
