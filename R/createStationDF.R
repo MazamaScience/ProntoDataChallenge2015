@@ -102,6 +102,9 @@ station <- cbind(station,distanceMatrix)
 
 # ----- Save the dataframe ----------------------------------------------------
 
+# Remove the 'tbl_df' class we got from readr::read_csv
+station <- as.data.frame(station)
+
 save(station,file='data/Mazama_station.RData')
 
 readr::write_csv(station,path='data/Mazama_station.csv')

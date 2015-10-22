@@ -50,7 +50,7 @@ trip$startTime <- lubridate::mdy_hm(trip$startTime, tz='America/Los_Angeles')
 # Convert and simplify
 # * integer seconds is plenty of resolution
 # * all bikes start with 'SEA'
-trip$tripDuration <- as.integer(trip$tripDuration)
+trip$duration <- as.integer(trip$duration)
 trip$bikeId <- stringr::str_replace(trip$bikeId,'SEA','')
 
 # Create factors
@@ -77,34 +77,56 @@ trip$age <- 2015 - trip$birthYear
 
 # Time info
 trip$timeSinceStart <- difftime(trip$startTime,trip$startTime[1])
-trip$daysSinceStart <- as.numeric(trip$timeSinceStart,units="days")
+trip$daysSinceStart <- as.integer(as.numeric(trip$timeSinceStart,units="days"))
 trip$hourOfDay <- lubridate::hour(trip$startTime)
 trip$dayOfWeek <- lubridate::wday(trip$startTime)
 trip$month <- lubridate::month(trip$startTime)
 
-# Distance from the station dataframe
+# ----- Distance from the station dataframe -----------------------------------
+
 load('./data/Mazama_station.RData')
 
 # Get station-station distances from the station dataframe
 # speed in units of crow-flies-meters/sec
 rownames(station) <- station$terminal
-trip$distanceKey <- paste0('dist_', trip$toStationId)
+distanceKey <- paste0('dist_', trip$toStationId)
 trip$distance <- as.numeric(NA)
 # NOTE:  Memory Death! when we try to index into the station dataframe with arrays
 # NOTE:  trip$distance <- station[trip$fromStationId, trip$distanceKey] # Memory Death!
 # NOTE:  Try looping instead:
 for (i in 1:length(trip$distance)) {
-    trip$distance[i] <- station[trip$fromStationId[i], trip$distanceKey[i]]
+  trip$distance[i] <- station[trip$fromStationId[i], distanceKey[i]]
+  if ( (i %% 1e3) == 0 ) {
+    pct <- sprintf("%3d",round(100*(i/length(trip$distance))))
+    cat(paste0(pct,' %\n'))
+  }
 }
 
 trip$speed <- trip$distance/trip$duration
 
-# Weather from the weather dataframe
-load('./data/Mazama_weather.RData')
+# ----- Weather from the weather dataframe ------------------------------------
 
+load('./data/Mazama_weather.RData')
+rownames(weather) <- as.character(weather$daysSinceStart)
+trip$maxTempF <- weather[as.character(trip$daysSinceStart),'Max_Temperature_F']
+trip$minTempF <- weather[as.character(trip$daysSinceStart),'Max_Temperature_F']
+trip$meanTempF <- weather[as.character(trip$daysSinceStart),'Mean_Temperature_F']
+trip$maxHumidity <- weather[as.character(trip$daysSinceStart),'Max_Humidity_F']
+trip$minHumidity <- weather[as.character(trip$daysSinceStart),'Max_Humidity_F']
+trip$meanHumidity <- weather[as.character(trip$daysSinceStart),'Mean_Humidity_F']
+trip$maxWindMPH <- weather[as.character(trip$daysSinceStart),'Max_Wind_Speed_MPH']
+trip$meanWindMPH <- weather[as.character(trip$daysSinceStart),'Mean_Wind_Speed_MPH']
+trip$precipIn <- weather[as.character(trip$daysSinceStart),'Precipitation_In']
+trip$rain <- weather[as.character(trip$daysSinceStart),'rain']
+trip$fog <- weather[as.character(trip$daysSinceStart),'fog']
+trip$snow <- weather[as.character(trip$daysSinceStart),'snow']
+trip$thunderstorm <- weather[as.character(trip$daysSinceStart),'thunderstorm']
 
 
 # ----- Save the dataframe ----------------------------------------------------
+
+# Remove the 'tbl_df' class we got from readr::read_csv
+trip <- as.data.frame(trip)
 
 save(trip, file='./data/Mazama_trip.RData')
 

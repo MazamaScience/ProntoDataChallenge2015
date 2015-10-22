@@ -27,13 +27,17 @@ weather <- readr::read_csv('data/2015_weather_data.csv')
 # [19] "Max_Gust_Speed_MPH"          "Precipitation_In "           "Events"                     
 
 # NOTE:  Several problems need to be fixed with this dataset:
-# NOTE:  1) several names have an extra space at the end
-# NOTE:  2) the Max_Wind_Speed_MPH column has a "-" which makes everything character
-# NOTE:  3) the Events column has weather names types but somtimes more than one with a comma
+# NOTE:  1) there is a 366'th row with nothing in it
+# NOTE:  2) several names have an extra space at the end
+# NOTE:  3) the Max_Wind_Speed_MPH column has a "-" which makes everything character
+# NOTE:  4) the Events column has weather names types but somtimes more than one with a comma
+# NOTE:  5) the 'Min_TemperatureF' name needs another underscore
 
 # > unique(weather$Events)
 # [1] "Rain"                ""                    "Rain , Snow"         "Fog"                
 # [5] "Fog , Rain"          "Rain , Thunderstorm"
+
+weather <- weather[-366,]
 
 # Fix names
 names(weather) <- stringr::str_replace(names(weather),' ','')
@@ -53,12 +57,17 @@ weather$Date <- lubridate::mdy(weather$Date, tz='America/Los_Angeles')
 weather$timeSinceStart <- difftime(weather$Date,weather$Date[1])
 weather$daysSinceStart <- as.integer(as.numeric(weather$timeSinceStart,units="days"))
 
+# Fix name
+names(weather)[4] <- 'Min_Temperature_F'
 
 # ----- Save the dataframe ----------------------------------------------------
 
-save(station,file='data/Mazama_weather.RData')
+# Remove the 'tbl_df' class we got from readr::read_csv
+weather <- as.data.frame(weather)
 
-readr::write_csv(station,path='data/Mazama_weather.csv')
+save(weather,file='data/Mazama_weather.RData')
+
+readr::write_csv(weather,path='data/Mazama_weather.csv')
 
 # ----- END -------------------------------------------------------------------
 
