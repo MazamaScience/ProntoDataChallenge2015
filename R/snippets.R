@@ -234,6 +234,8 @@ trip %>% filter(gender == 'Male' & birthyear == 1963) %>%
 
 # Create a dataframe for a heatmap
 melted <- reshape2::melt(from_to_stations, measure.vars='count')
+cohort <- intersect(melted$to_station_id, melted$from_station_id)
+melted <- subset(melted, to_station_id %in% cohort & from_station_id %in% cohort)
 from_to_df <- reshape2::dcast(melted, from_station_id ~ to_station_id)
 from_to_df[is.na(from_to_df)] <- 0
 from_to_matrix <- as.matrix(from_to_df[,-1])
