@@ -17,6 +17,8 @@
 # TODO:  Use maptools::sunriset() and and maptools::crepescule() to add daylight information
 
 library(dplyr)
+library(sp)
+library(maptools)
 
 # ----- BEGIN -----------------------------------------------------------------
 
@@ -128,6 +130,22 @@ trip$rain <- weather[as.character(trip$daysSinceStart),'rain']
 trip$fog <- weather[as.character(trip$daysSinceStart),'fog']
 trip$snow <- weather[as.character(trip$daysSinceStart),'snow']
 trip$thunderstorm <- weather[as.character(trip$daysSinceStart),'thunderstorm']
+
+
+# ----- Time of day using maptools -------------------------------------------
+# Create SpatialPoints object using sp
+seattle <- matrix(c(-122.3331, 47.6097), nrow=1)
+Seattle <- SpatialPoints(seattle, proj4strin=CRS('+proj=longlat +datum=WGS84'))
+
+# Not quite correct: gives the sunrise for only one day for every record. However, when hardcoded
+# to different records, gives different POSIXct values. 
+
+#trip$dawn <- crepuscule(Seattle, trip$startTime, solarDep =6, direction='dawn', POSIXct.out=TRUE)[1,2]
+#trip$sunrise <- sunriset(Seattle, trip$startTime, direction='sunrise', POSIXct.out=TRUE)[1,2]
+#trip$dusk <- crepuscule(Seattle, trip$startTime, solarDep =6, direction='dusk', POSIXct.out=TRUE)[1,2]
+#trip$sunset <- sunriset(Seattle, trip$startTime, direction='sunset', POSIXct.out=TRUE)[1,2]
+
+
 
 
 # ----- Save the dataframe ----------------------------------------------------
