@@ -12,42 +12,50 @@ library(dplyr)
 
 oldPar <- par()
 
-# Load the improved station metadata
-load('data/Mazama_station.RData')
+# Load the improved dataframes
+load('data/Mazama_station.RData') # for the names
+load('data/Mazama_trip.RData')
+
+# useful graphical parameters
+gnat01 <- adjustcolor('black',.01)
+gnat02 <- adjustcolor('black',.02)
+gnat05 <- adjustcolor('black',.05)
+salmon <- adjustcolor('salmon',.5)
+
 
 # ----- Trip data -------------------------------------------------------------
 
-trip <- readr::read_csv('data/2015_trip_data.csv')
-head(trip)
-
-# Convert starttime
-trip$starttime <- lubridate::mdy_hm(trip$starttime,tz="America/Los_Angeles")
-# Simplify/add other columns
-trip$duration <- as.integer(trip$tripduration)
-trip$age <- 2015 - trip$birthyear
-trip$bikeid <- stringr::str_replace(trip$bikeid,'SEA','')
-# Create factors
-trip$from_station_name <- as.factor(trip$from_station_name)
-trip$to_station_name <- as.factor(trip$to_station_name)
-trip$usertype <- as.factor(trip$usertype)
-trip$gender <- as.factor(trip$gender)
-# New columns
-trip$hourOfDay <- lubridate::hour(trip$starttime)
-trip$dayOfWeek <- lubridate::wday(trip$starttime)
-trip$weekday <- trip$dayOfWeek <= 5
-trip$weekend <- trip$dayOfWeek > 5
-trip$timeSinceStart <- difftime(trip$starttime,trip$starttime[1])
-trip$daysInOperation <- as.numeric(trip$timeSinceStart,units="days")
-
-# Add elevation difference
-rownames(station) <- station$terminal
-# NOTE:  Access by rownames requires matrix notation
-trip$elevationDiff <- station[trip$to_station_id,'elevation'] - station[trip$from_station_id,'elevation']
-
-# TODO:  Use lubridate functions to add weekend/weekday and other
-# TODO:  Use maptools::sunriset() and and maptools::crepescule() to add daylight information
-# TODO:    [need to create spatial coords from seattle longitude/latitude]
-# TODO:  Add columns:  elevation change, weather, distance, ...
+# trip <- readr::read_csv('data/2015_trip_data.csv')
+# head(trip)
+# 
+# # Convert starttime
+# trip$starttime <- lubridate::mdy_hm(trip$starttime,tz="America/Los_Angeles")
+# # Simplify/add other columns
+# trip$duration <- as.integer(trip$tripduration)
+# trip$age <- 2015 - trip$birthyear
+# trip$bikeid <- stringr::str_replace(trip$bikeid,'SEA','')
+# # Create factors
+# trip$from_station_name <- as.factor(trip$from_station_name)
+# trip$to_station_name <- as.factor(trip$to_station_name)
+# trip$usertype <- as.factor(trip$usertype)
+# trip$gender <- as.factor(trip$gender)
+# # New columns
+# trip$hourOfDay <- lubridate::hour(trip$starttime)
+# trip$dayOfWeek <- lubridate::wday(trip$starttime)
+# trip$weekday <- trip$dayOfWeek <= 5
+# trip$weekend <- trip$dayOfWeek > 5
+# trip$timeSinceStart <- difftime(trip$starttime,trip$starttime[1])
+# trip$daysInOperation <- as.numeric(trip$timeSinceStart,units="days")
+# 
+# # Add elevation difference
+# rownames(station) <- station$terminal
+# # NOTE:  Access by rownames requires matrix notation
+# trip$elevationDiff <- station[trip$to_station_id,'elevation'] - station[trip$from_station_id,'elevation']
+# 
+# # TODO:  Use lubridate functions to add weekend/weekday and other
+# # TODO:  Use maptools::sunriset() and and maptools::crepescule() to add daylight information
+# # TODO:    [need to create spatial coords from seattle longitude/latitude]
+# # TODO:  Add columns:  elevation change, weather, distance, ...
 
 # ----- Data exploration ------------------------------------------------------
 

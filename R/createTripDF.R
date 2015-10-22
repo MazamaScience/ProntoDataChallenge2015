@@ -14,6 +14,8 @@
 # * lubridate  - powerful date functions
 # * readr      - easy data ingest
 
+# TODO:  Use maptools::sunriset() and and maptools::crepescule() to add daylight information
+
 library(dplyr)
 
 # ----- BEGIN -----------------------------------------------------------------
@@ -103,6 +105,11 @@ for (i in 1:length(trip$distance)) {
 }
 
 trip$speed <- trip$distance/trip$duration
+
+# Elevation
+# NOTE:  Access by rownames requires matrix notation
+trip$elevationDiff <- station[trip$toStationId,'elevation'] - station[trip$fromStationId,'elevation']
+
 
 # ----- Weather from the weather dataframe ------------------------------------
 
