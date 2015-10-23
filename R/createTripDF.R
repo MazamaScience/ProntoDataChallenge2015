@@ -151,13 +151,13 @@ trip$dawn <- trip$startTime > dawn[,2] & trip$startTime < sunrise[,2]
 trip$day <- trip$startTime > sunrise[,2] & trip$startTime < sunset[,2]
 trip$dusk <- trip$startTime > sunset[,2] & trip$startTime < dusk[,2]
 
-trip$amtOfDaylight<- as.factor(NA)
-for (i in 1:nrow(trip)) {
-  if (trip$night[[i]] == TRUE) trip$amtOfDaylight[[i]] <- 'night'
-  if (trip$dawn[[i]] == TRUE)  trip$amtOfDaylight[[i]] <- 'dawn'
-  if (trip$day[[i]] == TRUE)   trip$amtOfDaylight[[i]] <- 'day'
-  if (trip$dusk[[i]] == TRUE)  trip$amtOfDaylight[[i]] <- 'dusk'
-   
+trip$amtOfDaylight <- ''
+
+trip$amtOfDaylight[trip$night] <- 'night'
+trip$amtOfDaylight[trip$dawn] <- 'dawn'
+trip$amtOfDaylight[trip$day] <- 'day'
+trip$amtOfDaylight[trip$dusk] <- 'dusk'
+
 trip$amtOfDaylight <- as.factor(trip$amtOfDaylight)
 
 # ----- Save the dataframe ----------------------------------------------------
