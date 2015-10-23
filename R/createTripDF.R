@@ -82,6 +82,7 @@ trip$age <- 2015 - trip$birthYear
 # Time info
 trip$timeSinceStart <- difftime(trip$startTime,trip$startTime[1])
 trip$daysSinceStart <- as.integer(as.numeric(trip$timeSinceStart,units="days"))
+trip$weeksSinceStart <- as.integer(as.numeric(trip$timeSinceStart,units="weeks"))
 trip$hourOfDay <- lubridate::hour(trip$startTime)
 trip$dayOfWeek <- lubridate::wday(trip$startTime)
 trip$month <- lubridate::month(trip$startTime)
