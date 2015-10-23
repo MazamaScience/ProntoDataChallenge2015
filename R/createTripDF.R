@@ -140,13 +140,24 @@ Seattle <- SpatialPoints(seattle, proj4string=CRS('+proj=longlat +datum=WGS84'))
 # Not quite correct: gives the sunrise for only one day for every record. However, when hardcoded
 # to different records, gives different POSIXct values. 
 
-#trip$dawn <- crepuscule(Seattle, trip$startTime, solarDep =6, direction='dawn', POSIXct.out=TRUE)[1,2]
-#trip$sunrise <- sunriset(Seattle, trip$startTime, direction='sunrise', POSIXct.out=TRUE)[1,2]
-#trip$dusk <- crepuscule(Seattle, trip$startTime, solarDep =6, direction='dusk', POSIXct.out=TRUE)[1,2]
-#trip$sunset <- sunriset(Seattle, trip$startTime, direction='sunset', POSIXct.out=TRUE)[1,2]
+dawn <- crepuscule(seattle, trip$startTime, solarDep=6, direction='dawn', POSIXct.out=TRUE)
+sunrise <- sunriset(seattle, trip$startTime, direction='sunrise', POSIXct.out=TRUE)
+sunset <- sunriset(seattle, trip$startTime, direction='sunset', POSIXct.out=TRUE)
+dusk <- crepuscule(seattle, trip$startTime, solarDep=6, direction='dusk', POSIXct.out=TRUE)
 
+trip$night <- trip$startTime > dusk[,2] | trip$startTime < dawn[,2]
+trip$dawn <- trip$startTime > dawn[,2] & trip$startTime < sunrise[,2]
+trip$day <- trip$startTime > sunrise[,2] & trip$startTime < sunset[,2]
+trip$dusk <- trip$startTime > sunset[,2] & trip$startTime < dusk[,2]
 
-
+trip$amtOfDaylight<- as.factor(NA)
+for (i in 1:nrow(trip)) {
+  if (trip$night[[i]] == TRUE) trip$amtOfDaylight[[i]] <- 'night'
+  if (trip$dawn[[i]] == TRUE)  trip$amtOfDaylight[[i]] <- 'dawn'
+  if (trip$day[[i]] == TRUE)   trip$amtOfDaylight[[i]] <- 'day'
+  if (trip$dusk[[i]] == TRUE)  trip$amtOfDaylight[[i]] <- 'dusk'
+   
+trip$amtOfDaylight <- as.factor(trip$amtOfDaylight)
 
 # ----- Save the dataframe ----------------------------------------------------
 
