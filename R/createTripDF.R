@@ -135,7 +135,7 @@ trip$thunderstorm <- weather[as.character(trip$daysSinceStart),'thunderstorm']
 # ----- Time of day using maptools -------------------------------------------
 # Create SpatialPoints object using sp
 seattle <- matrix(c(-122.3331, 47.6097), nrow=1)
-Seattle <- SpatialPoints(seattle, proj4strin=CRS('+proj=longlat +datum=WGS84'))
+Seattle <- SpatialPoints(seattle, proj4string=CRS('+proj=longlat +datum=WGS84'))
 
 # Not quite correct: gives the sunrise for only one day for every record. However, when hardcoded
 # to different records, gives different POSIXct values. 
