@@ -72,5 +72,5 @@ for x in station_data:
             item2['turns'] = decode(directions[0]['overview_polyline']['points'])
             pairwise_directions.append(OrderedDict(sorted(item2.items(), key=lambda t: t[0])))
 
-with open('data/pairwise_routes.json', 'w') as pr:
+with open('../data/pairwise_routes.json', 'w') as pr:
     pr.write(json.dumps(pairwise_directions))
