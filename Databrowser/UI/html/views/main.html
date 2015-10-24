@@ -14,27 +14,25 @@
       <div class="row margin-md grey">
 
         <div class="col-lg-4 margin-sm">
-          <label>User Type</label>
-
-
+          <label>Membership</label>
           <select-menu model="main.request.userType" options="main.forms.userType"></select-menu>
-
-
         </div>
 
         <div class="col-lg-4 margin-sm">
-          <label>Weekday/Weekend</label>
-
-          <select-menu model="main.request.weekday_weekend" options="main.forms.weekday_weekend"></select-menu>
-
+          <label>Type of Day</label>
+          <select-menu model="main.request.dayType" options="main.forms.dayType"></select-menu>
         </div>
 
-<!--
         <div class="col-lg-4 margin-sm">
-          <label>X-Max</label>
-          <slider floor="1" ceiling="50" ng-model="main.request.cycles"></slider>
+          <label>Time of Day</label>
+          <select-menu model="main.request.timeOfDay" options="main.forms.timeOfDay"></select-menu>
         </div>
--->
+
+        <div class="col-lg-4 margin-sm">
+          <label>Distance</label>
+          <select-menu model="main.request.distance" options="main.forms.distance"></select-menu>
+        </div>
+
         <div class="col-lg-4 col-lg-offset-8">
           <button class="btn btn-primary btn-block" ng-click="main.updatePlot()">Update Plot</button>  
         </div>

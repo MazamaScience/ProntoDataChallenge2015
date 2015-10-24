@@ -20,9 +20,10 @@ growthPlot <- function(dataList, infoList, textList) {
   spreadFactor <- 5
   col_text <- 'gray40'
   font <- 2
+  cex <- 1.5
   
   # Timeseries
-  lwd <- 6
+  lwd <- 3
   col_weekday <- 'gray70'
   col_weekend <- 'palevioletred1'
   colors <- c(rep(col_weekday,5),rep(col_weekend,2))
@@ -82,7 +83,8 @@ growthPlot <- function(dataList, infoList, textList) {
     # Add  a shifted line with 'S' to get a horizontal line for the last complete week
     points(value[1:52] ~ week[2:53], type='S', col=colors[i], lwd=lwd)
     # Annotate
-    text(week[1], value[1], textList$dayLabels[i], pos=2, font=font, col=col_text, xpd=NA)
+    ###text(week[1], value[1], textList$dayLabels[i], pos=2, font=font, col=col_text, xpd=NA)
+    text(week[length(week)], value[length(value)-1], textList$dayLabels[i], pos=4, font=font, col=col_text, cex=cex, xpd=NA)
   }
   
   # ---- Annotations ----------------------------------------------------------
@@ -90,7 +92,7 @@ growthPlot <- function(dataList, infoList, textList) {
   # X axis
   xpos <- newMonthMonday
   ypos <- label_hadj * (par('usr')[3]) # Note that usr[3] is a negative value
-  text(xpos, ypos, textList$monthLabels, pos=4, font=font, col=col_text)
+  text(xpos, ypos, textList$monthLabels_1, pos=4, font=font, col=col_text, cex=cex, xpd=NA)
   
   # ---- Return ----------------------------------------------------------------
   

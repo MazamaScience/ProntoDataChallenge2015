@@ -188,26 +188,75 @@ angular.module('App')
       language: "en",
       plotWidth: 700,
       plotType: "growth",
-      userType: "Annual Member",
-      weekday_weekend: "weekday",
+      userType: "all",
+      dayType: "all",
+      timeOfDay: "all",
+      distance: "all",
       lat: 47,
       lng: -122
     };
 
     var forms = {
       userType: [{
-        text: "Annual Member",
-        value: "Annual Member"
+        text: "All",
+        value: "all"
       }, {
-        text: "Short-Term Pass Holder",
-        value: "Short-Term Pass Holder"
+        text: "Annual",
+        value: "annual"
+      }, {
+        text: "Short-Term",
+        value: "shortTerm"
       }],
-      weekday_weekend: [{
+      dayType: [{
+        text: "All",
+        value: "all"
+      }, {
         text: "Weekday",
-        value: "Weekday"
+        value: "weekday"
       }, {
         text: "Weekend",
-        value: "Weekend"
+        value: "weekend"
+      }],
+      timeOfDay: [{
+        text: "All",
+        value: "all"
+      }, {
+        text: "AM Commute",
+        value: "amCommute"
+      }, {
+        text: "Mid Day",
+        value: "midday"
+      }, {
+        text: "PM Commute",
+        value: "pmCommute"
+      }, {
+        text: "Evening",
+        value: "evening"
+      }, {
+        text: "Night",
+        value: "night"
+      }],
+      distance: [{
+        text: "All",
+        value: "all"
+      }, {
+        text: "Zero",
+        value: "zero"
+      }, {
+        text: "0-1 km",
+        value: "0_1"
+      }, {
+        text: "1-2 km",
+        value: "1_2"
+      }, {
+        text: "2-3 km",
+        value: "23"
+      }, {
+        text: "3-5 km",
+        value: "3_5"
+      }, {
+        text: " >5 km",
+        value: "5_"
       }]
     };
 

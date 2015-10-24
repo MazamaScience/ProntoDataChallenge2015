@@ -31,7 +31,8 @@ createTextList <- function(dataList, infoList) {
   textList$attribution <- paste("Source:  mazamascience.com")
 
   textList$dayLabels=c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
-  textList$monthLabels=c('Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
+  textList$monthLabels_3=c('Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
+  textList$monthLabels_1=c('N','D','J','F','M','A','M','J','J','A','S','O')
   
   return(textList)
 }
