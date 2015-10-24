@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="App">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="/__DATABROWSER__/">
+
+  <!-- databrowser name. Phrases wrapped in __ are replaced by the makefile -->
+  <title>__DATABROWSER__</title>
+
+  <!-- this hides ugliness before the page loads -->
+  <style type="text/css">
+    [ng\:cloak], [ng-cloak], .ng-cloak {  display: none !important; }
+  </style>
+
+  <!-- load Source Sans from google fonts -->
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,400italic,600italic">
+
+</head>
+
+<body>
+
+  <!-- header: this is always shown even if the view changes -->
+
+  <header class="navbar navbar-default margin-lg">
+    <div class="container">
+      <div class="navbar-header">
+
+          
+          <h3>
+            <!-- <img class="logo" src="images/forestservicelogo-inverted.svg"/> -->
+            <a class="navbar-brand" ui-sref="index">__DATABROWSER__</a>
+          </h3>
+
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li ui-sref-active="active"><a ui-sref="about">About</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- the view: templates will be loaded here-->
+
+  <ui-view ng-cloak></ui-view>
+
+  <!-- minified CSS -->
+
+  <link rel="stylesheet" href="build.min.css">
+
+  <!-- packages -->
+
+  <script src='//maps.googleapis.com/maps/api/js?libraries=geometry'></script>        <!-- google maps -->
+
+  <script src="bower_components/angular/angular.min.js"></script>                     <!-- angular -->
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>   <!-- angular routing -->
+  <script src="bower_components/ng-maps/dist/ng-maps.js"></script>                    <!-- ng-maps -->
+  <script src="bower_components/angular-slider/slider.js"></script>                   <!-- angular slider -->
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script> <!-- angular bootstrap -->
+  
+  <!-- minified JS -->
+
+  <script src="build.min.js"></script>
+  
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+/* IMPORTS .................................................................... */
+
+@import url('../UI/css/bootstrap.min.css');
+
+@import url('../bower_components/angular-slider/slider.css');
+
+@import url('../UI/css/Mazama_databrowser_base.css');
+
+
+
+/* ELEMENTS ..................................................................... */
+/* Unclasses elements */
+
+
+
+/* RESET .....................................................................*/
+/* Override rules from previous CSS files */
+
+
+
+/* OBJECTS ...................................................................*/
+/* Abstract classes */
+
+
+
+/* COMPONENTS ................................................................*/
+/* Specific components */
+
+/* Header */
+
+
+/* Navbar */
+
+
+/* Controls */
+
+
+/* Plots */
+
+
+/* Mapping */

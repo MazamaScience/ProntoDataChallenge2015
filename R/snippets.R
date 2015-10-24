@@ -150,14 +150,14 @@ morningCommute %>%
 
 # Top from stations
 trip %>% ###filter(weekend) %>%
-  group_by(from_station_id) %>%
+  group_by(fromStationId) %>%
   summarize(count=n()) %>%
   arrange(desc(count)) ->
   from_stations
 
 # Top weekend to stations
 trip %>% ###filter(weekend) %>%
-  group_by(to_station_id) %>%
+  group_by(toStationId) %>%
   summarize(count=n()) %>%
   arrange(desc(count)) ->
   to_stations

@@ -1,0 +1,592 @@
+/* ELEMENTS ..................................................................... */
+/* Unclasses elements */
+
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Source Sans Pro', 'Helvetica', sans-serif;
+  font-weight: normal;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+label {
+  display: block;
+  color: #455a64;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+h1,h2,h3,h4 {
+  font-weight: 500;
+}
+
+p {
+  font-size: 1.2em;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+pre {
+  border-radius: 0;
+  background-color: #E0F7FA;
+  border-color: #80DEEA;
+  overflow: auto;
+  word-wrap: normal;
+  white-space: pre;
+}
+
+code {
+  background-color: #E0F7FA;
+  color: #00ACC1;
+}
+
+
+
+/* VARIABLES .................................................................*/
+
+/* blue light        #64BCE3;
+/* blue dark         #5292C1;
+
+/* green light       #569561;
+/* green dark        #4C724F;
+
+/* red light         #EF4846
+/* red dark          #BC5050
+
+/* orange light      #F89E3A
+/* orange dark       #F37721
+
+/* grey lightest     #E3E3E3
+/* grey lighter      #D3D3D3
+/* grey darker       #666
+/* grey darkest      #333
+
+
+
+/* RESET .....................................................................*/
+/* Override rules from previous CSS files */
+
+/* undo all of the corner rounding bootstrap does */
+.btn, .form-control, .input-sm, .input-lg, .navbar {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* adds standard blue to buttons */
+.btn-primary {
+  background-color: #64BCE3;/*mainlight*/
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #5292C1;/*maindark*/
+}
+
+.btn-danger {
+  background-color: #FF5722;/*dangerlight*/
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active {
+  background-color: #4C724F;/*dangerdark*/
+}
+
+
+/* dropdown overwrites */
+div.btn-group {
+  width: 100%;
+}
+
+div.btn-group .btn {
+  text-align: left;
+}
+
+.dropdown-menu>li>a {
+  padding: 4px 12px;
+}
+
+.dropdown-menu>li>a:hover {
+  color: white;
+  background-color: #64BCE3;/*mainlight*/
+}
+
+.btn-group .caret {
+  float: right;
+  margin-top: 8px;
+}
+
+/* adds standard blue to navbar */
+.navbar-default {
+  background-color: #64BCE3;/*mainlight*/
+  border-bottom: 2px solid #5292C1;/*maindark*/
+}
+
+/* navbar menu items */
+.navbar-default .navbar-nav > li > a {
+  line-height: 2em;
+  color: white;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.navbar-default .navbar-header {
+  position: relative;
+}
+
+.navbar-default .logo {
+    position: absolute;
+    height: 55px;
+    display: inline;
+    float: left;
+    padding: 10px;
+    margin-right: 15px; 
+    transition: padding 0.05s linear;
+}
+
+.navbar-default .logo + a {
+  margin-left: 30px!important;
+}
+
+.navbar-default .logo:hover {
+  padding: 8px;
+}
+
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.active>a:active {
+  background-color: #5292C1;/*maindark*/
+  color: white;
+}
+
+
+
+/*datepicker*/
+table .btn-default {
+  border: none;
+}
+
+.well {
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.dropdown-menu {
+  border-radius: 0;
+}
+
+/* bootstap tabs */
+.nav-justified {
+  background-color: rgb(250,250,250);
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
+  background-color: none;
+}
+
+.nav-tabs.nav-justified>li>a,
+.nav-tabs>li>a {
+  /*border: none;*/
+  border-radius: 0;
+  color: rgb(160,160,160);
+}
+
+.nav-tabs.nav-justified>.active>a,
+.nav-tabs.nav-justified>.active>a:hover,
+.nav-tabs.nav-justified>.active>a:focus {
+  border: 1px solid white;
+  color: #00ACC1;
+}
+
+.nav-tabs>li.active>a, 
+.nav-tabs>li.active>a:hover, 
+.nav-tabs>li.active>a:focus {
+  border: 1px solid white;
+  color: #00ACC1;
+}
+
+.tab-content {
+  padding-top: 0.8em;
+}
+
+.tooltip.in {
+  opacity: 1;
+}
+
+/*bootstrap tooltip*/
+.tooltip-inner {
+  max-width: 400px;
+  color: white;
+  text-align: left;
+  border-radius: 0;
+  background-color: #64BCE3;/*mainlight*/
+  -webkit-box-shadow: 0px 0px 7px 0px rgba(70, 70, 70, 0.62);
+  -moz-box-shadow:    0px 0px 7px 0px rgba(70, 70, 70, 0.62);
+  box-shadow:         0px 0px 7px 0px rgba(70, 70, 70, 0.62);
+}
+
+.tooltip.top .tooltip-arrow,
+.tooltip.top-left .tooltip-arrow,
+.tooltip.top-right .tooltip-arrow   {
+  border-top-color: #64BCE3;/*mainlight*/
+}
+
+.tooltip.right .tooltip-arrow {
+  border-right-color: #64BCE3;/*mainlight*/
+}
+.tooltip.left .tooltip-arrow {
+  border-left-color: #64BCE3;/*mainlight*/
+}
+
+.tooltip.bottom .tooltip-arrow,
+.tooltip.bottom-left .tooltip-arrow,
+.tooltip.bottom-right .tooltip-arrow {
+  border-bottom-color: #64BCE3;/*mainlight*/
+}
+
+
+/* main title */
+.navbar-default .navbar-brand {
+  font-size: inherit;
+  padding: 0 10px;
+  padding-left: 25px;
+  margin: 0;
+  height: inherit;
+  color: white;
+  letter-spacing: 0.5px;
+  line-height: 55px;
+}
+
+.navbar-header h3 {
+  margin: 0;
+  padding: 0;
+  height: 55px;
+}
+
+.navbar-default .navbar-brand:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.navbar-default .navbar-brand:active,
+.navbar-default .navbar-brand:focus {
+  color: white;
+}
+
+.input-group-addon {
+  background-color: inherit;
+  border-radius: 0;
+}
+
+/* adds standard blue to select menu */
+.ui-select-bootstrap .ui-select-choices-row.active > a {
+  background-color: #64BCE3;/*mainlight*/
+}
+
+.checkbox, .radio {
+  background-color: white;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  line-height: 20px;
+  margin: 0;
+}
+
+.checkbox label, .radio label {
+  display: block;
+}
+
+/* slider rules */
+slider, [slider] {
+  margin: 15px 2px;
+}
+
+slider div.bar, [slider] div.bar {
+  border: 1px solid #ccc;
+  border-radius: 0px;
+  background: #fff;
+}
+
+slider div.bar .selection, [slider] div.bar .selection {
+  background: #80DEEA;
+}
+
+slider div.handle, [slider] div.handle {
+  top: -7px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0;
+}
+
+slider div.handle:after, [slider] div.handle:after {
+  display: none;
+}
+
+
+
+
+/* OBJECTS ...................................................................*/
+/* Abstract classes */
+
+.no-margin {
+  margin: 0;
+}
+
+.margin-sm {
+  margin-bottom: 0.85em;
+}
+
+.margin-md {
+  margin-bottom: 1.621em;
+}
+
+.margin-lg {
+  margin-bottom: 3.24em;
+}
+
+.margin-xl {
+  margin-bottom: 7.5em;
+}
+
+.tall {
+  height:100%;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.push-right {
+  margin-left: 15px;
+  margin-right: -15px;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.faded {
+  color: #ddd;
+}
+
+.grey {
+  background-color: #ececec;
+  padding: 0.81em 0;
+}
+
+.fade-animate.ng-hide-remove, .face.ng-show-add{
+    -webkit-animation: fadeIn 0.3s;
+    animation: fadeIn 0.3s;
+}
+ 
+.fade-animate.ng-hide-add, .fade.ng-show-remove{
+    -webkit-animation: fadeOut 0.3s;
+    animation: fadeOut 0.3s;
+    display: block !important;
+}
+
+/*text-heavy pages should use this class for better formatting*/
+.text-document p {
+  font-size: 1.4em;
+  margin-bottom: 2.7em;
+}
+
+.text-document h1 {
+  margin-bottom: 1.621em;
+}
+
+.text-document img {
+  width: 100%;
+  margin-bottom: 0.85em;
+}
+
+.text-document .caption {
+  font-style: italic;
+}
+
+/* COMPONENTS ................................................................*/
+
+/* Specific components */
+
+/* Header */
+
+/* Navbar */
+
+/* Controls */
+
+/* Plots */
+
+.popup-wrapper {
+  pointer-events: none;
+  opacity: 0;
+  position: relative;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 999;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+
+.popup {
+  margin-top: 50px;
+}
+
+.plot-loading {
+  margin-top: 2.47em;
+}
+
+.plot-error {
+  border-top: 5px solid #EF4846;
+  border-bottom: 5px solid #EF4846;
+}
+
+.plot-error h4 {
+  background-color: #EF4846;
+  padding: 0.5em;
+  margin: 0;
+  color: white;
+}
+
+.plot-image {
+  max-width: 100%;
+  height: auto;
+  width: auto\9;
+  padding: 0.5em;
+  /* ie8 */
+  cursor: pointer;
+  display: block;
+  margin: auto;
+}
+
+
+/* Mapping */
+
+.google-map {
+  height: 350px;
+}
+
+/* ANIMATIONS ................................................................*/
+
+@-webkit-keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+          animation-name: fadeIn;
+}
+
+@-webkit-keyframes fadeOut {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+@keyframes fadeOut {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+.fadeOut {
+  -webkit-animation-name: fadeOut;
+          animation-name: fadeOut;
+}
+
+.visible {
+  pointer-events: all;
+  opacity: 1;
+}
+
+.shadow {
+  -webkit-transition: box-shadow 0.2s linear;
+  -moz-transiton: box-shadow: 0.2 linear;
+  transition: box-shadow 0.2s linear;
+}
+
+.shadow:hover {
+  -webkit-box-shadow: 0px 4px 4px 0px rgba(50, 50, 50, 0.2);
+  -moz-box-shadow:    0px 4px 4px 0px rgba(50, 50, 50, 0.2);
+  box-shadow:         0px 4px 4px 0px rgba(50, 50, 50, 0.2);
+}
+
+
+
+/* SPINNER ................................................................*/
+
+.spinner {
+  margin: 0 auto 0;
+  width: 100px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  /* Prevent first frame from flickering when animation starts */
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.spinner-light > div {
+  background-color: white;
+}
+
+.spinner-dark > div {
+  background-color: #64BCE3;/*mainlight*/
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0.0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes bouncedelay {
+  0%, 80%, 100% { 
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 40% { 
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
