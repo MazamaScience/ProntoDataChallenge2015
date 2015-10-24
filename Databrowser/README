@@ -1,0 +1,108 @@
+================================================================================
+
+Copyright:
+
+GNU Lesser General Public License, Version 3 (LGPLv3)
+
+Copyright (c) 2007-2014 by mazama Science
+
+
+================================================================================
+
+Overview:
+
+This directory contains code for a working 'databrowser' that can be used as a 
+starting point for creating other scientific databrowsers. The goal is to 
+allow for easy configuration of end-to-end functionality for internactive data
+visualization using the R statistical analysis package.
+
+================================================================================
+
+Manifest: 
+
+LICENSE             - copy of LPGLv3
+Makefile            - automated installation and updating
+js/                 - JavaScript files
+R/                  - R packages and scripts
+README              - this file
+__Databrowser.cgi   - template python CGI script
+config/             - server-specific configuration info
+data_local/         - static data files
+node_modules/       - command line utilities
+bower_components    - JS and CSS libraries managed by Bower
+html/               - HTML files defining the user interface
+output_en/          - output plots and files (potentially pre-generated)
+style/              - CSS libraries and files
+test/               - various test code
+
+================================================================================
+
+Prerequisites:
+
+Python              - http://python.org/
+
+R                   - http://www.r-project.org/
+
+rpy2                - http://rpy.sourceforge.net/
+
+NodeJS              - http://nodejs.org/
+
+Bower               - http://bower.io/
+
+
+
+
+Support for PDF files has additional requirements:
+
+Ghostscript         - http://ghostscript.com
+
+ImageMagick         - http://imagemagick.org
+  - OR -
+GraphicsMagick      - http://graphicsmagick.org
+
+================================================================================
+
+From client to back end the parts are as follows:
+
+User Interface [client browser]
+
+  html/             - contents (HTML)
+  style/            - style (CSS)
+  behavior/         - behavior (javascript)
+
+Middleware/Controller [server]
+
+  __Databrowser.cgi - CGI script (Python)
+
+Back-End Analysis [server]
+
+  R/                - data ingest/analysis/visualization
+
+================================================================================
+
+Initial installation procedure:
+
+1) Edit config/Makefile_vars_YOURSERVER to point to existing directories on your server.
+
+2) Install the code:
+
+$ sudo make install location=YOURSERVER
+
+3) Test whether the CGI functions from the command line:
+
+$ /CGI_LOCATION/DATABROWSER.cgi
+Content-type: application/json
+
+{"status": "OK", "return_json": "{ \"loadSecs\":  0.003,\"plotSecs\":  0.031,\"totalSecs\":  0.034 }", "rel_base": "output_en/9f416e0b14c15934a726b98db4103ee1211d31aabd3a0a7879af35bcd74c9481"}
+
+4) Test things from the web browser:
+
+http://localhost/URL_PATH_TO_DATABROWSER/
+
+5) Check the debug and transcript files for hints and lines of code to run in R
+
+$ make debug location=YOURSERVER
+$ make transcript location=YOURSERVER
+
+
+

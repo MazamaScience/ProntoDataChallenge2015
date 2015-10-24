@@ -29,14 +29,19 @@ sub <- weather[,c(2,4,9,18,20)]
 plot(sub)
 title("No compelling clusters")
 
-### Make this a function
-# Find out how many clusters kmeans thinks is appropriate
-clusterCount <- 1:10
-tot.withinss <- unlist( lapply(clusterCount, function(x) { kmeans(sub,x)$tot.withinss } ) )
-names(tot.withinss) <- clusterCount
-barplot(tot.withinss)
-title('Looks like 4 clusters is probably the best.')
-### Make the above a function
+howManyClusters <- function(sub) {
+  # Find out how many clusters kmeans thinks is appropriate
+  clusterCount <- 1:10
+  tot.withinss <- unlist( lapply(clusterCount, function(x) { kmeans(sub,x)$tot.withinss } ) )
+  names(tot.withinss) <- clusterCount
+  barplot(tot.withinss)
+  title('Looks like N clusters is probably the best.')
+}
+
+kMap <- function(sub,k) {
+  plot(sub$lon,sub$lat,col=kmeans(sub,k)$cluster)
+}
+
 
 plot(sub,col=kmeans(sub,2)$cluster) # Nothing compelling
 plot(sub,col=kmeans(sub,3)$cluster) # Separates temp and humidity
