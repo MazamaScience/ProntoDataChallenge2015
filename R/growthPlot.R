@@ -5,11 +5,16 @@
 
 if (FALSE) {
 
-  dataList <- list(df=df)
+  load('data/Mazama_trip.RData')
+  
+  dataList <- list(df=trip)
   infoList <- list()
   textList <- list(dayLabels=c('Mon','Tue','Wed','Thu','Fri','Sat','Sun'),
                    monthLabels=c('Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'))
 
+  growthPlot(dataList,infoList,textList)
+  
+  growthPlot(dataList=list(df=subset(trip,gender=='Male')), infoList, textList)
 }
 
 growthPlot <- function(dataList, infoList, textList) {
@@ -44,11 +49,14 @@ growthPlot <- function(dataList, infoList, textList) {
   
   # Get dataframe from the dataList
   df <- dataList$df
-
+  
+  # Need to create factors so that missing levels will be inserted
+  weekInOperation <- factor(df$weeksSinceStart+1,levels=1:53)
+  dayOfWeek <- factor(df$dayOfWeek,levels=1:7)
+  
   # Create a table of # of rides
-  tbl <- table(df$weeksSinceStart,df$dayOfWeek)
-  
-  
+  tbl <- table(weekInOperation,dayOfWeek)
+
   # Create an X axis
   week <- seq(lubridate::ymd('2014-10-13',tz='America/Los_Angeles'),
               lubridate::ymd('2015-10-13',tz='America/Los_Angeles'),
@@ -60,7 +68,7 @@ growthPlot <- function(dataList, infoList, textList) {
   # ----- Plot ----------------------------------------------------------------
   
   # Create a blank plot with the proper limits
-  plot(tbl[,1] ~ week, col='transparent',
+  plot(tbl[,1][1:52] ~ week[1:52], col='transparent',
        ylim=c(0, maxValue*spreadFactor*1.05),
        axes=FALSE,
        xlab='', ylab='')
