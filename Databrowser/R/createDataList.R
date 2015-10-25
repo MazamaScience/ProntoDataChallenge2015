@@ -11,6 +11,19 @@ createDataList <- function(infoList) {
   # Load data
   df <- get(load(paste0(infoList$dataDir,'/Mazama_trip.RData')))
   
+  # Create factors so that table() will insert zeros
+  df$userType <- as.factor(df$userType)
+  df$gender <- as.factor( ifelse(df$gender == '',NA,df$gender) )
+  df$dayOfWeek <- as.factor(df$dayOfWeek)
+  df$hourOfDay <- as.factor(df$hourOfDay)
+  df$age <- as.factor(df$age)
+  df$month <- as.factor(df$mont)
+  df$weeksSinceStart <- as.factor(as.integer(df$weeksSinceStart+1))
+  df$daysSinceStart <- as.factor(as.integer(df$daysSinceStart+1))
+  
+  # TODO:  change weeksSinceStart to weekInOperation
+  # TODO:  change daysSinceStart to dayInOperation
+
   # Subset data
   
   if (!is.null(infoList$MazamaSubset)) {
