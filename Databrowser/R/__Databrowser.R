@@ -14,7 +14,10 @@ library(jsonlite) # for JSON support
 # Include all the supporting code
 source("__DATABROWSER_PATH__/R/createInfoList.R")
 source("__DATABROWSER_PATH__/R/createDataList.R")
+
 source("__DATABROWSER_PATH__/R/growthPlot.R")
+source("__DATABROWSER_PATH__/R/heatmapPlot.R")
+source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
 
 # Global variables
 G_DEBUG <- TRUE
@@ -55,38 +58,33 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   
   # ----- Create the png file --------------------------------------------------
+    
+  absPlotPNG <- paste(infoList$outputDir,infoList$outputFileBase,'.png',sep="")
   
-  # This section isn't called in the map example
-  if (infoList$plotType != "Map") {
+  # NOTE:  The stationBubblePlot uses RgoogleMaps::GetMap() to obtain the
+  # NOTE:  initial png file from Google.
+  
+  if (infoList$plotType != "stationBubble") {
     
-    absPlotPDF <- paste(infoList$outputDir,infoList$outputFileBase,'.pdf',sep="")
-    absPlotPNG <- paste(infoList$outputDir,infoList$outputFileBase,'.png',sep="")
-    
-    if (infoList$plotDevice == "pdf") {
-      
-      width <- 8
-      height <- width * infoList$plotHeight/infoList$plotWidth
-      pdf(file=absPlotPDF, width=width, height=height, bg='white')
-      print(paste("Working on",absPlotPDF))
-      
-    } else if (infoList$plotDevice == "cairo") {
+    if (infoList$plotDevice == "cairo") {
       
       library(Cairo) # CairoPNG is part of the Cairo package
-      CairoPNG(filename=absPlotPNG, 
-               width=infoList$plotWidth, height=infoList$plotHeight, 
+      CairoPNG(filename=absPlotPNG,
+               width=infoList$plotWidth, height=infoList$plotHeight,
                units='px', bg='white')
       print(paste("Working on", absPlotPNG))
       
     } else if (infoList$plotDevice == "png") {
       
-      png(filename=absPlotPNG, 
-          width=infoList$plotWidth, height=infoList$plotHeight, 
+      png(filename=absPlotPNG,
+          width=infoList$plotWidth, height=infoList$plotHeight,
           units='px', bg='white')
       print(paste("Working on",absPlotPNG))
       
     }
     
   }
+  
   
   # ----- Subset the data -----------------------------------------------------
   
@@ -101,6 +99,14 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   if (infoList$plotType == 'growth') {
     
     returnValues <- growthPlot(dataList,infoList,textList)
+    
+  } else if (infoList$plotType == "heatmap") { 
+    
+    returnValues <- heatmapPlot(dataList,infoList,textList)
+    
+  } else if (infoList$plotType == "stationBubble") { 
+    
+    returnValues <- stationBubblePlot(dataList,infoList,textList)
     
   } else if (infoList$plotType == "Map") { 
     
@@ -124,36 +130,6 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   if (infoList$plotDevice != '' & infoList$plotType == "TrigFunctions") {
     dev.off()
-  }
-  
-  
-  # ----- Convert PDF file to PNG file using ImageMagick ----------------------
-  
-  if (infoList$plotDevice == "pdf") {
-    
-    gs_cmd <- paste("gs -dSAFTER -dBATCH -dNOPAUSE -sDEVICE=png16m ",
-                    "-dGraphicsAlphaBits=4 -dTextAlphaBits=4 -r300 ",
-                    "-dBackgroundColor='16#ffffff' ",
-                    "-sOutputFile=",absPlotPNG," ",absPlotPDF," > /dev/null",
-                    sep="")
-    result <- system(gs_cmd)
-    
-    # ImageMagick version of mogrify
-    mogrify_cmd <- paste("mogrify -resize ", infoList$plotWidth, "x",
-                         infoList$plotHeight, " ", absPlotPNG,
-                         " > /dev/null", sep="")
-    
-    # GraphicsMagick version of mogrify
-    #mogrify_cmd <- paste("gm mogrify -resize ", infoList$plotWidth, "x",
-    #                     infoList$plotHeight, " ", absPlotPNG,
-    #                     " > /dev/null", sep="")
-    
-    result <- system(mogrify_cmd)
-    
-    elapsed <- ( (proc.time())[3] - timepoint )
-    timepoint <- (proc.time())[3]
-    print(paste(round(elapsed,4),"seconds to convert PDF to PNG"))
-    
   }
   
   

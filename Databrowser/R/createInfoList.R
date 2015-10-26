@@ -21,7 +21,7 @@ createInfoList <- function(jsonArgs='{}') {
   infoList$language <- ifelse(is.null(infoList$language),'en',infoList$language)
   infoList$responseType <- ifelse(is.null(infoList$responseType),'json',infoList$responseType)
   infoList$plotDevice <- ifelse(is.null(infoList$plotDevice),'png',infoList$plotDevice)
-  infoList$plotWidth <- ifelse(is.null(infoList$plotWidth),500,as.numeric(infoList$plotWidth))
+  infoList$plotWidth <- ifelse(is.null(infoList$plotWidth),640,as.numeric(infoList$plotWidth))
   infoList$plotHeight <- ifelse(is.null(infoList$plotHeight),infoList$plotWidth,as.numeric(infoList$plotHeight))
 
   if (is.null(infoList$plotType)) {

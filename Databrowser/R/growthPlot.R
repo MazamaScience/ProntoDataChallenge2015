@@ -1,13 +1,13 @@
 ###############################################################################
 # growthPlot.R
 #
-# Attempts to display weekly growth in ridership for the selected df subset
+# Attempts to display weekly growth in ridership for the selected trip subset
 
 if (FALSE) {
 
-  df <- get(load('data/Mazama_trip.RData'))
+  trip <- get(load('data/Mazama_trip.RData'))
   
-  dataList <- list(df=df)
+  dataList <- list(trip=trip)
   infoList <- list()
   
   textList <- list() 
@@ -53,10 +53,10 @@ growthPlot <- function(dataList, infoList, textList) {
   # ----- Data Preparation ----------------------------------------------------
   
   # Get dataframe from the dataList
-  df <- dataList$df
+  trip <- dataList$trip
 
   # Create a table of # of rides
-  tbl <- table(df$weeksSinceStart,df$dayOfWeek)
+  tbl <- table(trip$weeksSinceStart,trip$dayOfWeek)
   
   
   # Create an X axis
@@ -74,6 +74,7 @@ growthPlot <- function(dataList, infoList, textList) {
   
   for (i in 1:7) {
     barplot(tbl[1:52,i],
+            ylim=c(0, maxValue*1.05),
             axes=FALSE, xlab='', ylab='',
             names.arg=rep('',52),
             col=colors[i],border=colors[i],

@@ -30,15 +30,16 @@ ABS_OUT = DATABROWSER_PATH + '/' + OUTPUT_DIR
 # Minimal request object
 request = {'debug': 'none',
            'responseType': 'json',
-           'plotWidth': '500',
+           'plotWidth': '640',
+           'productType': 'systemTable',
            'plotType': 'growth'}
 
 # NOTE:  You can set up a request object with all required parameters and run this
 # NOTE:  this cgi script from the command line for debugging.
 #request = {'debug': 'transcript',
 #           'responseType': 'json',
-#           'plotWidth': '500',
-#           'plotHeight': '500',
+#           'plotWidth': '640',
+#           'plotHeight': '640',
 #           'plotDevice': 'png',
 #           'language': 'en',
 #           'lineColor': 'black',
@@ -141,7 +142,7 @@ for key in request:
     if key == 'plotWidth':
         try:
             if int(value) < 100 or int(value) > 2000:
-                request['plotWidth'] = '500'
+                request['plotWidth'] = '640'
         except Exception, e:
             status = 'ERROR'
             error_text = "CGI ERROR: parameter '%s' has a value of '%s' which is not an integer: %s" % (key,value,e)

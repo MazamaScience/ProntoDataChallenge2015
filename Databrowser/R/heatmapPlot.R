@@ -10,31 +10,31 @@ if (FALSE) {
   
   load('data/Mazama_trip.RData')
   
-  dataList <- list(df=trip)
+  dataList <- list(trip=trip)
   infoList <- list()
   textList <- list(dayLabels=c('Mon','Tue','Wed','Thu','Fri','Sat','Sun'),
                    monthLabels=c('Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'))
   
   # Testing
-  heatmapPlot(dataList=list(df=subset(trip,userType=='Short-Term Pass Holder')),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,userType=='Annual Member')),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,gender=='Male')),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,gender=='Female')),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,age > 40)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,age < 30)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,elevationDiff < -50)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,elevationDiff < -100)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,elevationDiff > 50)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,elevationDiff > 100)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,stringr::str_detect(fromStationId,'CH'))),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,stringr::str_detect(fromStationId,'WF'))),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,toStationId == fromStationId)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,toStationId != fromStationId)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,distance < 500)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,distance > 500 & distance < 1500)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,distance > 1500 & distance < 2500)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,distance > 2500 & distance < 3500)),infoList,textList)
-  heatmapPlot(dataList=list(df=subset(trip,distance > 3500)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,userType=='Short-Term Pass Holder')),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,userType=='Annual Member')),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,gender=='Male')),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,gender=='Female')),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,age > 40)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,age < 30)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,elevationDiff < -50)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,elevationDiff < -100)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,elevationDiff > 50)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,elevationDiff > 100)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,stringr::str_detect(fromStationId,'CH'))),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,stringr::str_detect(fromStationId,'WF'))),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,toStationId == fromStationId)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,toStationId != fromStationId)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,distance < 500)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,distance > 500 & distance < 1500)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,distance > 1500 & distance < 2500)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,distance > 2500 & distance < 3500)),infoList,textList)
+  heatmapPlot(dataList=list(trip=subset(trip,distance > 3500)),infoList,textList)
   
 }
 
@@ -62,11 +62,11 @@ heatmapPlot <- function(dataList, infoList, textList) {
   # ----- Data Preparation ----------------------------------------------------
   
   # Get dataframe from the dataList
-  df <- dataList$df
+  trip <- dataList$trip
   
   # Convert days from 00:00-23:00 to 04:00-27:00
   # by setting all times back four hours
-  startTime <- df$startTime - lubridate::dhours(3)
+  startTime <- trip$startTime - lubridate::dhours(3)
   timeSinceStart <- startTime - startTime[1]
   daysSinceStart <- as.integer(as.numeric(timeSinceStart,units="days"))
   weeksSinceStart <- as.integer(as.numeric(timeSinceStart,units="weeks"))

@@ -186,8 +186,9 @@ angular.module('App')
 
     var request = {
       language: "en",
-      plotWidth: 700,
+      plotWidth: 640,
       plotType: "growth",
+      productType: "systemTable",
       userType: "all",
       dayType: "all",
       timeOfDay: "all",
@@ -197,6 +198,16 @@ angular.module('App')
     };
 
     var forms = {
+      plotType: [{
+        text: "growth",
+        value: "growth"
+      }, {
+        text: "heatmap",
+        value: "heatmap"
+      }, {
+        text: "stationBubble",
+        value: "stationBubble"
+      }],
       userType: [{
         text: "All",
         value: "all"

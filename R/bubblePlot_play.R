@@ -10,7 +10,7 @@ toStation <- table(trip$toStation)
 station$toCount <- as.numeric(toStation[station$terminal])
 
 # Remove 'Pronto Shop'
-station <- subset(station,termina != 'XXX-01')
+station <- subset(station,terminal != 'XXX-01')
 oldPar <- par()
 par(mar=c(5,20,4,2)+.1)
 barplot(station$fromCount, horiz=TRUE, names.arg=station$name, las=2)
@@ -34,11 +34,11 @@ specificUsageIndex <- .bincode(usage,breaks=365*c(0,1,2,3,4,5,1e9),include.lowes
 daily_1 <- specificUsageIndex <= 1
 daily_2 <- specificUsageIndex > 1 & specificUsageIndex <= 2
 daily_3 <- specificUsageIndex > 2 & specificUsageIndex <= 3
-daily_4 <- specificUsageIndex > 3 & specificUsageIndex <= 4
-daily_5 <- specificUsageIndex > 4 & specificUsageIndex <= 5
+# daily_4 <- specificUsageIndex > 3 & specificUsageIndex <= 4
+# daily_5 <- specificUsageIndex > 4 & specificUsageIndex <= 5
 
 text(station$lon[daily_1],station$lat[daily_1],'1',col='red',cex=1.5,font=2)
 text(station$lon[daily_2],station$lat[daily_2],'2',col='red',cex=1.5,font=2)
 text(station$lon[daily_3],station$lat[daily_3],'3',col='red',cex=1.5,font=2)
-text(station$lon[daily_4],station$lat[daily_4],'4',col='red',cex=1.5,font=2)
-text(station$lon[daily_5],station$lat[daily_5],'5',col='red',cex=1.5,font=2)
+# text(station$lon[daily_4],station$lat[daily_4],'4',col='red',cex=1.5,font=2)
+# text(station$lon[daily_5],station$lat[daily_5],'5',col='red',cex=1.5,font=2)
