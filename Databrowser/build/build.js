@@ -202,8 +202,8 @@ angular.module('App')
         text: "Weekly by DoW",
         value: "weeklyUsageByDayOfWeek"
       }, {
-        text: "heatmap",
-        value: "heatmap"
+        text: "Dailiy by Hour",
+        value: "dailyUsageByHourOfDay"
       }, {
         text: "stationBubble",
         value: "stationBubble"
@@ -241,19 +241,22 @@ angular.module('App')
         text: "All",
         value: "all"
       }, {
-        text: "AM Commute",
+        text: "Early 4-6",
+        value: "early"
+      }, {
+        text: "AM Commute 7-9",
         value: "amCommute"
       }, {
-        text: "Mid Day",
+        text: "Mid Day 10-3",
         value: "midday"
       }, {
-        text: "PM Commute",
+        text: "PM Commute 4-6",
         value: "pmCommute"
       }, {
-        text: "Evening",
+        text: "Evening 7-10",
         value: "evening"
       }, {
-        text: "Night",
+        text: "Night 11-3",
         value: "night"
       }],
       distance: [{

@@ -28,7 +28,6 @@ weeklyUsageByDayOfWeekPlot <- function(dataList, infoList, textList) {
   # ----- Style ---------------------------------------------------------------
 
   # Overall
-  spreadFactor <- 5
   col_text <- 'gray40'
   font <- 2
   cex <- 2

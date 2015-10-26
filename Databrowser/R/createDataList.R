@@ -59,7 +59,9 @@ createDataList <- function(infoList) {
     }
 
     # timeOfDay
-    if (infoList$timeOfDay == 'amCommute') {
+    if (infoList$timeOfDay == 'early') {
+      trip <- subset(trip, hourOfDay %in% 4:6)
+    } else if (infoList$timeOfDay == 'amCommute') {
       trip <- subset(trip, hourOfDay %in% 7:9)
     } else if (infoList$timeOfDay == 'midday') {
       trip <- subset(trip, hourOfDay %in% 10:15)
@@ -68,7 +70,7 @@ createDataList <- function(infoList) {
     } else if (infoList$timeOfDay == 'evening') {
       trip <- subset(trip, hourOfDay %in% 19:22)
     } else if (infoList$timeOfDay == 'night') {
-      trip <- subset(trip, hourOfDay %in% c(0:3,21:23))
+      trip <- subset(trip, hourOfDay %in% c(0:3,23))
     }
 
     # distance (in meters)

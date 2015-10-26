@@ -28,7 +28,7 @@ createTextList <- function(dataList, infoList) {
   textList <- list()
 
   textList$title <- paste("TrigFunctions_plot --",trigFunction)
-  textList$attribution <- paste("data:  ProntoCycle        graphic:  mazamascience.com")
+  textList$attribution <- paste("data:  ProntoCycleShare.com        graphic:  MazamaScience.com")
 
   textList$dayLabels=c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
   textList$monthLabels_3=c('Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
@@ -97,7 +97,9 @@ createTextList <- function(dataList, infoList) {
   # ----- Title ---------------------------------------------------------------
   
   if (infoList$plotType == 'weeklyUsageByDayOfWeek') {
-    textList$title <- 'Weekly Usage by Day of Week'
+    textList$title <- 'Weekly Usage by Day'
+  } else if (infoList$plotType == 'dailyUsageByHourOfDay') {
+    textList$title <- 'Daily Usage by Hour'
   } else {
     textList$title <- 'TITLE GOES HERE'
   }
