@@ -14,7 +14,7 @@
     var request = {
       language: "en",
       plotWidth: 640,
-      plotType: "growth",
+      plotType: "weeklyUsageByDayOfWeek",
       productType: "systemTable",
       userType: "all",
       dayType: "all",
@@ -26,8 +26,8 @@
 
     var forms = {
       plotType: [{
-        text: "growth",
-        value: "growth"
+        text: "Weekly by DoW",
+        value: "weeklyUsageByDayOfWeek"
       }, {
         text: "heatmap",
         value: "heatmap"
@@ -39,11 +39,20 @@
         text: "All",
         value: "all"
       }, {
+        text: "Short-Term",
+        value: "shortTerm"
+      }, {
         text: "Annual",
         value: "annual"
       }, {
-        text: "Short-Term",
-        value: "shortTerm"
+        text: "Annual (male)",
+        value: "annualMale"
+      }, {
+        text: "Annual (female)",
+        value: "annualFemale"
+      }, {
+        text: "Annual (other)",
+        value: "annualOther"
       }],
       dayType: [{
         text: "All",
@@ -88,7 +97,7 @@
         value: "1_2"
       }, {
         text: "2-3 km",
-        value: "23"
+        value: "2_3"
       }, {
         text: "3-5 km",
         value: "3_5"

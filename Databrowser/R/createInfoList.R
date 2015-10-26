@@ -30,12 +30,12 @@ createInfoList <- function(jsonArgs='{}') {
   
   # ----- Databrowser specific parameters from the UI --------------------------
 
-  infoList$plotType <- ifelse(is.null(infoList$plotType),'growth',infoList$plotType)
+  infoList$plotType <- ifelse(is.null(infoList$plotType),'weeklyUsageByDayOfWeek',infoList$plotType)
 
-  infoList$userType <- ifelse(is.null(infoList$userType),'ALL',infoList$userType)
-  infoList$dayType <- ifelse(is.null(infoList$dayType),'ALL',infoList$dayType)
-  infoList$timeOfDay <- ifelse(is.null(infoList$timeOfDay),'ALL',infoList$timeOfDay)
-  infoList$distance <- ifelse(is.null(infoList$distance),'ALL',infoList$distance)
+  infoList$userType <- ifelse(is.null(infoList$userType),'all',infoList$userType)
+  infoList$dayType <- ifelse(is.null(infoList$dayType),'all',infoList$dayType)
+  infoList$timeOfDay <- ifelse(is.null(infoList$timeOfDay),'all',infoList$timeOfDay)
+  infoList$distance <- ifelse(is.null(infoList$distance),'all',infoList$distance)
 
   return(infoList)
 }

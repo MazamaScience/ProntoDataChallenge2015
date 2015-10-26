@@ -13,19 +13,19 @@ createDataList <- function(infoList) {
   # Load data
   trip <- get(load(paste0(infoList$dataDir,'/Mazama_trip.RData')))
   
-  # Create factors so that table() will insert zeros
+  # NOTE:  Create factors before subsetting so that all levels will be
+  # NOTE:  captured. Downstream use of the table() function in plotting
+  # NOTE:  scripts will insert zeros for rows or columns where a particular
+  # NOTE:  is not represented in the subset dataframe.
   trip$userType <- as.factor(trip$userType)
-  trip$gender <- as.factor( ifelse(trip$gender == '',NA,trip$gender) )
+  trip$gender <- as.factor(trip$gender)
   trip$dayOfWeek <- as.factor(trip$dayOfWeek)
   trip$hourOfDay <- as.factor(trip$hourOfDay)
   trip$age <- as.factor(trip$age)
   trip$month <- as.factor(trip$mont)
-  trip$weeksSinceStart <- as.factor(as.integer(trip$weeksSinceStart+1))
-  trip$daysSinceStart <- as.factor(as.integer(trip$daysSinceStart+1))
+  trip$ProntoWeek <- as.factor(as.integer(trip$weeksSinceStart+1))
+  trip$ProntoDay <- as.factor(as.integer(trip$daysSinceStart+1))
   
-  # TODO:  change weeksSinceStart to weekInOperation
-  # TODO:  change daysSinceStart to dayInOperation
-
   # Subset data
   
   if (!is.null(infoList$MazamaSubset)) {
@@ -40,15 +40,22 @@ createDataList <- function(infoList) {
     # userType
     if (infoList$userType == 'annual') {
       trip <- subset(trip, userType == 'Annual Member')
+    } else if (infoList$userType == 'annualMale') {
+      trip <- subset(trip, userType == 'Annual Member' & gender == 'Male')
+    } else if (infoList$userType == 'annualFemale') {
+      trip <- subset(trip, userType == 'Annual Member' & gender == 'Female')
+    } else if (infoList$userType == 'annualOther') {
+      trip <- subset(trip, userType == 'Annual Member' & gender == 'Other')
     } else if (infoList$userType == 'shortTerm') {
       trip <- subset(trip, userType == 'Short-Term Pass Holder')
     }
 
     # dayType
+    # NOTE:  Need to force to integer for integer comparison.
     if (infoList$dayType == 'weekday') {
-      trip <- subset(trip, dayOfWeek <= 5)
+      trip <- subset(trip, as.integer(trip$dayOfWeek) <= 5)
     } else if (infoList$dayType == 'weekend') {
-      trip <- subset(trip, dayOfWeek > 5)
+      trip <- subset(trip, as.integer(trip$dayOfWeek) > 5)
     }
 
     # timeOfDay
@@ -64,19 +71,19 @@ createDataList <- function(infoList) {
       trip <- subset(trip, hourOfDay %in% c(0:3,21:23))
     }
 
-    # distance
+    # distance (in meters)
     if (infoList$distance == 'zero') {
-      trip <- subset(trip, distance == 0)
+      trip <- subset(trip, trip$distance == 0)
     } else if (infoList$distance == '0_1') {
-      trip <- subset(trip, distance < 1)
+      trip <- subset(trip, trip$distance < 1000)
     } else if (infoList$distance == '1_2') {
-      trip <- subset(trip, distance >= 1 & distance < 2)
+      trip <- subset(trip, trip$distance >= 1000 & trip$distance < 2000)
     } else if (infoList$distance == '2_3') {
-      trip <- subset(trip, distance >= 2 & distance < 3)
+      trip <- subset(trip, trip$distance >= 2000 & trip$distance < 3000)
     } else if (infoList$distance == '3_5') {
-      trip <- subset(trip, distance >= 3 & distance < 5)
+      trip <- subset(trip, trip$distance >= 3000 & trip$distance < 5000)
     } else if (infoList$distance == '5_') {
-      trip <- subset(trip, distance > 5)
+      trip <- subset(trip, trip$distance > 5000)
     }
 
   }

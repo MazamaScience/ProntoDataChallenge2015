@@ -15,7 +15,7 @@ library(jsonlite) # for JSON support
 source("__DATABROWSER_PATH__/R/createInfoList.R")
 source("__DATABROWSER_PATH__/R/createDataList.R")
 
-source("__DATABROWSER_PATH__/R/growthPlot.R")
+source("__DATABROWSER_PATH__/R/weeklyUsageByDayOfWeekPlot.R")
 source("__DATABROWSER_PATH__/R/heatmapPlot.R")
 source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
 
@@ -96,9 +96,9 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   returnValues <- c(0.0,0.0,0.0,0.0)
   
-  if (infoList$plotType == 'growth') {
+  if (infoList$plotType == 'weeklyUsageByDayOfWeek') {
     
-    returnValues <- growthPlot(dataList,infoList,textList)
+    returnValues <- weeklyUsageByDayOfWeekPlot(dataList,infoList,textList)
     
   } else if (infoList$plotType == "heatmap") { 
     
