@@ -1,0 +1,44 @@
+
+library(RColorBrewer)
+
+load('data/Mazama_station.RData')
+load('data/Mazama_trip.RData')
+
+fromStation <- table(trip$fromStationId)
+station$fromCount <- as.numeric(fromStation[station$terminal])
+toStation <- table(trip$toStation)
+station$toCount <- as.numeric(toStation[station$terminal])
+
+# Remove 'Pronto Shop'
+station <- subset(station,terminal != 'XXX-01')
+oldPar <- par()
+par(mar=c(5,20,4,2)+.1)
+barplot(station$fromCount, horiz=TRUE, names.arg=station$name, las=2)
+par(oldPar)
+
+rawUsage <- station$fromCount + station$toCount
+usage <- rawUsage * station$onlineDays/max(station$onlineDays)
+
+breaks=quantile(usage,probs=seq(0,1,1/9))
+# Give the first three breaks meaningful numbers
+breaks[1:3] <- c(0,1,3)*365
+usageIndex <- .bincode(usage,breaks=breaks,include.lowest=TRUE)
+cols <- brewer.pal(max(usageIndex),'Spectral')[usageIndex]
+cex <- 6 * station$usage/max(usage)
+
+plot(station$lon,station$lat,col=cols,pch=16,cex=cex)
+points(station$lon,station$lat,pch=1,cex=cex)
+
+specificUsageIndex <- .bincode(usage,breaks=365*c(0,1,2,3,4,5,1e9),include.lowest=TRUE)
+
+daily_1 <- specificUsageIndex <= 1
+daily_2 <- specificUsageIndex > 1 & specificUsageIndex <= 2
+daily_3 <- specificUsageIndex > 2 & specificUsageIndex <= 3
+# daily_4 <- specificUsageIndex > 3 & specificUsageIndex <= 4
+# daily_5 <- specificUsageIndex > 4 & specificUsageIndex <= 5
+
+text(station$lon[daily_1],station$lat[daily_1],'1',col='red',cex=1.5,font=2)
+text(station$lon[daily_2],station$lat[daily_2],'2',col='red',cex=1.5,font=2)
+text(station$lon[daily_3],station$lat[daily_3],'3',col='red',cex=1.5,font=2)
+# text(station$lon[daily_4],station$lat[daily_4],'4',col='red',cex=1.5,font=2)
+# text(station$lon[daily_5],station$lat[daily_5],'5',col='red',cex=1.5,font=2)

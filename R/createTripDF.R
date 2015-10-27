@@ -14,11 +14,9 @@
 # * lubridate  - powerful date functions
 # * readr      - easy data ingest
 
-# TODO:  Use maptools::sunriset() and and maptools::crepescule() to add daylight information
-
 library(dplyr)
-library(sp)
 library(maptools)
+library(sp)
 
 # ----- BEGIN -----------------------------------------------------------------
 
@@ -82,9 +80,11 @@ trip$age <- 2015 - trip$birthYear
 # Time info
 trip$timeSinceStart <- difftime(trip$startTime,trip$startTime[1])
 trip$daysSinceStart <- as.integer(as.numeric(trip$timeSinceStart,units="days"))
+trip$weeksSinceStart <- as.integer(as.numeric(trip$timeSinceStart,units="weeks"))
 trip$hourOfDay <- lubridate::hour(trip$startTime)
 trip$dayOfWeek <- lubridate::wday(trip$startTime)
 trip$month <- lubridate::month(trip$startTime)
+
 
 # ----- Distance from the station dataframe -----------------------------------
 
@@ -100,6 +100,7 @@ trip$distance <- as.numeric(NA)
 # NOTE:  Try looping instead:
 for (i in 1:length(trip$distance)) {
   trip$distance[i] <- station[trip$fromStationId[i], distanceKey[i]]
+  # Print out progress for the impatient
   if ( (i %% 1e3) == 0 ) {
     pct <- sprintf("%3d",round(100*(i/length(trip$distance))))
     cat(paste0(pct,' %\n'))
@@ -133,31 +134,32 @@ trip$thunderstorm <- weather[as.character(trip$daysSinceStart),'thunderstorm']
 
 
 # ----- Time of day using maptools -------------------------------------------
-# Create SpatialPoints object using sp
-seattle <- matrix(c(-122.3331, 47.6097), nrow=1)
-Seattle <- SpatialPoints(seattle, proj4strin=CRS('+proj=longlat +datum=WGS84'))
 
-# Not quite correct: gives the sunrise for only one day for every record. However, when hardcoded
-# to different records, gives different POSIXct values. 
+# Create coordinates matrix for Seattle
+seattleCoords <- matrix(c(-122.3331, 47.6097), nrow=1)
 
-dawn <- crepuscule(seattle, trip$startTime, solarDep=6, direction='dawn', POSIXct.out=TRUE)
-sunrise <- sunriset(seattle, trip$startTime, direction='sunrise', POSIXct.out=TRUE)
-sunset <- sunriset(seattle, trip$startTime, direction='sunset', POSIXct.out=TRUE)
-dusk <- crepuscule(seattle, trip$startTime, solarDep=6, direction='dusk', POSIXct.out=TRUE)
+# Get the dayFraction and time of each event
+dawn <- maptools::crepuscule(seattleCoords, trip$startTime, solarDep=6, direction='dawn', POSIXct.out=TRUE)
+sunrise <- maptools::sunriset(seattleCoords, trip$startTime, direction='sunrise', POSIXct.out=TRUE)
+sunset <- maptools::sunriset(seattleCoords, trip$startTime, direction='sunset', POSIXct.out=TRUE)
+dusk <- maptools::crepuscule(seattleCoords, trip$startTime, solarDep=6, direction='dusk', POSIXct.out=TRUE)
 
+# Create logical masks
 trip$night <- trip$startTime > dusk[,2] | trip$startTime < dawn[,2]
 trip$dawn <- trip$startTime > dawn[,2] & trip$startTime < sunrise[,2]
 trip$day <- trip$startTime > sunrise[,2] & trip$startTime < sunset[,2]
 trip$dusk <- trip$startTime > sunset[,2] & trip$startTime < dusk[,2]
 
-trip$amtOfDaylight<- as.factor(NA)
-for (i in 1:nrow(trip)) {
-  if (trip$night[[i]] == TRUE) trip$amtOfDaylight[[i]] <- 'night'
-  if (trip$dawn[[i]] == TRUE)  trip$amtOfDaylight[[i]] <- 'dawn'
-  if (trip$day[[i]] == TRUE)   trip$amtOfDaylight[[i]] <- 'day'
-  if (trip$dusk[[i]] == TRUE)  trip$amtOfDaylight[[i]] <- 'dusk'
-   
-trip$amtOfDaylight <- as.factor(trip$amtOfDaylight)
+# Create a factor
+trip$solarPosition <- ''
+
+trip$solarPosition[trip$night] <- 'night'
+trip$solarPosition[trip$dawn] <- 'dawn'
+trip$solarPosition[trip$day] <- 'day'
+trip$solarPosition[trip$dusk] <- 'dusk'
+
+trip$solarPosition <- as.factor(trip$solarPosition)
+
 
 # ----- Save the dataframe ----------------------------------------------------
 

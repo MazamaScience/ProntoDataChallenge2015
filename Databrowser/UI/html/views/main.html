@@ -1,0 +1,156 @@
+
+  <!-- main container -->
+
+  <div class="container" ng-controller="Main as main" ng-cloak>
+
+ 
+
+    <!-- left column: plot controls, map -->
+
+    <div class="col-sm-6 col-md-5">
+
+      <!-- plot controls -->
+
+      <div class="row margin-md grey">
+
+        <div class="col-lg-4 margin-sm">
+          <label>Plot Type</label>
+          <select-menu model="main.request.plotType" options="main.forms.plotType"></select-menu>
+        </div>
+
+        <div class="col-lg-4 margin-sm">
+          <label>Membership</label>
+          <select-menu model="main.request.userType" options="main.forms.userType"></select-menu>
+        </div>
+
+        <div class="col-lg-4 margin-sm">
+          <label>Type of Day</label>
+          <select-menu model="main.request.dayType" options="main.forms.dayType"></select-menu>
+        </div>
+
+        <div class="col-lg-4 margin-sm">
+          <label>Time of Day</label>
+          <select-menu model="main.request.timeOfDay" options="main.forms.timeOfDay"></select-menu>
+        </div>
+
+        <div class="col-lg-4 margin-sm">
+          <label>Distance</label>
+          <select-menu model="main.request.distance" options="main.forms.distance"></select-menu>
+        </div>
+
+        <div class="col-lg-4 col-lg-offset-8">
+          <button class="btn btn-primary btn-block" ng-click="main.updatePlot()">Update Plot</button>  
+        </div>
+
+      </div>
+
+      <!-- mapping -->
+
+      <div class="row margin-md grey">
+
+        <div class="col-xs-6 margin-sm">
+          <div class="input-group">
+            <input ng-model="main.request.lng" type="text" class="form-control">
+            <div class="input-group-addon">East</div>
+          </div>
+        </div>
+    
+      <!-- longitude -->
+
+        <div class="col-xs-6 margin-sm">
+          <div class="input-group">
+            <input ng-model="main.request.lat" type="text" class="form-control">
+            <div class="input-group-addon">North</div>
+          </div>
+        </div>  
+
+        <div class="col-sm-12">
+
+          <!-- google map directive -->
+          
+          <map
+            ng-transclude 
+            class="google-map margin-sm" 
+            center="main.map.center" 
+            zoom="main.map.zoom"
+            events="main.map.events">
+
+            <marker 
+              lat="main.request.lat" 
+              lng="main.request.lng" 
+              options="main.marker.options"
+              decimals="main.marker.decimals">
+            </marker>
+
+          </map>
+
+        </div>
+
+      </div>
+
+      <!-- end left column -->
+
+    </div>
+
+
+
+
+
+    <!-- right column: plots -->
+
+    <div class="col-sm-6 col-md-offset-1">
+
+      <div class="row margin-md">
+
+        <div class="col-md-12">
+
+          <!-- loading screen-->
+
+          <div class="plot-loading" ng-show="main.status().loading">
+            <div class="spinner spinner-dark">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+            </div>
+          </div>
+
+          <!-- error message -->
+
+          <div class="plot-error" ng-show="main.status().error">
+            <h4>ERROR</h4>
+            <p>{{status().error}}</p>
+          </div>
+
+          <!-- plot image -->
+
+          <img 
+            class="plot-image shadow"
+            ng-click="main.popup.visible=true" 
+            ng-hide="main.status().loading || main.status().error" 
+            ng-src="{{main.url && main.url || ''}}" />
+
+          <!-- popup directive: creates a dark transparent overlay that hides when clicked -->
+          <!-- any html can go inside -->
+
+          <popup visible="main.popup.visible">
+            <div class="col-sm-6 col-sm-offset-3">
+              <img class="plot-image" ng-src="{{main.popup.url}}" />
+            </div>
+          </popup>
+
+        </div>
+
+      </div>
+
+      <!-- end right column -->
+
+    </div>
+
+
+
+
+
+    <!-- end container -->
+ 
+  </div>
+
