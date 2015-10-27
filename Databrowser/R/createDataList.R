@@ -21,8 +21,8 @@ createDataList <- function(infoList) {
   trip$gender <- as.factor(trip$gender)
   trip$dayOfWeek <- as.factor(trip$dayOfWeek)
   trip$hourOfDay <- as.factor(trip$hourOfDay)
-  trip$age <- as.factor(trip$age)
-  trip$month <- as.factor(trip$mont)
+  ###trip$age <- as.factor(trip$age)
+  trip$month <- as.factor(trip$month)
   trip$ProntoWeek <- as.factor(as.integer(trip$weeksSinceStart+1))
   trip$ProntoDay <- as.factor(as.integer(trip$daysSinceStart+1))
   
