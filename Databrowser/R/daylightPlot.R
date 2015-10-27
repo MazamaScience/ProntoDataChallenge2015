@@ -15,7 +15,7 @@ if (FALSE) {
   
   infoList <- list(dataDir="./data_local",
                    plotType='daylight',
-                   userType='all',
+                   userType='annualFemale',
                    dayType='all',
                    timeOfDay='all',
                    distance='all')
@@ -63,12 +63,16 @@ daylightPlot <- function(dataList, infoList, textList) {
   # Get dataframe from the dataList
   trip <- dataList$trip
 
-
+# ------ Algorithm to center 'day' at top of plot' ----------------------------
+  counts <- as.numeric(table(trip$solarPosition))
+  middayFraction <- counts[[2]]/2 + counts[[1]]
+  init.angle <- (middayFraction/sum(counts))*360 + 90
   
     
   #############################################################################
   colors <- c('#E77483', 'gold', 'orange', 'gray31')
-  pie(table(trip$solarPosition), border='white', col=colors, clockwise=T, init.angle=246)
+  # Initial angle was 246
+  pie(table(trip$solarPosition), border='white', col=colors, clockwise=T, init.angle=init.angle)
   par(new=TRUE)
   pie(c(1), border='white', labels=NA, rad=0.4)
   text(0,0, labels=nrow(trip), cex=1.25, font=2)
@@ -76,6 +80,7 @@ daylightPlot <- function(dataList, infoList, textList) {
   #############################################################################
   
   
+
   
   
    
