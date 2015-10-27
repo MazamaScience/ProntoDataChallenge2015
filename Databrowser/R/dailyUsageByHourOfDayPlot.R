@@ -81,7 +81,7 @@ dailyUsageByHourOfDayPlot <- function(dataList, infoList, textList) {
   maxValue <- max(tbl)
   
   # Convert the table (it's 1-D) into a matrix so we can rearrange the rows
-  mat <- matrix(tbl,nrow=365)
+  mat <- matrix(tbl,nrow=365) # byrow = FALSE by default
   
   # Find the location of the first Monday of each month
   date <- seq(lubridate::ymd('2014-10-13',tz='America/Los_Angeles'),
