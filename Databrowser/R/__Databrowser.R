@@ -17,6 +17,7 @@ source("__DATABROWSER_PATH__/R/createDataList.R")
 
 source("__DATABROWSER_PATH__/R/weeklyUsageByDayOfWeekPlot.R")
 source("__DATABROWSER_PATH__/R/dailyUsageByHourOfDayPlot.R")
+source("__DATABROWSER_PATH__/R/calendarHeatmap.R")
 source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
 
 # Global variables
@@ -103,6 +104,10 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   } else if (infoList$plotType == "dailyUsageByHourOfDay") { 
     
     returnValues <- dailyUsageByHourOfDayPlot(dataList,infoList,textList)
+
+  } else if (infoList$plotType == "calendarHeatmap") { 
+    
+    returnValues <- calendarHeatmapPlot(dataList,infoList,textList)
     
   } else if (infoList$plotType == "stationBubble") { 
     

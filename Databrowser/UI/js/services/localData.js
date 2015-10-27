@@ -32,6 +32,9 @@
         text: "Dailiy by Hour",
         value: "dailyUsageByHourOfDay"
       }, {
+        text: "Weather Calendar",
+        value: "calendarHeatmap"
+      }, {
         text: "stationBubble",
         value: "stationBubble"
       }],

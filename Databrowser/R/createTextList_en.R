@@ -30,9 +30,14 @@ createTextList <- function(dataList, infoList) {
   textList$title <- paste("TrigFunctions_plot --",trigFunction)
   textList$attribution <- paste("data:  ProntoCycleShare.com        graphic:  MazamaScience.com")
 
-  textList$dayLabels=c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
-  textList$monthLabels_3=c('Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
-  textList$monthLabels_1=c('N','D','J','F','M','A','M','J','J','A','S','O')
+  textList$dayLabels <- c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
+  textList$monthLabels_3 <- c('Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
+  textList$monthLabels_1 <- c('N','D','J','F','M','A','M','J','J','A','S','O')
+  
+  textList$temp <- "Temp"
+  textList$rideCount <- "Rides"
+  textList$precip <- "Rain"
+  
   
   # ----- Subset info ---------------------------------------------------------
 
