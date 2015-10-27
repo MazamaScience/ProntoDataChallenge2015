@@ -30,7 +30,12 @@
         value: "weeklyUsageByDayOfWeek"
       }, {
         text: "Dailiy by Hour",
-        value: "dailyUsageByHourOfDay"
+      }, {
+        text: "Weather Calendar",
+        value: "weatherCalendar"
+      }, {
+        text: "Daylight",
+        value: "daylight"
       }, {
         text: "stationBubble",
         value: "stationBubble"

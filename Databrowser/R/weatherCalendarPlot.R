@@ -1,7 +1,7 @@
 ###############################################################################
-# dailyUsageByHourOfDayPlot.R
+# weatherCalendarPlot.R
 #
-# Hour by day dailyUsageByHourOfDay.
+# Multiple calendars showing weather and ridership.
 
 ###############################################################################
 # Intialization for testing in RStudio
@@ -12,7 +12,7 @@ if (FALSE) {
   source('./R/createTextList_en.R')
   
   infoList <- list(dataDir="./data_local",
-                   plotType='calendarHeatmap',
+                   plotType='weatherCalendar',
                    userType='all',
                    dayType='all',
                    timeOfDay='all',
@@ -22,7 +22,7 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
   
-  calendarHeatmapPlot(dataList, infoList, textList)
+  weatherCalendarPlot(dataList, infoList, textList)
   
 }
 
@@ -92,7 +92,7 @@ calendarHeatmap_sub <- function(mat, date=NULL,
 
 ###############################################################################
 
-calendarHeatmapPlot <- function(dataList, infoList, textList) {
+weatherCalendarPlot <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
   

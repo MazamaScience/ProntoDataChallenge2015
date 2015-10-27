@@ -15,9 +15,11 @@ library(jsonlite) # for JSON support
 source("__DATABROWSER_PATH__/R/createInfoList.R")
 source("__DATABROWSER_PATH__/R/createDataList.R")
 
-source("__DATABROWSER_PATH__/R/weeklyUsageByDayOfWeekPlot.R")
+source("__DATABROWSER_PATH__/R/weatherCalendarPlot.R")
 source("__DATABROWSER_PATH__/R/dailyUsageByHourOfDayPlot.R")
+source("__DATABROWSER_PATH__/R/daylightPlot.R")
 source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
+source("__DATABROWSER_PATH__/R/weeklyUsageByDayOfWeekPlot.R")
 
 # Global variables
 G_DEBUG <- TRUE
@@ -100,9 +102,17 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
     
     returnValues <- weeklyUsageByDayOfWeekPlot(dataList,infoList,textList)
     
+  } else if (infoList$plotType == "weatherCalendar") { 
+    
+    returnValues <- weatherCalendarPlot(dataList,infoList,textList)
+    
   } else if (infoList$plotType == "dailyUsageByHourOfDay") { 
     
     returnValues <- dailyUsageByHourOfDayPlot(dataList,infoList,textList)
+    
+  } else if (infoList$plotType == "daylight") { 
+    
+    returnValues <- daylightPlot(dataList,infoList,textList)
     
   } else if (infoList$plotType == "stationBubble") { 
     

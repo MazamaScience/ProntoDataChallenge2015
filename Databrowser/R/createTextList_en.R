@@ -42,9 +42,9 @@ createTextList <- function(dataList, infoList) {
     if (infoList$userType == 'annual') {
       textList$subset <- 'Annual -- '
     } else if (infoList$userType == 'annualMale') {
-      textList$subset <- 'Annual (male) -- '
+      textList$subset <- 'Annual (male) -- '   ### \u2642 is Unicode for Mars
     } else if (infoList$userType == 'annualFemale') {
-      textList$subset <- 'Annual (female) -- '
+      textList$subset <- 'Annual (female) -- ' ### \u2640 is Unicode for Venus
     } else if (infoList$userType == 'annualOther') {
       textList$subset <- 'Annual (other) -- '
     } else {
