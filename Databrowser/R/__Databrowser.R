@@ -63,28 +63,21 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
     
   absPlotPNG <- paste(infoList$outputDir,infoList$outputFileBase,'.png',sep="")
   
-  # NOTE:  The stationBubblePlot uses RgoogleMaps::GetMap() to obtain the
-  # NOTE:  initial png file from Google.
-  
-  if (infoList$plotType != "stationBubble") {
-    
-    if (infoList$plotDevice == "cairo") {
+  if (infoList$plotDevice == "cairo") {
       
-      library(Cairo) # CairoPNG is part of the Cairo package
-      CairoPNG(filename=absPlotPNG,
-               width=infoList$plotWidth, height=infoList$plotHeight,
-               units='px', bg='white')
-      print(paste("Working on", absPlotPNG))
+    library(Cairo) # CairoPNG is part of the Cairo package
+    CairoPNG(filename=absPlotPNG,
+             width=infoList$plotWidth, height=infoList$plotHeight,
+             units='px', bg='white')
+    print(paste("Working on", absPlotPNG))
       
-    } else if (infoList$plotDevice == "png") {
+  } else if (infoList$plotDevice == "png") {
       
-      png(filename=absPlotPNG,
-          width=infoList$plotWidth, height=infoList$plotHeight,
-          units='px', bg='white')
-      print(paste("Working on",absPlotPNG))
+    png(filename=absPlotPNG,
+        width=infoList$plotWidth, height=infoList$plotHeight,
+        units='px', bg='white')
+    print(paste("Working on",absPlotPNG))
       
-    }
-    
   }
   
   

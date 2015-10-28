@@ -100,6 +100,8 @@ createTextList <- function(dataList, infoList) {
     textList$title <- 'Weekly Usage by Day'
   } else if (infoList$plotType == 'dailyUsageByHourOfDay') {
     textList$title <- 'Daily Usage by Hour'
+  } else if (infoList$plotType == 'stationBubble') {
+    textList$title <- 'Average Station Usage'
   } else {
     textList$title <- 'TITLE GOES HERE'
   }
