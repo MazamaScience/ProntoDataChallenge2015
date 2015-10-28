@@ -54,13 +54,27 @@ createTextList <- function(dataList, infoList) {
   if (infoList$gender != 'all') {
     if (infoList$gender == 'male') {
       textList$subset <- 'male -- '   ### \u2642 is Unicode for Mars
-    } else if (infoList$gender == 'annualFemale') {
+    } else if (infoList$gender == 'female') {
       textList$subset <- 'female -- ' ### \u2640 is Unicode for Venus
-    } else if (infoList$gender == 'annualOther') {
+    } else if (infoList$gender == 'other') {
       textList$subset <- 'other -- '
     }
   }
   
+  if (infoList$age != 'all') {
+    if (infoList$age == '_21') {
+      textList$subset <- paste0(textList$subset,'<21 years --')
+    } else if (infoList$age == '21_30') {
+      textList$subset <- paste0(textList$subset,'21-30 years --')
+    } else if (infoList$age == '31_40') {
+      textList$subset <- paste0(textList$subset,'31-40 years --')
+    } else if (infoList$age == '41_60') {
+      textList$subset <- paste0(textList$subset,'41-60 years --')
+    } else if (infoList$age == '61_') {
+      textList$subset <- paste0(textList$subset,'>60 years --')
+    }
+  }
+
   if (infoList$dayType != 'all') {
     if (infoList$dayType == 'weeday') {
       textList$subset <- paste0(textList$subset,'Weekday -- ')
@@ -100,7 +114,7 @@ createTextList <- function(dataList, infoList) {
   }
   
   # Strip off first and last ','
-  textList$subset <- stringr::str_sub(textList$subset, start=1, end=-5)
+  textList$subset <- stringr::str_sub(textList$subset, start=1, end=-4)
   
   
   # ----- Title ---------------------------------------------------------------
@@ -110,7 +124,7 @@ createTextList <- function(dataList, infoList) {
   } else if (infoList$plotType == 'dailyUsageByHourOfDay') {
     textList$title <- 'Daily Usage by Hour'
   } else if (infoList$plotType == 'stationBubble') {
-    textList$title <- 'Average Station Usage'
+    textList$title <- 'Station Usage'
   } else {
     textList$title <- 'TITLE GOES HERE'
   }

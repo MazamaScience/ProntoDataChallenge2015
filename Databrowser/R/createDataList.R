@@ -13,6 +13,8 @@ createDataList <- function(infoList) {
   # Load data
   trip <- get(load(paste0(infoList$dataDir,'/Mazama_trip.RData')))
   
+  startingRowCount <- nrow(trip)
+
   # NOTE:  Create factors before subsetting so that all levels will be
   # NOTE:  captured. Downstream use of the table() function in plotting
   # NOTE:  scripts will insert zeros for rows or columns where a particular
@@ -31,12 +33,6 @@ createDataList <- function(infoList) {
   # userType
   if (infoList$userType == 'annual') {
     trip <- subset(trip, userType == 'Annual Member')
-  } else if (infoList$userType == 'annualMale') {
-    trip <- subset(trip, userType == 'Annual Member' & gender == 'Male')
-  } else if (infoList$userType == 'annualFemale') {
-    trip <- subset(trip, userType == 'Annual Member' & gender == 'Female')
-  } else if (infoList$userType == 'annualOther') {
-    trip <- subset(trip, userType == 'Annual Member' & gender == 'Other')
   } else if (infoList$userType == 'shortTerm') {
     trip <- subset(trip, userType == 'Short-Term Pass Holder')
   }
@@ -102,12 +98,13 @@ createDataList <- function(infoList) {
   }
   
   # station
-  if (infoList$stationId == 'all') {
-    trip <- subset(trip, trip$distance == 0)
-  } else {
+  if (infoList$stationId != 'all') {
     trip <- subset(trip, trip$fromStationId == infoList$stationId | trip$toStationId == infoList$stationId)
   }
       
+  endingRowCount <- nrow(trip)
+
+  print(paste0(endingRowCount,' of ',startingRowCount,' rows retained.'))
       
     
   # ----- Other Data ----------------------------------------------------------

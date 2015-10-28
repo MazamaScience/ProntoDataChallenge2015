@@ -33,16 +33,12 @@ if (FALSE) {
 
 stationBubblePlot <- function(dataList, infoList, textList) {
  
-
   # ----- Style ---------------------------------------------------------------
   
   # Overall
   col_text <- 'gray40'
   font <- 2
   cexFactor <- 0.5
-  cex_title <- 2.5 * cexFactor
-  cex_subset <- 1.5 * cexFactor
-  cex_attribution <- 1.5 * cexFactor
   
   # Bad stations
   cex_station <- 1.0
@@ -62,20 +58,19 @@ stationBubblePlot <- function(dataList, infoList, textList) {
   station <- dataList$station
   
   # Count up the trips
-  fromStation <- table(trip$fromStationId)
-  station$fromCount <- as.numeric(fromStation[station$terminal])
-  toStation <- table(trip$toStation)
-  station$toCount <- as.numeric(toStation[station$terminal])
+  fromStationTbl <- table(trip$fromStationId)
+  fromCount <- as.numeric(fromStationTbl[station$terminal])
+  fromCount[is.na(fromCount)] <- 0
+  toStationTbl <- table(trip$toStation)
+  toCount <- as.numeric(toStationTbl[station$terminal])
+  toCount[is.na(toCount)] <- 0
   
   # Remove 'Pronto Shop'
   station <- subset(station,terminal != 'XXX-01')
 
   # Get adjust station usage
-  rawUsage <- station$fromCount + station$toCount
+  rawUsage <- fromCount + toCount
   usage <- rawUsage * station$onlineDays/max(station$onlineDays)
-  
-  # Max value
-  maxValue <- round(max(usage) / 365)
   
   # Create breaks
   breaks=quantile(usage,probs=seq(0,1,1/9))
@@ -86,7 +81,7 @@ stationBubblePlot <- function(dataList, infoList, textList) {
   
   # Set colors and sizes based on usage categories
   usageIndex <- .bincode(usage,breaks=breaks,include.lowest=TRUE)
-  cols <- RColorBrewer::brewer.pal(max(usageIndex),'Purples')[usageIndex]
+  cols <- RColorBrewer::brewer.pal(max(usageIndex),'Spectral')[usageIndex]
   cols_border <- rep('black',length(cols))
   for (i in 1:length(cols)) cols[i] <- adjustcolor(cols[i],0.8)
   cex <- 8 * usage/max(usage)
@@ -119,9 +114,39 @@ stationBubblePlot <- function(dataList, infoList, textList) {
   daily_3 <- specificUsageIndex > 3 & specificUsageIndex <= 4
   daily_4 <- specificUsageIndex > 4 & specificUsageIndex <= 5
   
+  # ----- Layout --------------------------------------------------------------
+  
+  # NOTE:  The layoutFraction_ components are the same in every plot and guarantee
+  # NOTE:  a similar look and feel across plots. The fractions are multiplied by
+  # NOTE:  the sum of heights used by all other plotting rows in your plot.
+  # NOTE:
+  # NOTE:  For instance, if you have three plots with heights of c(2,1,1) then the
+  # NOTE:  full set of plotting heights is 4 and the full set of heights will be:
+  # NOTE:  heights=c(layoutFraction_title*4,2,1,1,layoutFraction_attribution*4).
+  # NOTE:
+  # NOTE:  The order of plotting should always start with N and end with N-1 so 
+  # NOTE:  that the title is added last.
+  
+  # For this plot the sum of heights is 1
+  plotHeightSum <- 1
+  heights <- c(plotHeightSum * infoList$layoutFraction_title,
+               1,
+               plotHeightSum * infoList$layoutFraction_attribution)
+  layout(matrix(c(3,1:2)), heights=heights)
+  
+
   # ----- Plot ----------------------------------------------------------------
 
-  par(mar=c(4,4,5,4))  
+  # NOTE:  Figure inches are defined before we plot anything and should be square.
+  # NOTE:  Our background image for the map is square so we need to make sure that
+  # NOTE:  the sides are squeezed in a little to match the non-square plotting
+  # NOTE:  region specified in the layout above.
+
+  widthInches <- par('fin')[1]
+  nonPlotFraction <- (heights[1] + heights[length(heights)]) / sum(heights)
+  sideBorder <- (widthInches * nonPlotFraction) / 2
+
+  par(mai=c(0,sideBorder,0,sideBorder))  
   
   # Blank plot to get the scaling
   xvals <- seq(xlo,xhi,length.out=5)
@@ -146,18 +171,18 @@ stationBubblePlot <- function(dataList, infoList, textList) {
     text(station$lon[daily_1], station$lat[daily_1], '1', col=col_station, cex=cex_station, font=font_station)
   }
   
+  # Modify the passed in title
+  maxValue <- max(usage,na.rm=TRUE)
+  if (maxValue > 900) {
+    textList$title <- paste0(textList$title,'  (max=',round(maxValue/365,1),'/day)')
+  } else {
+    textList$title <- paste0(textList$title,'  (max=',maxValue,'/year)')
+  }
 
-  # ---- Annotations ----------------------------------------------------------
-  
-  # Title and subset information at the top
-  title <- paste0(textList$title,'  (max=',maxValue,'/day)')
-  mtext(title, side=3, line=line_title, font=font, col=col_text, cex=cex_title, xpd=NA)
-  mtext(textList$subset, side=3, line=line_subtitle, font=1, col=col_text, cex=cex_subset, xpd=NA)
-  
-  # Attribution
-  mtext(textList$attribution, side=1, line=line_attribution, font=1, col=col_text, cex=cex_attribution, xpd=NA)
-  
-  
+  # Add title and attribution as the last two plots
+  addTitleAndAttribution(dataList,infoList,textList)
+
+
   # ---- Cleanup and Return ---------------------------------------------------
   
   # Restore Global Graphical Parameters

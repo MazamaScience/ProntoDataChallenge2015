@@ -31,8 +31,6 @@ weeklyUsageByDayOfWeekPlot <- function(dataList, infoList, textList) {
   col_text <- 'gray40'
   font <- 2
   cex <- 2
-  cex_title <- 3
-  cex_attribution <- 1.5
   
   # Timeseries
   lwd <- 3
@@ -70,11 +68,28 @@ weeklyUsageByDayOfWeekPlot <- function(dataList, infoList, textList) {
               by="weeks")
   newMonthMonday <- which(diff(lubridate::month(date)) != 0)
 
-  # ----- Plot ----------------------------------------------------------------
+  # ----- Layout --------------------------------------------------------------
   
-  # NOTE:  Have the title in the top position plotted last so that the vertical
-  # NOTE:  white lines with xpd=NA don't overplot the title text.
-  layout(matrix(c(9,1:8)))
+  # NOTE:  The layoutFraction_ components are the same in every plot and guarantee
+  # NOTE:  a similar look and feel across plots. The fractions are multiplied by
+  # NOTE:  the sum of heights used by all other plotting rows in your plot.
+  # NOTE:
+  # NOTE:  For instance, if you have three plots with heights of c(2,1,1) then the
+  # NOTE:  full set of plotting heights is 4 and the full set of heights will be:
+  # NOTE:  heights=c(layoutFraction_title*4,2,1,1,layoutFraction_attribution*4).
+  # NOTE:
+  # NOTE:  The order of plotting should always start with N and end with N-1 so 
+  # NOTE:  that the title is added last.
+  
+  # For this plot the sum of heights is 1
+  plotHeightSum <- 7
+  heights <- c(plotHeightSum * infoList$layoutFraction_title,
+               rep(1,7),
+               plotHeightSum * infoList$layoutFraction_attribution)
+  layout(matrix(c(9,1:8)), heights=heights)
+  
+
+  # ----- Plot ----------------------------------------------------------------
   
   par(mar=c(0,3,3,4))
   for (i in 1:7) {
@@ -101,20 +116,11 @@ weeklyUsageByDayOfWeekPlot <- function(dataList, infoList, textList) {
   # Add vertical grid lines at each new month
   abline(v=newMonthMonday, lty=lty_vert, lwd=lwd_vert, col=col_vert,xpd=NA)
   
-  
-  # ---- Annotations ----------------------------------------------------------
+  # Modify the passed in title
+  infoList$title <- paste0(textList$title,'  (max=',maxValue,'/day)')
 
-  par(mar=c(0,0,0,0))
-  plot(0:1,0:1,col='transparent',axes=FALSE,xlab='',ylab='')
-  text(0.5, 0.5, textList$attribution, font=1, col=col_text, cex=cex_attribution, xpd=NA)
-  
-  # Title and subset information at the top
-  par(mar=c(0,0,0,0))
-  plot(0:1,0:1,col='transparent',axes=FALSE,xlab='',ylab='')
-  title <- paste0(textList$title,'  (max=',maxValue,')')
-  text(0.5, 0.6, title, font=font, col=col_text, cex=cex_title, xpd=NA)
-  text(0.5, 0.2, textList$subset, font=1, col=col_text, cex=cex, xpd=NA)
-  
+  # Add title and attribution as the last two plots
+  addTitleAndAttribution(dataList,infoList,textList)
   
   # ---- Cleanup and Return ---------------------------------------------------
  

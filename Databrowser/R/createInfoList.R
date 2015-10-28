@@ -28,6 +28,23 @@ createInfoList <- function(jsonArgs='{}') {
     stop(paste0("ERROR in createInfoList.R: required parameter plotType is missing."),call.=FALSE)
   }
   
+  
+  # ----- Plot styling to be used in all plots ---------------------------------
+  
+  # Title and attribution
+  infoList$layoutFraction_title <- 0.16
+  infoList$layoutFraction_attribution <- 0.08
+  infoList$font_title <- 2
+  infoList$col_title <- 'black'
+  infoList$cex_title <- 3
+  infoList$font_subtitle <- 3
+  infoList$col_subtitle <- 'gray20'
+  infoList$cex_subtitle <- 2.0
+  infoList$font_attribution <- 1
+  infoList$col_attribution <- 'gray20'
+  infoList$cex_attribution <- 1.5
+  
+  
   # ----- Databrowser specific parameters from the UI --------------------------
 
   infoList$plotType <- ifelse(is.null(infoList$plotType),'weeklyUsageByDayOfWeek',infoList$plotType)

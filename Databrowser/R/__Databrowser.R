@@ -15,10 +15,11 @@ library(jsonlite) # for JSON support
 source("__DATABROWSER_PATH__/R/createInfoList.R")
 source("__DATABROWSER_PATH__/R/createDataList.R")
 
-source("__DATABROWSER_PATH__/R/weatherCalendarPlot.R")
+source("__DATABROWSER_PATH__/R/addTitleAndAttribution.R")
 source("__DATABROWSER_PATH__/R/dailyUsageByHourOfDayPlot.R")
 source("__DATABROWSER_PATH__/R/daylightPlot.R")
 source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
+source("__DATABROWSER_PATH__/R/weatherCalendarPlot.R")
 source("__DATABROWSER_PATH__/R/weeklyUsageByDayOfWeekPlot.R")
 
 # Global variables

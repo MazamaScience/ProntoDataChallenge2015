@@ -10,7 +10,6 @@
 # Targets 
 
 install: FORCE
-	#R CMD INSTALL --library=$(libPath) RJSONIO_1.2-0.2.tar.gz
 	#R CMD INSTALL --library=$(libPath) stringr_0.6.2.tar.gz
 
 FORCE:

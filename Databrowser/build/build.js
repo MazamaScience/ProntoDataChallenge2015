@@ -187,8 +187,8 @@ angular.module('App')
     var request = {
       language: "en",
       plotWidth: 640,
-      plotType: "weeklyUsageByDayOfWeek",
       productType: "systemTable",
+      plotType: "weeklyUsageByDayOfWeek",
       userType: "all",
       age: "all",
       gender: "all",
@@ -205,8 +205,8 @@ angular.module('App')
         text: "Weekly by DoW",
         value: "weeklyUsageByDayOfWeek"
       }, {
-        text: "Dailiy by Hour",
-        value: "dailyUsageByHour"
+        text: "Daily by Hour",
+        value: "dailyUsageByHourOfDay"
       }, {
         text: "Daylight",
         value: "daylight"
