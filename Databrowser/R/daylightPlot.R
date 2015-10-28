@@ -15,9 +15,9 @@ if (FALSE) {
   
   infoList <- list(dataDir="./data_local",
                    plotType='daylight',
-                   userType='annualFemale',
+                   userType='all',
                    dayType='all',
-                   timeOfDay='all',
+                   timeOfDay='early',
                    distance='all')
   
   dataList <- createDataList(infoList)
@@ -27,6 +27,8 @@ if (FALSE) {
   daylightPlot(dataList, infoList, textList)
   
 }
+
+
 
 ###############################################################################
 
@@ -60,27 +62,34 @@ daylightPlot <- function(dataList, infoList, textList) {
   
   # ----- Data Preparation ----------------------------------------------------
   
+# TODO: 
+# 
+# 
+# - use par margin settings to make them bigger
+# 
+# - 
+
+
   # Get dataframe from the dataList
   trip <- dataList$trip
 
-# ------ Algorithm to center 'day' at top of plot' ----------------------------
-  counts <- as.numeric(table(trip$solarPosition))
-  middayFraction <- counts[[2]]/2 + counts[[1]]
-  init.angle <- (middayFraction/sum(counts))*360 + 90
-  
-    
-  #############################################################################
-  colors <- c('#E77483', 'gold', 'orange', 'gray31')
-  # Initial angle was 246
-  pie(table(trip$solarPosition), border='white', col=colors, clockwise=T, init.angle=init.angle)
-  par(new=TRUE)
-  pie(c(1), border='white', labels=NA, rad=0.4)
-  text(0,0, labels=nrow(trip), cex=1.25, font=2)
-  par(new=FALSE)
-  #############################################################################
   
   
+layout(matrix(c(1,3,2,4), nrow=2, ncol=2))
 
+
+# Subset by the four genders - male, female, other and non-reported(short-term users)
+maleTripDf <- subset(trip, gender=='Male')
+miniDaylightPlot(maleTripDf, title='Male Users')
+
+femaleTripDf <- subset(trip, gender=='Female')
+miniDaylightPlot(femaleTripDf, title='Female Users')
+
+otherTripDf <- subset(trip, gender=='Other')
+miniDaylightPlot(otherTripDf, title='Gender not reported')
+  
+StTripDf <- subset(trip, gender=='')
+miniDaylightPlot(StTripDf, 'Short Term Users')
   
   
    
@@ -162,3 +171,38 @@ daylightPlot <- function(dataList, infoList, textList) {
   return(c(1.0,2.0,3.0,4.0))
   
 }
+
+
+miniDaylightPlot <- function(trip, title = 'All Trips'){
+  #############################################################################
+  # ------ Algorithm to center 'day' at top of plot' ----------------------------
+  counts <- as.numeric(table(trip$solarPosition))
+  middayFraction <- counts[[2]]/2 + counts[[1]]
+  init.angle <- (middayFraction/sum(counts))*360 + 90
+  colors <- c('#E77483', 'gold', 'orange', 'gray31')
+  table <- table(trip$solarPosition)
+  # Error handling if table is all zeroes
+  if (all(table==0)){
+    pie(1, border='gray80', col='gray80', labels=NA)
+    par(new=TRUE) 
+    pie(c(1), border='white', labels=NA, rad=0.4)
+    text(0,0, labels= 'No\nTrips', cex=1.25, font=2)
+    par(new=FALSE)
+  } else {
+    pie(table, border='white', labels=NA, col=colors, clockwise=T, init.angle=init.angle, main=title)
+    par(new=TRUE)
+    pie(c(1), border='white', labels=NA, rad=0.4)
+    innerText <- as.character(nrow(trip))
+    if (nchar(innerText) > 3) {
+      labels <- paste0(str_sub(innerText, end=2), ',', str_sub(innerText, start=2))
+      text(0,0, labels=labels, cex=1.25, font=2)    
+    } else {
+      text(0,0, labels=innerText, cex=1.25, font=2)  
+    }
+    par(new=FALSE)
+  }
+ 
+  #############################################################################
+}
+
+
