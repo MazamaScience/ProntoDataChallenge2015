@@ -15,10 +15,11 @@ library(jsonlite) # for JSON support
 source("__DATABROWSER_PATH__/R/createInfoList.R")
 source("__DATABROWSER_PATH__/R/createDataList.R")
 
-source("__DATABROWSER_PATH__/R/weeklyUsageByDayOfWeekPlot.R")
+source("__DATABROWSER_PATH__/R/weatherCalendarPlot.R")
 source("__DATABROWSER_PATH__/R/dailyUsageByHourOfDayPlot.R")
-source("__DATABROWSER_PATH__/R/calendarHeatmap.R")
+source("__DATABROWSER_PATH__/R/daylightPlot.R")
 source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
+source("__DATABROWSER_PATH__/R/weeklyUsageByDayOfWeekPlot.R")
 
 # Global variables
 G_DEBUG <- TRUE
@@ -62,28 +63,21 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
     
   absPlotPNG <- paste(infoList$outputDir,infoList$outputFileBase,'.png',sep="")
   
-  # NOTE:  The stationBubblePlot uses RgoogleMaps::GetMap() to obtain the
-  # NOTE:  initial png file from Google.
-  
-  if (infoList$plotType != "stationBubble") {
-    
-    if (infoList$plotDevice == "cairo") {
+  if (infoList$plotDevice == "cairo") {
       
-      library(Cairo) # CairoPNG is part of the Cairo package
-      CairoPNG(filename=absPlotPNG,
-               width=infoList$plotWidth, height=infoList$plotHeight,
-               units='px', bg='white')
-      print(paste("Working on", absPlotPNG))
+    library(Cairo) # CairoPNG is part of the Cairo package
+    CairoPNG(filename=absPlotPNG,
+             width=infoList$plotWidth, height=infoList$plotHeight,
+             units='px', bg='white')
+    print(paste("Working on", absPlotPNG))
       
-    } else if (infoList$plotDevice == "png") {
+  } else if (infoList$plotDevice == "png") {
       
-      png(filename=absPlotPNG,
-          width=infoList$plotWidth, height=infoList$plotHeight,
-          units='px', bg='white')
-      print(paste("Working on",absPlotPNG))
+    png(filename=absPlotPNG,
+        width=infoList$plotWidth, height=infoList$plotHeight,
+        units='px', bg='white')
+    print(paste("Working on",absPlotPNG))
       
-    }
-    
   }
   
   
@@ -101,13 +95,21 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
     
     returnValues <- weeklyUsageByDayOfWeekPlot(dataList,infoList,textList)
     
+  } else if (infoList$plotType == "weatherCalendar") { 
+    
+    returnValues <- weatherCalendarPlot(dataList,infoList,textList)
+    
   } else if (infoList$plotType == "dailyUsageByHourOfDay") { 
     
     returnValues <- dailyUsageByHourOfDayPlot(dataList,infoList,textList)
 
-  } else if (infoList$plotType == "calendarHeatmap") { 
+  } else if (infoList$plotType == "weatherCalendar") { 
     
-    returnValues <- calendarHeatmapPlot(dataList,infoList,textList)
+    returnValues <- weatherCalendarPlot(dataList,infoList,textList)
+    
+  } else if (infoList$plotType == "daylight") { 
+    
+    returnValues <- daylightPlot(dataList,infoList,textList)
     
   } else if (infoList$plotType == "stationBubble") { 
     

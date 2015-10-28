@@ -17,11 +17,14 @@
       plotType: "weeklyUsageByDayOfWeek",
       productType: "systemTable",
       userType: "all",
+      age: "all",
+      gender: "all",
       dayType: "all",
       timeOfDay: "all",
       distance: "all",
+      stationId: "all",
       lat: 47,
-      lng: -122
+      lng: 122
     };
 
     var forms = {
@@ -30,35 +33,61 @@
         value: "weeklyUsageByDayOfWeek"
       }, {
         text: "Dailiy by Hour",
-        value: "dailyUsageByHourOfDay"
+        value: "dailyUsageByHour"
+      }, {
+        text: "Daylight",
+        value: "daylight"
       }, {
         text: "Weather Calendar",
-        value: "calendarHeatmap"
+        value: "weatherCalendar"
       }, {
         text: "stationBubble",
         value: "stationBubble"
       }],
       userType: [{
-        text: "All",
+        text: "All Users",
         value: "all"
-      }, {
-        text: "Short-Term",
-        value: "shortTerm"
       }, {
         text: "Annual",
         value: "annual"
       }, {
-        text: "Annual (male)",
-        value: "annualMale"
+        text: "Short-Term",
+        value: "shortTerm"
+      }],
+      age: [{
+        text: "All Ages",
+        value: "all"
       }, {
-        text: "Annual (female)",
-        value: "annualFemale"
+        text: "Under 21",
+        value: "_21"
       }, {
-        text: "Annual (other)",
-        value: "annualOther"
+        text: "21 to 30",
+        value: "21_30"
+      }, {
+        text: "31 to 40",
+        value: "31_40"
+      }, {
+        text: "41 to 60",
+        value: "41_60"
+      }, {
+        text: "Over 60",
+        value: "61_"
+      }],
+      gender: [{
+        text: "All Genders",
+        value: "all"
+      }, {
+        text: "Male",
+        value: "male"
+      }, {
+        text: "Female",
+        value: "female"
+      }, {
+        text: "Other",
+        value: "other"
       }],
       dayType: [{
-        text: "All",
+        text: "All Days",
         value: "all"
       }, {
         text: "Weekday",
@@ -68,7 +97,7 @@
         value: "weekend"
       }],
       timeOfDay: [{
-        text: "All",
+        text: "All Times",
         value: "all"
       }, {
         text: "Early 4-6",
@@ -90,7 +119,7 @@
         value: "night"
       }],
       distance: [{
-        text: "All",
+        text: "All Distances",
         value: "all"
       }, {
         text: "Zero",
@@ -110,6 +139,13 @@
       }, {
         text: " >5 km",
         value: "5_"
+      }],
+      stationId: [{
+        text: "All Stations",
+        value: "all"
+      }, {
+        text: "Pier 69",
+        value: "WF-01"
       }]
     };
 

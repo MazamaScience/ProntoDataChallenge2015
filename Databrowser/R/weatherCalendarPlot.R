@@ -1,7 +1,7 @@
 ###############################################################################
-# dailyUsageByHourOfDayPlot.R
+# weatherCalendarPlot.R
 #
-# Hour by day dailyUsageByHourOfDay.
+# Multiple calendars showing weather and ridership.
 
 ###############################################################################
 # Intialization for testing in RStudio
@@ -12,7 +12,7 @@ if (FALSE) {
   source('./R/createTextList_en.R')
   
   infoList <- list(dataDir="./data_local",
-                   plotType='calendarHeatmap',
+                   plotType='weatherCalendar',
                    userType='all',
                    dayType='all',
                    timeOfDay='all',
@@ -22,13 +22,13 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
   
-  calendarHeatmapPlot(dataList, infoList, textList)
+  weatherCalendarPlot(dataList, infoList, textList)
   
 }
 
 ###############################################################################
 
-calendarHeatmapPlot <- function(dataList, infoList, textList) {
+weatherCalendarPlot <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
   
@@ -138,16 +138,6 @@ calendarHeatmapPlot <- function(dataList, infoList, textList) {
   #        font=font, col=col_text, cex=cex, xpd=NA)
   #   
   # 
-  # ---- Annotations ----------------------------------------------------------
-  
-  #   # Title and subset information at the top
-  #   title <- paste0(textList$title,'  (max=',maxValue_rides,')')
-  #   mtext(title, side=3, line=line_title, font=font, col=col_text, cex=cex_title, xpd=NA)
-  #   mtext(textList$subset, side=3, line=line_subtitle, font=1, col=col_text, cex=cex, xpd=NA)
-  #   
-  #   # Attribution
-  #   mtext(textList$attribution, side=1, line=line_attribution, font=1, col=col_text, cex=cex_attribution, xpd=NA)
-  
   # ---- Annotations ----------------------------------------------------------
   
   par(mar=c(0,0,0,0))

@@ -46,14 +46,18 @@ createTextList <- function(dataList, infoList) {
   if (infoList$userType != 'all') {
     if (infoList$userType == 'annual') {
       textList$subset <- 'Annual -- '
-    } else if (infoList$userType == 'annualMale') {
-      textList$subset <- 'Annual (male) -- '
-    } else if (infoList$userType == 'annualFemale') {
-      textList$subset <- 'Annual (female) -- '
-    } else if (infoList$userType == 'annualOther') {
-      textList$subset <- 'Annual (other) -- '
     } else {
       textList$subset <- 'Short-Term -- '
+    }
+  }
+  
+  if (infoList$gender != 'all') {
+    if (infoList$gender == 'male') {
+      textList$subset <- 'male -- '   ### \u2642 is Unicode for Mars
+    } else if (infoList$gender == 'annualFemale') {
+      textList$subset <- 'female -- ' ### \u2640 is Unicode for Venus
+    } else if (infoList$gender == 'annualOther') {
+      textList$subset <- 'other -- '
     }
   }
   
@@ -105,6 +109,8 @@ createTextList <- function(dataList, infoList) {
     textList$title <- 'Weekly Usage by Day'
   } else if (infoList$plotType == 'dailyUsageByHourOfDay') {
     textList$title <- 'Daily Usage by Hour'
+  } else if (infoList$plotType == 'stationBubble') {
+    textList$title <- 'Average Station Usage'
   } else {
     textList$title <- 'TITLE GOES HERE'
   }

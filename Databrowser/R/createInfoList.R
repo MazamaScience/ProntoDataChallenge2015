@@ -33,9 +33,12 @@ createInfoList <- function(jsonArgs='{}') {
   infoList$plotType <- ifelse(is.null(infoList$plotType),'weeklyUsageByDayOfWeek',infoList$plotType)
 
   infoList$userType <- ifelse(is.null(infoList$userType),'all',infoList$userType)
+  infoList$age <- ifelse(is.null(infoList$age),'all',infoList$age)
+  infoList$gender <- ifelse(is.null(infoList$gender),'all',infoList$gender)
   infoList$dayType <- ifelse(is.null(infoList$dayType),'all',infoList$dayType)
   infoList$timeOfDay <- ifelse(is.null(infoList$timeOfDay),'all',infoList$timeOfDay)
   infoList$distance <- ifelse(is.null(infoList$distance),'all',infoList$distance)
+  infoList$stationId <- ifelse(is.null(infoList$stationId),'all',infoList$stationId)
 
   return(infoList)
 }
