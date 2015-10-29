@@ -33,6 +33,17 @@ if (FALSE) {
   
   pie_daylightPlot(dataList, infoList, textList)
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 
 # Function to turn nrow(df) into character string title
@@ -54,6 +65,7 @@ pie_daylightPlot <- function(dataList, infoList, textList) {
   # - you may have to use graphical setting xpd=NA in pie() to get the title to appear
   # - use 'M','F','O','S-T' as center text and put the counts above
   # - set colors and col_gray in the style section above
+  # - change margins to have less white space in the middle 
 
   # Get dataframe from the dataList
   trip <- dataList$trip
@@ -83,32 +95,41 @@ pie_daylightPlot <- function(dataList, infoList, textList) {
   # ----- Plot ----------------------------------------------------------------
   
   # Changing margins
-  par(mar=c(0,0,0,0))
+  par(mar=c(0,4,0,0))
+  #par(oma=c(0,0,0,0))
   
   # Removing plot area restrictions for titles
   par(xpd=NA)
 
   # Subset by the four genders - male, female, other and non-reported(short-term users)
+  par(mar=c(0,4,0,0))
   maleTripDf <- subset(trip, gender=='Male')
-  miniDaylightPlot(maleTripDf, col=colors, 
-                   titleText=prettyNum(nrow(maleTripDf), big.mark=','), 
+  miniDaylightPlot(maleTripDf, col=colors,   
                    centerText= "M")
+  title(prettyNum(nrow(maleTripDf), big.mark=','), line=-3.7, cex.main=2.75)
+#   box()
   
-  
+  par(mar=c(0,0,0,4))
   femaleTripDf <- subset(trip, gender=='Female')
-  miniDaylightPlot(femaleTripDf, col=colors,
-                   titleText=as.character(nrow(femaleTripDf), big.mark=','), 
+  miniDaylightPlot(femaleTripDf, col=colors, 
                    centerText= "F")
+  title(prettyNum(nrow(femaleTripDf), big.mark=','), line=-3.7, cex.main=2.75)
+#   box()
   
+  par(mar=c(0,4,0,0))
   otherTripDf <- subset(trip, gender=='Other')
-  miniDaylightPlot(otherTripDf, col=colors,
-                   titleText=as.character(nrow(otherTripDf), big.mark=','), 
+  miniDaylightPlot(otherTripDf, col=colors, 
                    centerText= "O")
   
+  title(prettyNum(nrow(otherTripDf), big.mark=','), line=-3.7, cex.main=2.75)
+#   box()
+  
+  par(mar=c(0,0,0,4))
   StTripDf <- subset(trip, gender=='')
   miniDaylightPlot(StTripDf, col=colors,
-                   titleText=as.character(nrow(StTripDf), big.mark=','), 
                    centerText= "S-T")
+  title(prettyNum(nrow(StTripDf), big.mark=','), line=-3.7, cex.main=2.75)
+#   box()
   
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)
@@ -118,7 +139,10 @@ pie_daylightPlot <- function(dataList, infoList, textList) {
   
   # Restore Global Graphical Parameters
   par(mar=c(5,4,4,2)+.1)
+  #par(oma=c(2,2,2,2))
+  par(xpd=FALSE)
   layout(1)
+  
   
   return(c(1.0,2.0,3.0,4.0))
   
@@ -139,7 +163,7 @@ miniDaylightPlot <- function(trip, col = 'gray80', centerText = 'No\nTrips', tit
   if ( all(table==0) ) {
     
     # Gray donut with "no trips" message
-    pie(1, border='gray80', labels=NA)
+    pie(1, border='gray80', labels=NA, rad=1.2)
     title('No Trips')
     par(new=TRUE) 
     pie(c(1), border='white', labels=NA, rad=0.4)
@@ -149,7 +173,7 @@ miniDaylightPlot <- function(trip, col = 'gray80', centerText = 'No\nTrips', tit
   } else {
     
     # Colored donut
-    pie(table, border='white', labels=NA, col=col, clockwise=T, init.angle=init.angle)
+    pie(table, border='white', labels=NA, col=col, rad=1.0, clockwise=T, init.angle=init.angle)
     title(titleText)
     par(new=TRUE)
     pie(c(1), border='white', labels=NA, rad=0.4)
