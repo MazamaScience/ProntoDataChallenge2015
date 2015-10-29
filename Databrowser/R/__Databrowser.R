@@ -118,6 +118,10 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
     
     returnValues <- weatherCalendarPlot(dataList,infoList,textList)
     
+  } else if (infoList$plotType == "heatmapHourByDay") { 
+    
+    returnValues <- heatmapHourByDayPlot(dataList,infoList,textList)
+
   } else if (infoList$plotType == "heatmapHourByWeek") { 
     
     returnValues <- heatmapHourByWeekPlot(dataList,infoList,textList)
