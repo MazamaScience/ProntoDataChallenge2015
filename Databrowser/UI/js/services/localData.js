@@ -15,7 +15,7 @@
       language: "en",
       plotWidth: 640,
       productType: "systemTable", 
-      plotTypes: "heatmapHourByDay,daylight,weatherCalendar",
+      plotTypes: "heatmap_weekByHour,pie_daylight,calendar_weather",
       userType: "all",
       age: "all",
       gender: "all",
@@ -31,13 +31,13 @@
 
       plotGroups: [{
         text: "Group 1",
-        value: "heatmapHourByDay,daylight,weatherCalendar"
+        value: "heatmap_weekByHour,pie_daylight,calendar_weather"
       }, {
         text: "Group 2",
-        value: "barplotDayByWeek,heatmapHourByDay,daylight,weatherCalendar,stationBubble"
+        value: "barplot_weekByDay,heatmap_weekByHour,pie_daylight,calendar_weather,bubble_station"
       }, {
         text: "Group 3",
-        value: "barplotDayByWeek,heatmapHourByDay"
+        value: "barplot_weekByDay,heatmap_weekByHour"
 
       }],
 

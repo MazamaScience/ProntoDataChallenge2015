@@ -112,12 +112,12 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   if (infoList$productType == "systemTable") {
     
-#     plotDict <- list(barplotDayByWeek = barplotDayByWeekPlot,
-#                      weatherCalendar = weatherCalendarPlot,
-#                      heatmapHourByDay = heatmapHourByDayPlot,
-#                      heatmapHourByWeek = heatmapHourByWeekPlot,
-#                      daylight = daylightPlot,
-#                      stationBubble = stationBubblePlot,
+#     plotDict <- list(barplot_weekByDay = barplot_weekByDayPlot,
+#                      calendar_weather = calendar_weatherPlot,
+#                      heatmap_weekByHour = heatmap_weekByHourPlot,
+#                      heatmap_weekByHour = heatmap_weekByHourPlot,
+#                      pie_daylight = pie_daylightPlot,
+#                      bubble_station = bubble_stationPlot,
 #                      map = mapPlot)
 #     
     
@@ -133,36 +133,39 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
       returnValues <- c(0.0,0.0,0.0,0.0)
       
-      if (plotType == 'barplotDayByWeek') {
+      if (plotType == 'barplot_weekByDay') {
         
-        returnValues <- barplotDayByWeekPlot(dataList,infoList,textList)
+        textList$title <- 'Growth by Day of Week'
+        returnValues <- barplot_weekByDayPlot(dataList,infoList,textList)
         
-      } else if (plotType == "weatherCalendar") { 
+      } else if (plotType == "calendar_weather") { 
         
-        returnValues <- weatherCalendarPlot(dataList,infoList,textList)
+        textList$title <- 'Weather Calendar'
+        returnValues <- calendar_weatherPlot(dataList,infoList,textList)
         
-      } else if (plotType == "heatmapHourByDay") { 
+      } else if (plotType == "heatmap_weekByDay") { 
         
-        returnValues <- heatmapHourByDayPlot(dataList,infoList,textList)
+        textList$title <- 'Weekly Usage by Day'
+        returnValues <- heatmap_weekByDayPlot(dataList,infoList,textList)
     
-      } else if (plotType == "heatmapHourByWeek") { 
+      } else if (plotType == "heatmap_weekByHour") { 
         
-        returnValues <- heatmapHourByWeekPlot(dataList,infoList,textList)
-    
-      } else if (plotType == "weatherCalendar") { 
+        textList$title <- 'Weekly Usage by Hour'
+        returnValues <- heatmap_weekByHourPlot(dataList,infoList,textList)
+
+      } else if (plotType == "pie_daylight") { 
         
-        returnValues <- weatherCalendarPlot(dataList,infoList,textList)
+        textList$title <- 'Daylight Preference'
+        returnValues <- pie_daylightPlot(dataList,infoList,textList)
         
-      } else if (plotType == "daylight") { 
+      } else if (plotType == "bubble_station") { 
         
-        returnValues <- daylightPlot(dataList,infoList,textList)
-        
-      } else if (plotType == "stationBubble") { 
-        
-        returnValues <- stationBubblePlot(dataList,infoList,textList)
+        textList$title <- 'Station Usage Map'
+        returnValues <- bubble_stationPlot(dataList,infoList,textList)
         
       } else if (plotType == "Map") { 
         
+        textList$title <- 'XXX'
         returnValues <- mapPlot(dataList,infoList,textList)
         
       } else {

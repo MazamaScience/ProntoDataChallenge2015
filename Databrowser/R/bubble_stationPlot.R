@@ -174,9 +174,9 @@ bubble_stationPlot <- function(dataList, infoList, textList) {
   # Modify the passed in title
   maxValue <- max(usage,na.rm=TRUE)
   if (maxValue > 900) {
-    textList$title <- paste0(textList$title,'  (max=',round(maxValue/365,1),'/day)')
+    textList$subset <- paste0(textList$subset,'  (max=',round(maxValue/365,1),'/day)')
   } else {
-    textList$title <- paste0(textList$title,'  (max=',maxValue,'/year)')
+    textList$subset <- paste0(textList$subset,'  (max=',maxValue,'/year)')
   }
 
   # Add title and attribution as the last two plots

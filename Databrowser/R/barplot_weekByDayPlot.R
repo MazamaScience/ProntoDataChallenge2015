@@ -126,7 +126,7 @@ barplot_weekByDayPlot <- function(dataList, infoList, textList) {
   abline(v=newMonthMonday, lty=lty_vert, lwd=lwd_vert, col=col_vert,xpd=NA)
   
   # Modify the passed in title
-  infoList$title <- paste0(textList$title,'  (max=',maxValue,'/day)')
+  textList$subset <- paste0(textList$subset,'  (max=',maxValue,'/day)')
 
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)
