@@ -31,8 +31,8 @@ createTextList <- function(dataList, infoList) {
   textList$attribution <- paste("data:  ProntoCycleShare.com        graphic:  MazamaScience.com")
 
   textList$dayLabels <- c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
-  textList$monthLabels_3 <- c('Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
-  textList$monthLabels_1 <- c('N','D','J','F','M','A','M','J','J','A','S','O')
+  textList$monthLabels_3 <- c('Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
+  textList$monthLabels_1 <- c('O','N','D','J','F','M','A','M','J','J','A','S','O')
   
   textList$temp <- "Temp"
   textList$rideCount <- "Rides"
@@ -120,9 +120,9 @@ createTextList <- function(dataList, infoList) {
   # ----- Title ---------------------------------------------------------------
   
   if (infoList$plotType == 'weeklyUsageByDayOfWeek') {
-    textList$title <- 'Weekly Usage by Day'
-  } else if (infoList$plotType == 'dailyUsageByHourOfDay') {
-    textList$title <- 'Daily Usage by Hour'
+    textList$title <- 'Growth by Day'
+  } else if (infoList$plotType == 'weeklyUsageByHourOfDay') {
+    textList$title <- 'Weekly Usage by Hour'
   } else if (infoList$plotType == 'stationBubble') {
     textList$title <- 'Station Usage'
   } else {

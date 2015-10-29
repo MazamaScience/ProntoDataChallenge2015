@@ -202,11 +202,11 @@ angular.module('App')
 
     var forms = {
       plotType: [{
-        text: "Weekly by DoW",
+        text: "Growth by DoW",
         value: "weeklyUsageByDayOfWeek"
       }, {
-        text: "Daily by Hour",
-        value: "dailyUsageByHourOfDay"
+        text: "Usage by Hour",
+        value: "weeklyUsageByHourOfDay"
       }, {
         text: "Daylight",
         value: "daylight"

@@ -16,7 +16,7 @@ source("__DATABROWSER_PATH__/R/createInfoList.R")
 source("__DATABROWSER_PATH__/R/createDataList.R")
 
 source("__DATABROWSER_PATH__/R/addTitleAndAttribution.R")
-source("__DATABROWSER_PATH__/R/dailyUsageByHourOfDayPlot.R")
+source("__DATABROWSER_PATH__/R/weeklyUsageByHourOfDayPlot.R")
 source("__DATABROWSER_PATH__/R/daylightPlot.R")
 source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
 source("__DATABROWSER_PATH__/R/weatherCalendarPlot.R")
@@ -100,9 +100,9 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
     
     returnValues <- weatherCalendarPlot(dataList,infoList,textList)
     
-  } else if (infoList$plotType == "dailyUsageByHourOfDay") { 
+  } else if (infoList$plotType == "weeklyUsageByHourOfDay") { 
     
-    returnValues <- dailyUsageByHourOfDayPlot(dataList,infoList,textList)
+    returnValues <- weeklyUsageByHourOfDayPlot(dataList,infoList,textList)
 
   } else if (infoList$plotType == "weatherCalendar") { 
     
