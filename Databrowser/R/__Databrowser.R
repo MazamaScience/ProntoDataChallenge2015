@@ -82,25 +82,25 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   # ----- Create the png file --------------------------------------------------
     
-  absPlotPNG <- paste(infoList$outputDir,infoList$outputFileBase,'.png',sep="")
-  
-  if (infoList$plotDevice == "cairo") {
-      
-    library(Cairo) # CairoPNG is part of the Cairo package
-    CairoPNG(filename=absPlotPNG,
-             width=infoList$plotWidth, height=infoList$plotHeight,
-             units='px', bg='white')
-    print(paste("Working on", absPlotPNG))
-      
-  } else if (infoList$plotDevice == "png") {
-      
-    png(filename=absPlotPNG,
-        width=infoList$plotWidth, height=infoList$plotHeight,
-        units='px', bg='white')
-    print(paste("Working on",absPlotPNG))
-      
-  }
-  
+#   absPlotPNG <- paste(infoList$outputDir,infoList$outputFileBase,'.png',sep="")
+#   
+#   if (infoList$plotDevice == "cairo") {
+#       
+#     library(Cairo) # CairoPNG is part of the Cairo package
+#     CairoPNG(filename=absPlotPNG,
+#              width=infoList$plotWidth, height=infoList$plotHeight,
+#              units='px', bg='white')
+#     print(paste("Working on", absPlotPNG))
+#       
+#   } else if (infoList$plotDevice == "png") {
+#       
+#     png(filename=absPlotPNG,
+#         width=infoList$plotWidth, height=infoList$plotHeight,
+#         units='px', bg='white')
+#     print(paste("Working on",absPlotPNG))
+#       
+#   }
+#   
   
   # ----- Subset the data -----------------------------------------------------
   
@@ -110,40 +110,72 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   # ----- Create the desired output -------------------------------------------
   
-  returnValues <- c(0.0,0.0,0.0,0.0)
+  if (infoList$productType == "systemTable") {
+    
+#     plotDict <- list(barplot_weekByDay = barplot_weekByDayPlot,
+#                      calendar_weather = calendar_weatherPlot,
+#                      heatmap_weekByHour = heatmap_weekByHourPlot,
+#                      heatmap_weekByHour = heatmap_weekByHourPlot,
+#                      pie_daylight = pie_daylightPlot,
+#                      bubble_station = bubble_stationPlot,
+#                      map = mapPlot)
+#     
+    
+    for (plotType in as.character(infoList$plotTypes[[1]])) {
+      
+      print("First element:")
+      print(plotType)
+      
+      absPlotPNG <- paste(infoList$outputDir,infoList$outputFileBase,'_',plotType,'.png',sep="")
+      png(filename=absPlotPNG,
+          width=infoList$plotWidth, height=infoList$plotHeight,
+          units='px', bg='white')
   
-  if (infoList$plotType == 'barplot_weekByDay') {
+      returnValues <- c(0.0,0.0,0.0,0.0)
+      
+      if (plotType == 'barplot_weekByDay') {
+        
+        textList$title <- 'Growth by Day of Week'
+        returnValues <- barplot_weekByDayPlot(dataList,infoList,textList)
+        
+      } else if (plotType == "calendar_weather") { 
+        
+        textList$title <- 'Weather Calendar'
+        returnValues <- calendar_weatherPlot(dataList,infoList,textList)
+        
+      } else if (plotType == "heatmap_weekByDay") { 
+        
+        textList$title <- 'Weekly Usage by Day'
+        returnValues <- heatmap_weekByDayPlot(dataList,infoList,textList)
     
-    returnValues <- barplot_weekByDayPlot(dataList,infoList,textList)
-    
-  } else if (infoList$plotType == "calendar_weather") { 
-    
-    returnValues <- calendar_weatherPlot(dataList,infoList,textList)
-    
-  } else if (infoList$plotType == "heatmap_weekByDay") { 
-    
-    returnValues <- heatmap_weekByDayPlot(dataList,infoList,textList)
+      } else if (plotType == "heatmap_weekByHour") { 
+        
+        textList$title <- 'Weekly Usage by Hour'
+        returnValues <- heatmap_weekByHourPlot(dataList,infoList,textList)
 
-  } else if (infoList$plotType == "heatmap_weekByHour") { 
-    
-    returnValues <- heatmap_weekByHourPlot(dataList,infoList,textList)
+      } else if (plotType == "pie_daylight") { 
+        
+        textList$title <- 'Daylight Preference'
+        returnValues <- pie_daylightPlot(dataList,infoList,textList)
+        
+      } else if (plotType == "bubble_station") { 
+        
+        textList$title <- 'Station Usage Map'
+        returnValues <- bubble_stationPlot(dataList,infoList,textList)
+        
+      } else if (plotType == "Map") { 
+        
+        textList$title <- 'XXX'
+        returnValues <- mapPlot(dataList,infoList,textList)
+        
+      } else {
+        
+        stop(paste0("ERROR in __Databrowser.R: plotType=",plotType," is not recognized."),call.=FALSE)
+        
+      }
+      
+    }
 
-  } else if (infoList$plotType == "calendar_weather") { 
-    
-    returnValues <- calendar_weatherPlot(dataList,infoList,textList)
-    
-  } else if (infoList$plotType == "pie_daylight") { 
-    
-    returnValues <- pie_daylightPlot(dataList,infoList,textList)
-    
-  } else if (infoList$plotType == "bubble_station") { 
-    
-    returnValues <- bubble_stationPlot(dataList,infoList,textList)
-    
-  } else {
-    
-    stop(paste0("ERROR in __Databrowser.R: plotType=",infoList$plotType," is not recognized."),call.=FALSE)
-    
   }
   
   plotSecs <- elapsed <- ( (proc.time())[3] - timepoint )

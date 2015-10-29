@@ -32,7 +32,7 @@ request = {'debug': 'none',
            'responseType': 'json',
            'plotWidth': '640',
            'productType': 'systemTable',
-           'plotType': 'weeklyUsageByDayOfWeek'}
+           'plotType': 'barplot_weekByDay'}
 
 # NOTE:  You can set up a request object with all required parameters and run this
 # NOTE:  this cgi script from the command line for debugging.

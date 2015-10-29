@@ -45,6 +45,7 @@
     var vm = this;
 
     vm.request = LocalData.request;
+    vm.returnData = {};
 
     vm.forms = LocalData.forms;
 
@@ -56,6 +57,9 @@
     vm.updatePlot = updatePlot;                 
     vm.status = RequestService.status;          // request status and results
     vm.popup = { visible: false, url: null };   // plot zoom popup object
+    vm.clicked = clicked;
+
+    vm.plotTableClass = plotTableClass;
 
     // Initial plot
     updatePlot();
@@ -64,52 +68,110 @@
     ///////////////
     ///////////////
 
+    document.onkeydown = function(e) {
+      e = e || window.event;
+      console.log(vm.popup)
+      if (vm.popup.visible) {
+        var index = vm.returnData.plotTypes.indexOf(vm.popup.plotType);
+        switch(e.which || e.keyCode) {
+          case 37: // left
+          index = index - 1 < 0 ? vm.returnData.plotTypes.length - 1 : index - 1;
+          break;
+
+          case 39: // right
+          index = index + 1 > vm.returnData.plotTypes.length - 1 ? 0 : index + 1;
+          break;
+        }
+        console.log(index);
+        vm.popup.plotType = vm.returnData.plotTypes[index];
+        vm.popup.url = vm.popup.relBase + "_" + vm.popup.plotType;
+        $scope.$apply();
+      }
+    }
+
+
     // Make request
     function updatePlot() {
       RequestService.get(LocalData.request)
-        .then(function(result) {
-          LocalData.result = result;
+        .then(function(result) {  
+          var json = result.data.return_json;
+          json = JSON.parse(json).returnValues;
+          vm.returnData.plotTypes = vm.request.plotTypes.split(",");
+          vm.returnData.relBase = result.data.rel_base;
         });
     }
 
-    // Watched for changes in plotURL, which translates to this function firing
-    // whenever a successful request is made
-    $scope.$watch(function() {
-      return LocalData.result;
-    }, function() {
-      if(LocalData.result) {
-        vm.url = LocalData.result.data.rel_base + ".png";
-        vm.popup.url = vm.url;
+    // Plot click popup behavior
+    function clicked(relBase, plotType){
+      var url = relBase + "_" + plotType;
+      vm.popup.relBase = relBase;
+      vm.popup.plotType = plotType;
+      vm.popup.visible = true;
+      vm.popup.url = url;
+    };
+
+    function plotTableClass() {
+      switch(vm.returnData.plotTypes.length) {
+
+        case 1:
+        case 2:
+          return "col-md-6";
+          break;
+        case 3:
+        case 5:
+        case 6:
+          return "col-md-4";
+          break;
+        case 4:
+        case 7:
+        case 8:
+          return "col-md-3";
+          break;
+
+        default:
+          return "col-md-6";
+
       }
-    });
+    }
 
-    // When URL params change apply those changes to the request object
-    $scope.$watch(function() {
-      return $location.search();
-    }, function(params, old) {
+    // // Watched for changes in plotURL, which translates to this function firing
+    // // whenever a successful request is made
+    // $scope.$watch(function() {
+    //   return LocalData.result;
+    // }, function() {
+    //   if(LocalData.result) {
+    //     vm.url = LocalData.result.data.rel_base + ".png";
+    //     vm.popup.url = vm.url;
+    //   }
+    // });
 
-      // If param is an attribute of request, add it's 
-      // value to request
-      for (var attr in params) {
-        if (vm.request.hasOwnProperty(attr)) {
-          vm.request[attr] = params[attr];
-        }
-      }
+    // // When URL params change apply those changes to the request object
+    // $scope.$watch(function() {
+    //   return $location.search();
+    // }, function(params, old) {
 
-    }, true);
+    //   // If param is an attribute of request, add it's 
+    //   // value to request
+    //   for (var attr in params) {
+    //     if (vm.request.hasOwnProperty(attr)) {
+    //       vm.request[attr] = params[attr];
+    //     }
+    //   }
 
-    // When the request object changes apply those changes to the URL params
-    $scope.$watch(function() { 
-      return vm.request; 
-    }, function(params) {
+    // }, true);
 
-      var par = $location.search();
-      for (var attr in params) {
-        par[attr] = params[attr];
-      }
-      $location.search(par);
+    // // When the request object changes apply those changes to the URL params
+    // $scope.$watch(function() { 
+    //   return vm.request; 
+    // }, function(params) {
 
-    }, true);
+    //   var par = $location.search();
+    //   for (var attr in params) {
+    //     par[attr] = params[attr];
+    //   }
+    //   $location.search(par);
+
+    // }, true);
 
   }
 
@@ -187,8 +249,8 @@ angular.module('App')
     var request = {
       language: "en",
       plotWidth: 640,
-      productType: "systemTable",
-      plotType: "barplot_weekByDay",
+      productType: "systemTable", 
+      plotTypes: "heatmap_weekByHour,pie_daylight,calendar_weather",
       userType: "all",
       age: "all",
       gender: "all",
@@ -201,25 +263,19 @@ angular.module('App')
     };
 
     var forms = {
-      plotType: [{
-        text: "barplot_weekByDay",
-        value: "barplot_weekByDay"
+
+      plotGroups: [{
+        text: "Group 1",
+        value: "heatmap_weekByHour,pie_daylight,calendar_weather"
       }, {
-        text: "heatmap_weekByDay",
-        value: "heatmap_weekByDay"
+        text: "Group 2",
+        value: "barplot_weekByDay,heatmap_weekByHour,pie_daylight,calendar_weather,bubble_station"
       }, {
-        text: "heatmap_weekByHour",
-        value: "heatmap_weekByHour"
-      }, {
-        text: "pie_daylight",
-        value: "pie_daylight"
-      }, {
-        text: "calendar_weather",
-        value: "calendar_weather"
-      }, {
-        text: "bubble_station",
-        value: "bubble_station"
+        text: "Group 3",
+        value: "barplot_weekByDay,heatmap_weekByHour"
+
       }],
+
       userType: [{
         text: "All Users",
         value: "all"
@@ -230,6 +286,7 @@ angular.module('App')
         text: "Short-Term",
         value: "shortTerm"
       }],
+
       age: [{
         text: "All Ages",
         value: "all"
@@ -249,6 +306,7 @@ angular.module('App')
         text: "Over 60",
         value: "61_"
       }],
+
       gender: [{
         text: "All Genders",
         value: "all"
@@ -262,6 +320,7 @@ angular.module('App')
         text: "Other",
         value: "other"
       }],
+
       dayType: [{
         text: "All Days",
         value: "all"
@@ -272,6 +331,7 @@ angular.module('App')
         text: "Weekend",
         value: "weekend"
       }],
+
       timeOfDay: [{
         text: "All Times",
         value: "all"
@@ -294,6 +354,7 @@ angular.module('App')
         text: "Night 11-3",
         value: "night"
       }],
+
       distance: [{
         text: "All Distances",
         value: "all"
@@ -316,6 +377,7 @@ angular.module('App')
         text: " >5 km",
         value: "5_"
       }],
+
       stationId: [{
         text: "All Stations",
         value: "all"
@@ -323,6 +385,7 @@ angular.module('App')
         text: "Pier 69",
         value: "WF-01"
       }]
+
     };
 
     var map = function($scope) {
