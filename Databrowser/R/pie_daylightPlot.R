@@ -8,6 +8,7 @@
 
 if (FALSE) {
   
+  source('./R/addTitleAndAttribution.R')
   source('./R/createDataList.R')
   source('./R/createTextList_en.R')
   
@@ -34,6 +35,7 @@ if (FALSE) {
   
 }
 
+# Function to turn nrow(df) into character string title
 
 
 ###############################################################################
@@ -41,7 +43,7 @@ if (FALSE) {
 pie_daylightPlot <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
-  
+  colors <- c('#E77483', 'gold', 'orange', 'gray31')
   
   # ----- Data Preparation ----------------------------------------------------
   
@@ -79,19 +81,34 @@ pie_daylightPlot <- function(dataList, infoList, textList) {
   
   
   # ----- Plot ----------------------------------------------------------------
-    
+  
+  # Changing margins
+  par(mar=c(0,0,0,0))
+  
+  # Removing plot area restrictions for titles
+  par(xpd=NA)
+
   # Subset by the four genders - male, female, other and non-reported(short-term users)
   maleTripDf <- subset(trip, gender=='Male')
-  miniDaylightPlot(maleTripDf, title='Male Users')
+  miniDaylightPlot(maleTripDf, col=colors, 
+                   titleText=prettyNum(nrow(maleTripDf), big.mark=','), 
+                   centerText= "M")
+  
   
   femaleTripDf <- subset(trip, gender=='Female')
-  miniDaylightPlot(femaleTripDf, title='Female Users')
+  miniDaylightPlot(femaleTripDf, col=colors,
+                   titleText=as.character(nrow(femaleTripDf), big.mark=','), 
+                   centerText= "F")
   
   otherTripDf <- subset(trip, gender=='Other')
-  miniDaylightPlot(otherTripDf, title='Gender not reported')
+  miniDaylightPlot(otherTripDf, col=colors,
+                   titleText=as.character(nrow(otherTripDf), big.mark=','), 
+                   centerText= "O")
   
   StTripDf <- subset(trip, gender=='')
-  miniDaylightPlot(StTripDf, 'Short Term Users')
+  miniDaylightPlot(StTripDf, col=colors,
+                   titleText=as.character(nrow(StTripDf), big.mark=','), 
+                   centerText= "S-T")
   
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)
@@ -109,41 +126,38 @@ pie_daylightPlot <- function(dataList, infoList, textList) {
 
 ###############################################################################
 
-miniDaylightPlot <- function(trip, title = 'All Trips') {
+miniDaylightPlot <- function(trip, col = 'gray80', centerText = 'No\nTrips', titleText = '') {
   
   # Algorithm to center 'day' at top of plot'
   counts <- as.numeric(table(trip$solarPosition))
   middayFraction <- counts[[2]]/2 + counts[[1]]
   init.angle <- (middayFraction/sum(counts))*360 + 90
   
-  colors <- c('#E77483', 'gold', 'orange', 'gray31')
+  
   table <- table(trip$solarPosition)    
   
   if ( all(table==0) ) {
     
     # Gray donut with "no trips" message
-    pie(1, border='gray80', col='gray80', labels=NA)
+    pie(1, border='gray80', labels=NA)
+    title('No Trips')
     par(new=TRUE) 
     pie(c(1), border='white', labels=NA, rad=0.4)
-    text(0,0, labels= 'No\nTrips', cex=1.25, font=2)
+    text(0,0, labels= centerText, cex=3, font=2)
     par(new=FALSE)
     
   } else {
     
     # Colored donut
-    pie(table, border='white', labels=NA, col=colors, clockwise=T, init.angle=init.angle, main=title)
+    pie(table, border='white', labels=NA, col=col, clockwise=T, init.angle=init.angle)
+    title(titleText)
     par(new=TRUE)
     pie(c(1), border='white', labels=NA, rad=0.4)
-    innerText <- as.character(nrow(trip))
-    if (nchar(innerText) > 3) {
-      labels <- paste0(str_sub(innerText, end=2), ',', str_sub(innerText, start=2))
-      text(0,0, labels=labels, cex=1.25, font=2)    
-    } else {
-      text(0,0, labels=innerText, cex=1.25, font=2)  
-    }
+    text(0,0, labels=centerText, cex=3, font=2)
     par(new=FALSE)
     
   }
+  
   
 }
 
