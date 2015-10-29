@@ -48,7 +48,7 @@ createInfoList <- function(jsonArgs='{}') {
   # ----- Databrowser specific parameters from the UI --------------------------
 
   # infoList$plotType <- ifelse(is.null(infoList$plotType),'barplotDayByWeek',infoList$plotType)
-  infoList$plotTypes <- ifelse(is.null(infoList$plotTypes),c('barplotDayByWeek'),strsplit(infoList$plotTypes,","))
+  infoList$plotTypes <- ifelse(is.null(infoList$plotTypes),c('barplot_weekByDay'),strsplit(infoList$plotTypes,","))
 
   infoList$userType <- ifelse(is.null(infoList$userType),'all',infoList$userType)
   infoList$age <- ifelse(is.null(infoList$age),'all',infoList$age)

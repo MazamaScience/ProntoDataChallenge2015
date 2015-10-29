@@ -1,5 +1,5 @@
 ###############################################################################
-# genericPlot.R
+# GENERIC_Plot.R
 #
 # Displays ...
 
@@ -25,11 +25,11 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
 
-  genericPlot(dataList, infoList, textList)
+  GENERIC_Plot(dataList, infoList, textList)
   
 }
 
-genericPlot <- function(dataList, infoList, textList) {
+GENERIC_Plot <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
 

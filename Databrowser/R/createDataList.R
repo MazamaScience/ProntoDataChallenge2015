@@ -28,6 +28,12 @@ createDataList <- function(infoList) {
   trip$ProntoWeek <- as.factor(as.integer(trip$weeksSinceStart+1))
   trip$ProntoDay <- as.factor(as.integer(trip$daysSinceStart+1))
   
+  # Create an alternative dayOfWeek that starts on Monday
+  dayOfWeek <- as.numeric(trip$dayOfWeek) - 1
+  dayOfWeek[dayOfWeek == 0] <- 7
+  trip$dayOfWeek_MondayStart <- factor(dayOfWeek, levels=1:7)
+  
+  
   # ----- Subset Trip ---------------------------------------------------------
   
   # userType

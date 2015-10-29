@@ -1,5 +1,5 @@
 ###############################################################################
-# stationBubblePlot.R
+# bubble_stationPlot.R
 #
 # Bubbles sized by overallstation usage.
 
@@ -11,10 +11,10 @@ if (FALSE) {
   source('./R/createDataList.R')
   source('./R/createTextList_en.R')
   
-  source('./R/stationBubblePlot.R')
+  source('./R/bubble_stationPlot.R')
   
   infoList <- list(dataDir="./data_local",
-                   plotType='stationBubble',
+                   plotType='bubble_station',
                    userType='annual',
                    dayType='all',
                    timeOfDay='all',
@@ -24,14 +24,14 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
   
-  stationBubblePlot(dataList, infoList, textList)
+  bubble_stationPlot(dataList, infoList, textList)
   
 }
 
 
 ###############################################################################
 
-stationBubblePlot <- function(dataList, infoList, textList) {
+bubble_stationPlot <- function(dataList, infoList, textList) {
  
   # ----- Style ---------------------------------------------------------------
   

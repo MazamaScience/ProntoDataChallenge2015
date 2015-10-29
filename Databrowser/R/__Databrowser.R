@@ -20,11 +20,13 @@ result <- try( {
   source("__DATABROWSER_PATH__/R/createDataList.R")
   
   source("__DATABROWSER_PATH__/R/addTitleAndAttribution.R")
-  source("__DATABROWSER_PATH__/R/heatmapHourByWeekPlot.R")
-  source("__DATABROWSER_PATH__/R/daylightPlot.R")
-  source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
-  source("__DATABROWSER_PATH__/R/weatherCalendarPlot.R")
-  source("__DATABROWSER_PATH__/R/barplotDayByWeekPlot.R")
+
+  source("__DATABROWSER_PATH__/R/barplot_weekByDayPlot.R")
+  source("__DATABROWSER_PATH__/R/bubble_stationPlot.R")
+  source("__DATABROWSER_PATH__/R/calendar_weatherPlot.R")
+  source("__DATABROWSER_PATH__/R/heatmap_weekByDayPlot.R")
+  source("__DATABROWSER_PATH__/R/heatmap_weekByHourPlot.R")
+  source("__DATABROWSER_PATH__/R/pie_daylightPlot.R")
 }, silent=TRUE)
 
 if ( class(result)[1] == "try-error" ) {
@@ -108,7 +110,6 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   # ----- Create the desired output -------------------------------------------
   
-
   if (infoList$productType == "systemTable") {
     
 #     plotDict <- list(barplotDayByWeek = barplotDayByWeekPlot,
@@ -171,6 +172,7 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
       }
       
     }
+
   }
   
   plotSecs <- elapsed <- ( (proc.time())[3] - timepoint )
@@ -183,7 +185,7 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   totalSecs <- ( (proc.time())[3] - start )
   print(paste("Total elapsed =",round(totalSecs,4),"seconds"))
   
-  if (infoList$plotDevice != '' & infoList$plotType == "TrigFunctions") {
+  if ( infoList$plotDevice != '' ) {
     dev.off()
   }
   

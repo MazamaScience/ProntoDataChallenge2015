@@ -17,9 +17,8 @@ createTextList <- function(dataList, infoList) {
   ########################################
 
   # Extra information
-  plotType <- ifelse(is.null(infoList$plotType),'TrigFunctions',infoList$plotType)
-  plotWidth <- as.numeric( ifelse(is.null(infoList$plotWidth),'500',infoList$plotWidth) )
-  trigFunction <- ifelse(is.null(infoList$trigFunction),'cos',infoList$trigFunction)
+  plotType <- ifelse(is.null(infoList$plotType),'barplot_weekByDay',infoList$plotType)
+  plotWidth <- as.numeric( ifelse(is.null(infoList$plotWidth),'640',infoList$plotWidth) )
 
   ########################################
   # Create context dependent text strings
@@ -27,7 +26,6 @@ createTextList <- function(dataList, infoList) {
 
   textList <- list()
 
-  textList$title <- paste("TrigFunctions_plot --",trigFunction)
   textList$attribution <- paste("data:  ProntoCycleShare.com        graphic:  MazamaScience.com")
 
   textList$dayLabels <- c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
@@ -119,11 +117,15 @@ createTextList <- function(dataList, infoList) {
   
   # ----- Title ---------------------------------------------------------------
   
-  if (infoList$plotType == 'barplotDayByWeek') {
+  if (infoList$plotType == 'barplot_weekByDay') {
     textList$title <- 'Growth by Day'
-  } else if (infoList$plotType == 'heatmapHourByDay') {
+  } else if (infoList$plotType == 'calendar_weather') {
+    textList$title <- 'Weather Calendar'
+  } else if (infoList$plotType == 'heatmap_weekByDay') {
+    textList$title <- 'Weekly Usage by Day'
+  } else if (infoList$plotType == 'heatmap_weekByHour') {
     textList$title <- 'Weekly Usage by Hour'
-  } else if (infoList$plotType == 'stationBubble') {
+  } else if (infoList$plotType == 'bubble_station') {
     textList$title <- 'Station Usage'
   } else {
     textList$title <- 'TITLE GOES HERE'

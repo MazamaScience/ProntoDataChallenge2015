@@ -38,6 +38,7 @@
       }, {
         text: "Group 3",
         value: "barplotDayByWeek,heatmapHourByDay"
+
       }],
 
       userType: [{

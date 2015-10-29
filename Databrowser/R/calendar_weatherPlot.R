@@ -1,5 +1,5 @@
 ###############################################################################
-# weatherCalendarPlot.R
+# calendar_weatherPlot.R
 #
 # Multiple calendars showing weather and ridership.
 
@@ -12,7 +12,7 @@ if (FALSE) {
   source('./R/createTextList_en.R')
   
   infoList <- list(dataDir="./data_local",
-                   plotType='weatherCalendar',
+                   plotType='calendar_weather',
                    userType='annual',
                    gender='all',
                    age='all',
@@ -27,13 +27,13 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
   
-  weatherCalendarPlot(dataList, infoList, textList)
+  calendar_weatherPlot(dataList, infoList, textList)
   
 }
 
 ###############################################################################
 
-weatherCalendarPlot <- function(dataList, infoList, textList) {
+calendar_weatherPlot <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
   
@@ -61,13 +61,13 @@ weatherCalendarPlot <- function(dataList, infoList, textList) {
   # Get dataframe from the dataList
   trip <- dataList$trip
   
-  # Shift the dayOfWeek so that weeks start on Monday
-  dayOfWeek <- as.numeric(trip$dayOfWeek) - 1
-  dayOfWeek[dayOfWeek == 0] <- 7
-  dayOfWeek <- factor(dayOfWeek, levels=1:7)
+#   # Shift the dayOfWeek so that weeks start on Monday
+#   dayOfWeek <- as.numeric(trip$dayOfWeek) - 1
+#   dayOfWeek[dayOfWeek == 0] <- 7
+#   dayOfWeek <- factor(dayOfWeek, levels=1:7)
   
   # Create a table of # of rides
-  tbl <- table(trip$ProntoWeek,dayOfWeek)
+  tbl <- table(trip$ProntoWeek,trip$dayOfWeek_MondayStart)
   
   maxValue_rides <- max(tbl)
   
