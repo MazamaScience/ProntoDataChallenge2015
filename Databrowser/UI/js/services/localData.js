@@ -14,8 +14,8 @@
     var request = {
       language: "en",
       plotWidth: 640,
-      productType: "systemTable",
-      plotType: "barplotDayByWeek",
+      productType: "systemTable", 
+      plotTypes: "heatmapHourByDay,daylight,weatherCalendar",
       userType: "all",
       age: "all",
       gender: "all",
@@ -28,22 +28,18 @@
     };
 
     var forms = {
-      plotType: [{
-        text: "barplotDayByWeek",
-        value: "barplotDayByWeek"
+
+      plotGroups: [{
+        text: "Group 1",
+        value: "heatmapHourByDay,daylight,weatherCalendar"
       }, {
-        text: "heatmapHourByDay",
-        value: "heatmapHourByDay"
+        text: "Group 2",
+        value: "barplotDayByWeek,heatmapHourByDay,daylight,weatherCalendar,stationBubble"
       }, {
-        text: "Daylight",
-        value: "daylight"
-      }, {
-        text: "Weather Calendar",
-        value: "weatherCalendar"
-      }, {
-        text: "stationBubble",
-        value: "stationBubble"
+        text: "Group 3",
+        value: "barplotDayByWeek,heatmapHourByDay"
       }],
+
       userType: [{
         text: "All Users",
         value: "all"
@@ -54,6 +50,7 @@
         text: "Short-Term",
         value: "shortTerm"
       }],
+
       age: [{
         text: "All Ages",
         value: "all"
@@ -73,6 +70,7 @@
         text: "Over 60",
         value: "61_"
       }],
+
       gender: [{
         text: "All Genders",
         value: "all"
@@ -86,6 +84,7 @@
         text: "Other",
         value: "other"
       }],
+
       dayType: [{
         text: "All Days",
         value: "all"
@@ -96,6 +95,7 @@
         text: "Weekend",
         value: "weekend"
       }],
+
       timeOfDay: [{
         text: "All Times",
         value: "all"
@@ -118,6 +118,7 @@
         text: "Night 11-3",
         value: "night"
       }],
+
       distance: [{
         text: "All Distances",
         value: "all"
@@ -140,6 +141,7 @@
         text: " >5 km",
         value: "5_"
       }],
+
       stationId: [{
         text: "All Stations",
         value: "all"
@@ -147,6 +149,7 @@
         text: "Pier 69",
         value: "WF-01"
       }]
+
     };
 
     var map = function($scope) {

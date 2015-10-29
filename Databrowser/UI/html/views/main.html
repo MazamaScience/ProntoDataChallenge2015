@@ -7,19 +7,19 @@
     <!-- plot controls -->
     <div class="row margin-md">
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <p>Subset by User:</p>
         </div>
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <select-menu model="main.request.userType" options="main.forms.userType"></select-menu>
         </div>
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <select-menu model="main.request.age" options="main.forms.age"></select-menu>
         </div>
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <select-menu model="main.request.gender" options="main.forms.gender"></select-menu>
         </div>
 
@@ -27,23 +27,23 @@
 
     <div class="row margin-md">
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <p>Subset by Trip:</p>
         </div>
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <select-menu model="main.request.dayType" options="main.forms.dayType"></select-menu>
         </div>
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <select-menu model="main.request.timeOfDay" options="main.forms.timeOfDay"></select-menu>
         </div>
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <select-menu model="main.request.distance" options="main.forms.distance"></select-menu>
         </div>
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <select-menu model="main.request.stationId" options="main.forms.stationId"></select-menu>
         </div>
 
@@ -51,13 +51,13 @@
 
     <div class="row margin-md">
 
-        <div class="col-lg-2 margin-sm">
+        <div class="col-md-2 margin-sm">
           <label>Plot Type</label>
-          <select-menu model="main.request.plotType" options="main.forms.plotType"></select-menu>
+          <select-menu model="main.request.plotTypes" options="main.forms.plotGroups"></select-menu>
         </div>
 
-        <!-- <div class="col-lg-2 col-lg-offset-8"> -->
-        <div class="col-lg-2 margin-sm">
+        <!-- <div class="col-md-2 col-md-offset-8"> -->
+        <div class="col-md-2 margin-sm">
           <button class="btn btn-primary btn-block" ng-click="main.updatePlot()">Update Plot</button>  
         </div>
 
@@ -88,20 +88,19 @@
 
         <!-- plot image -->
 
-        <img 
+<!--         <img 
           class="plot-image shadow"
           ng-click="main.popup.visible=true" 
           ng-hide="main.status().loading || main.status().error" 
           ng-src="{{main.url && main.url || ''}}" />
+ -->
 
-          {{main.returnData}}
-
-        <div ng-repeat="plot in main.returnData.plotTypes" ng-class="main.plotTableClass()">
+        <div class="margin-sm" ng-repeat="plot in main.returnData.plotTypes" ng-class="main.plotTableClass()">
           <img
             class="plot-image shadow"
-            ng-click="main.popup.visible=true"
+            ng-click="main.clicked(main.returnData.relBase,plot)"
             ng-hide="main.status().loading || main.status().error"
-            ng-src="{{plot}}_{{vm.returnData.relBase}}.png" />
+            ng-src="{{main.returnData.relBase}}_{{plot}}.png" />
         </div>
 
         <!-- popup directive: creates a dark transparent overlay that hides when clicked -->

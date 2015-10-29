@@ -25,40 +25,60 @@
     vm.map.events = vm.map.events;
     vm.marker = LocalData.marker;
 
-    // vm.updatePlot = updatePlot;                 
-    vm.generatePlotTable = generatePlotTable;
+    vm.updatePlot = updatePlot;                 
     vm.status = RequestService.status;          // request status and results
     vm.popup = { visible: false, url: null };   // plot zoom popup object
+    vm.clicked = clicked;
 
     vm.plotTableClass = plotTableClass;
 
     // Initial plot
-    // updatePlot();
-    generatePlotTable();
+    updatePlot();
 
     ///////////////
     ///////////////
     ///////////////
+
+    document.onkeydown = function(e) {
+      e = e || window.event;
+      console.log(vm.popup)
+      if (vm.popup.visible) {
+        var index = vm.returnData.plotTypes.indexOf(vm.popup.plotType);
+        switch(e.which || e.keyCode) {
+          case 37: // left
+          index = index - 1 < 0 ? vm.returnData.plotTypes.length - 1 : index - 1;
+          break;
+
+          case 39: // right
+          index = index + 1 > vm.returnData.plotTypes.length - 1 ? 0 : index + 1;
+          break;
+        }
+        console.log(index);
+        vm.popup.plotType = vm.returnData.plotTypes[index];
+        vm.popup.url = vm.popup.relBase + "_" + vm.popup.plotType;
+        $scope.$apply();
+      }
+    }
+
 
     // Make request
     function updatePlot() {
       RequestService.get(LocalData.request)
-        .then(function(result) {
-          LocalData.result = result;
-        });
-    }
-
-    function generatePlotTable() {
-      LocalData.request.productType = 'plotTable';
-      // vm.returnData.url = window.location.href;
-      RequestService.get(LocalData.request)
         .then(function(result) {  
           var json = result.data.return_json;
           json = JSON.parse(json).returnValues;
-          // vm.returnData.plotTypes = json.plotTypes;
-          // vm.returnData.relBase = result.data.rel_base;
-          vm.returnData.plotTypes = ["a","b","c","d"];
+          vm.returnData.plotTypes = vm.request.plotTypes.split(",");
+          vm.returnData.relBase = result.data.rel_base;
         });
+    }
+
+    // Plot click popup behavior
+    function clicked(relBase, plotType){
+      var url = relBase + "_" + plotType;
+      vm.popup.relBase = relBase;
+      vm.popup.plotType = plotType;
+      vm.popup.visible = true;
+      vm.popup.url = url;
     };
 
     function plotTableClass() {
@@ -66,21 +86,21 @@
 
         case 1:
         case 2:
-          return "col-sm-6";
+          return "col-md-6";
           break;
         case 3:
         case 5:
         case 6:
-          return "col-sm-4";
+          return "col-md-4";
           break;
         case 4:
         case 7:
         case 8:
-          return "col-sm-3";
+          return "col-md-3";
           break;
 
         default:
-          return "col-sm-6";
+          return "col-md-6";
 
       }
     }
@@ -96,33 +116,33 @@
     //   }
     // });
 
-    // When URL params change apply those changes to the request object
-    $scope.$watch(function() {
-      return $location.search();
-    }, function(params, old) {
+    // // When URL params change apply those changes to the request object
+    // $scope.$watch(function() {
+    //   return $location.search();
+    // }, function(params, old) {
 
-      // If param is an attribute of request, add it's 
-      // value to request
-      for (var attr in params) {
-        if (vm.request.hasOwnProperty(attr)) {
-          vm.request[attr] = params[attr];
-        }
-      }
+    //   // If param is an attribute of request, add it's 
+    //   // value to request
+    //   for (var attr in params) {
+    //     if (vm.request.hasOwnProperty(attr)) {
+    //       vm.request[attr] = params[attr];
+    //     }
+    //   }
 
-    }, true);
+    // }, true);
 
-    // When the request object changes apply those changes to the URL params
-    $scope.$watch(function() { 
-      return vm.request; 
-    }, function(params) {
+    // // When the request object changes apply those changes to the URL params
+    // $scope.$watch(function() { 
+    //   return vm.request; 
+    // }, function(params) {
 
-      var par = $location.search();
-      for (var attr in params) {
-        par[attr] = params[attr];
-      }
-      $location.search(par);
+    //   var par = $location.search();
+    //   for (var attr in params) {
+    //     par[attr] = params[attr];
+    //   }
+    //   $location.search(par);
 
-    }, true);
+    // }, true);
 
   }
 
