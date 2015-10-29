@@ -45,6 +45,7 @@
     var vm = this;
 
     vm.request = LocalData.request;
+    vm.returnData = {};
 
     vm.forms = LocalData.forms;
 
@@ -53,12 +54,16 @@
     vm.map.events = vm.map.events;
     vm.marker = LocalData.marker;
 
-    vm.updatePlot = updatePlot;                 
+    // vm.updatePlot = updatePlot;                 
+    vm.generatePlotTable = generatePlotTable;
     vm.status = RequestService.status;          // request status and results
     vm.popup = { visible: false, url: null };   // plot zoom popup object
 
+    vm.plotTableClass = plotTableClass;
+
     // Initial plot
-    updatePlot();
+    // updatePlot();
+    generatePlotTable();
 
     ///////////////
     ///////////////
@@ -72,16 +77,53 @@
         });
     }
 
-    // Watched for changes in plotURL, which translates to this function firing
-    // whenever a successful request is made
-    $scope.$watch(function() {
-      return LocalData.result;
-    }, function() {
-      if(LocalData.result) {
-        vm.url = LocalData.result.data.rel_base + ".png";
-        vm.popup.url = vm.url;
+    function generatePlotTable() {
+      LocalData.request.productType = 'plotTable';
+      // vm.returnData.url = window.location.href;
+      RequestService.get(LocalData.request)
+        .then(function(result) {  
+          var json = result.data.return_json;
+          json = JSON.parse(json).returnValues;
+          // vm.returnData.plotTypes = json.plotTypes;
+          // vm.returnData.relBase = result.data.rel_base;
+          vm.returnData.plotTypes = ["a","b","c","d"];
+        });
+    };
+
+    function plotTableClass() {
+      switch(vm.returnData.plotTypes.length) {
+
+        case 1:
+        case 2:
+          return "col-sm-6";
+          break;
+        case 3:
+        case 5:
+        case 6:
+          return "col-sm-4";
+          break;
+        case 4:
+        case 7:
+        case 8:
+          return "col-sm-3";
+          break;
+
+        default:
+          return "col-sm-6";
+
       }
-    });
+    }
+
+    // // Watched for changes in plotURL, which translates to this function firing
+    // // whenever a successful request is made
+    // $scope.$watch(function() {
+    //   return LocalData.result;
+    // }, function() {
+    //   if(LocalData.result) {
+    //     vm.url = LocalData.result.data.rel_base + ".png";
+    //     vm.popup.url = vm.url;
+    //   }
+    // });
 
     // When URL params change apply those changes to the request object
     $scope.$watch(function() {

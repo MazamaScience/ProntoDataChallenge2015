@@ -94,6 +94,16 @@
           ng-hide="main.status().loading || main.status().error" 
           ng-src="{{main.url && main.url || ''}}" />
 
+          {{main.returnData}}
+
+        <div ng-repeat="plot in main.returnData.plotTypes" ng-class="main.plotTableClass()">
+          <img
+            class="plot-image shadow"
+            ng-click="main.popup.visible=true"
+            ng-hide="main.status().loading || main.status().error"
+            ng-src="{{plot}}_{{vm.returnData.relBase}}.png" />
+        </div>
+
         <!-- popup directive: creates a dark transparent overlay that hides when clicked -->
         <!-- any html can go inside -->
 
