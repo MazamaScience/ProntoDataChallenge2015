@@ -20,11 +20,13 @@ result <- try( {
   source("__DATABROWSER_PATH__/R/createDataList.R")
   
   source("__DATABROWSER_PATH__/R/addTitleAndAttribution.R")
-  source("__DATABROWSER_PATH__/R/heatmapHourByWeekPlot.R")
-  source("__DATABROWSER_PATH__/R/daylightPlot.R")
-  source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
-  source("__DATABROWSER_PATH__/R/weatherCalendarPlot.R")
-  source("__DATABROWSER_PATH__/R/barplotDayByWeekPlot.R")
+
+  source("__DATABROWSER_PATH__/R/barplot_weekByDayPlot.R")
+  source("__DATABROWSER_PATH__/R/bubble_stationPlot.R")
+  source("__DATABROWSER_PATH__/R/calendar_weatherPlot.R")
+  source("__DATABROWSER_PATH__/R/heatmap_weekByDayPlot.R")
+  source("__DATABROWSER_PATH__/R/heatmap_weekByHourPlot.R")
+  source("__DATABROWSER_PATH__/R/pie_daylightPlot.R")
 }, silent=TRUE)
 
 if ( class(result)[1] == "try-error" ) {
@@ -110,37 +112,33 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   returnValues <- c(0.0,0.0,0.0,0.0)
   
-  if (infoList$plotType == 'barplotDayByWeek') {
+  if (infoList$plotType == 'barplot_weekByDay') {
     
-    returnValues <- barplotDayByWeekPlot(dataList,infoList,textList)
+    returnValues <- barplot_weekByDayPlot(dataList,infoList,textList)
     
-  } else if (infoList$plotType == "weatherCalendar") { 
+  } else if (infoList$plotType == "calendar_weather") { 
     
-    returnValues <- weatherCalendarPlot(dataList,infoList,textList)
+    returnValues <- calendar_weatherPlot(dataList,infoList,textList)
     
-  } else if (infoList$plotType == "heatmapHourByDay") { 
+  } else if (infoList$plotType == "heatmap_WeekByDay") { 
     
-    returnValues <- heatmapHourByDayPlot(dataList,infoList,textList)
+    returnValues <- heatmap_WeekByDayPlot(dataList,infoList,textList)
 
-  } else if (infoList$plotType == "heatmapHourByWeek") { 
+  } else if (infoList$plotType == "heatmap_weekByHour") { 
     
-    returnValues <- heatmapHourByWeekPlot(dataList,infoList,textList)
+    returnValues <- heatmap_weekByHourPlot(dataList,infoList,textList)
 
-  } else if (infoList$plotType == "weatherCalendar") { 
+  } else if (infoList$plotType == "calendar_weather") { 
     
-    returnValues <- weatherCalendarPlot(dataList,infoList,textList)
+    returnValues <- calendar_weatherPlot(dataList,infoList,textList)
     
-  } else if (infoList$plotType == "daylight") { 
+  } else if (infoList$plotType == "pie_daylight") { 
     
-    returnValues <- daylightPlot(dataList,infoList,textList)
+    returnValues <- pie_daylightPlot(dataList,infoList,textList)
     
-  } else if (infoList$plotType == "stationBubble") { 
+  } else if (infoList$plotType == "bubble_station") { 
     
-    returnValues <- stationBubblePlot(dataList,infoList,textList)
-    
-  } else if (infoList$plotType == "Map") { 
-    
-    returnValues <- mapPlot(dataList,infoList,textList)
+    returnValues <- bubble_stationPlot(dataList,infoList,textList)
     
   } else {
     
@@ -158,7 +156,7 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   totalSecs <- ( (proc.time())[3] - start )
   print(paste("Total elapsed =",round(totalSecs,4),"seconds"))
   
-  if (infoList$plotDevice != '' & infoList$plotType == "TrigFunctions") {
+  if ( infoList$plotDevice != '' ) {
     dev.off()
   }
   

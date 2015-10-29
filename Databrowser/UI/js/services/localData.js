@@ -15,7 +15,7 @@
       language: "en",
       plotWidth: 640,
       productType: "systemTable",
-      plotType: "barplotDayByWeek",
+      plotType: "barplot_weekByDay",
       userType: "all",
       age: "all",
       gender: "all",
@@ -29,20 +29,20 @@
 
     var forms = {
       plotType: [{
-        text: "barplotDayByWeek",
-        value: "barplotDayByWeek"
+        text: "barplot_weekByDay",
+        value: "barplot_weekByDay"
       }, {
-        text: "heatmapHourByDay",
-        value: "heatmapHourByDay"
+        text: "heatmap_weekByHour",
+        value: "heatmap_weekByHour"
       }, {
-        text: "Daylight",
-        value: "daylight"
+        text: "pie_daylight",
+        value: "pie_daylight"
       }, {
-        text: "Weather Calendar",
-        value: "weatherCalendar"
+        text: "calendar_weather",
+        value: "calendar_weather"
       }, {
-        text: "stationBubble",
-        value: "stationBubble"
+        text: "bubble_station",
+        value: "bubble_station"
       }],
       userType: [{
         text: "All Users",
