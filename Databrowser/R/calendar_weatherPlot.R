@@ -87,7 +87,11 @@ calendar_weatherPlot <- function(dataList, infoList, textList) {
   maxValue_temp <- round(max(mat_temp, na.rm=TRUE))
   maxValue_precip <- round(max(mat_precip, na.rm=TRUE),digits=1)
   
-  
+  # TODO:  Figure out how to subset mat_temp and mat_precip while retaining
+  # TODO:  based on user temp and precip subsetting without changing the
+  # TODO:  color scale.
+
+
   # ----- Layout --------------------------------------------------------------
   
   # NOTE:  The layoutFraction_ components are the same in every plot and guarantee

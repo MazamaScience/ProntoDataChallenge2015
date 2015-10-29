@@ -77,8 +77,24 @@ createTextList <- function(dataList, infoList) {
   if (infoList$dayType != 'all') {
     if (infoList$dayType == 'weekday') {
       textList$subset <- paste0(textList$subset,'weekday -- ')
-    } else {
+    } else if (infoList$dayType == 'weekend') {
       textList$subset <- paste0(textList$subset,'weekend -- ')
+    } else if (infoList$dayType == 'rain__02') {
+      textList$subset <- paste0(textList$subset,'<0.2 in rain -- ')
+    } else if (infoList$dayType == 'rain_02') {
+      textList$subset <- paste0(textList$subset,'>0.2 in rain -- ')
+    } else if (infoList$dayType == 'rain_05') {
+      textList$subset <- paste0(textList$subset,'>0.5 in rain -- ')
+    } else if (infoList$dayType == 'rain_10') {
+      textList$subset <- paste0(textList$subset,'>0.1 in rain -- ')
+    } else if (infoList$dayType == 'temp__50') {
+      textList$subset <- paste0(textList$subset,'<50 F -- ')
+    } else if (infoList$dayType == 'temp_50') {
+      textList$subset <- paste0(textList$subset,'>50 F -- ')
+    } else if (infoList$dayType == 'temp_60') {
+      textList$subset <- paste0(textList$subset,'>60 F -- ')
+    } else if (infoList$dayType == 'temp_70') {
+      textList$subset <- paste0(textList$subset,'>70 F -- ')
     }
   }
   

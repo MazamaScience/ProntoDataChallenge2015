@@ -71,6 +71,22 @@ createDataList <- function(infoList) {
     trip <- subset(trip, trip$dayOfWeek %in% 2:6)    # lubridate weeks begin on Sunday
   } else if (infoList$dayType == 'weekend') {
     trip <- subset(trip, trip$dayOfWeek %in% c(1,7)) # lubridate weeks begin on Sunday
+  } else if (infoList$dayType == 'rain__02') {
+    trip <- subset(trip, trip$precipIn < 0.02)
+  } else if (infoList$dayType == 'rain_02') {
+    trip <- subset(trip, trip$precipIn >= 0.02)
+  } else if (infoList$dayType == 'rain_05') {
+    trip <- subset(trip, trip$precipIn >= 0.05)
+  } else if (infoList$dayType == 'rain_10') {
+    trip <- subset(trip, trip$precipIn >= 0.10)
+  } else if (infoList$dayType == 'temp__50') {
+    trip <- subset(trip, trip$meanTempF < 50)
+  } else if (infoList$dayType == 'temp_50') {
+    trip <- subset(trip, trip$meanTempF >= 50)
+  } else if (infoList$dayType == 'temp_60') {
+    trip <- subset(trip, trip$meanTempF >= 70)
+  } else if (infoList$dayType == 'temp_70') {
+    trip <- subset(trip, trip$meanTempF >= 70)
   }
   
   # timeOfDay
@@ -136,7 +152,7 @@ createDataList <- function(infoList) {
   
   weather <- get(load(paste0(infoList$dataDir,'/Mazama_weather.RData')))
   
-  
+
   # ----- Finish and Return ---------------------------------------------------
   
   # Create dataList

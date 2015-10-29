@@ -95,6 +95,32 @@
       }, {
         text: "Weekend",
         value: "weekend"
+/*
+      }, {
+        text: "< .02 in Rain",
+        value: "rain__02"
+      }, {
+        text: "> 0.2 in Rain",
+        value: "rain_02"
+      }, {
+        text: "> 0.5 in Rain",
+        value: "rain_05"
+      }, {
+        text: "> 1.0 in Rain",
+        value: "rain_10"
+      }, {
+        text: "< 50 F",
+        value: "temp__50"
+      }, {
+        text: "> 50 F",
+        value: "temp_50"
+      }, {
+        text: "> 60 F",
+        value: "temp_60"
+      }, {
+        text: "> 70 F",
+        value: "temp_70"
+*/
       }],
 
       timeOfDay: [{
