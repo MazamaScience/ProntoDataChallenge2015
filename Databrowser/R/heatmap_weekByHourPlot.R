@@ -45,7 +45,6 @@ heatmap_weekByHourPlot <- function(dataList, infoList, textList) {
   col_box <- 'gray50'
 
   # Heatmap
-  col_bg <- 'gray90'
   colors <- c('transparent',RColorBrewer::brewer.pal(9,'Purples'))
   lty_vert <- 1
   lwd_vert <- 1
@@ -61,15 +60,15 @@ heatmap_weekByHourPlot <- function(dataList, infoList, textList) {
   
   # Convert days from 00:00-23:00 to 04:00-27:00 by setting all times back four hours
   startTime <- trip$startTime - lubridate::dhours(3)
-  timeSinceStart <- startTime - startTime[1]
-  daysSinceStart <- as.integer(as.numeric(timeSinceStart,units="days"))
-  weeksSinceStart <- as.integer(as.numeric(timeSinceStart,units="weeks"))
+#   timeSinceStart <- startTime - startTime[1]
+#   daysSinceStart <- as.integer(as.numeric(timeSinceStart,units="days"))
+#   weeksSinceStart <- as.integer(as.numeric(timeSinceStart,units="weeks"))
   hourOfDay <- lubridate::hour(startTime)
   month <- lubridate::month(startTime)
   
   # Create factors so the table function will add zeros for missing levels
-  weeksSinceStart <- factor(weeksSinceStart+1,levels=1:53)
-  daysSinceStart <- factor(daysSinceStart+1,levels=1:365)
+#   daysSinceStart <- factor(daysSinceStart+1,levels=1:365)
+#   weeksSinceStart <- factor(weeksSinceStart+1,levels=1:53)
   hourOfDay <- factor(hourOfDay,levels=0:23)
   month <- factor(month,levels=1:12)
   
@@ -162,8 +161,8 @@ heatmap_weekByHourPlot <- function(dataList, infoList, textList) {
   
   text(xpos, ypos, labels, pos=2, font=font, col=col, cex=cex, xpd=NA)
   
-  # Modify the passed in title
-  infoList$title <- paste0(textList$title,'  (max=',maxValue,')')
+  # Modify the subset string
+  textList$subset <- paste0(textList$subset,'  (max=',maxValue,')')
   
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)

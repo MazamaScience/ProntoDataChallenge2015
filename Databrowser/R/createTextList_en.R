@@ -28,7 +28,8 @@ createTextList <- function(dataList, infoList) {
 
   textList$attribution <- paste("data:  ProntoCycleShare.com        graphic:  MazamaScience.com")
 
-  textList$dayLabels <- c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
+  textList$dayLabels_3 <- c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
+  textList$dayLabels_1 <- c('M','T','W','T','F','S','S')
   textList$monthLabels_3 <- c('Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
   textList$monthLabels_1 <- c('O','N','D','J','F','M','A','M','J','J','A','S','O')
   
@@ -52,8 +53,8 @@ createTextList <- function(dataList, infoList) {
   if (infoList$gender != 'all') {
     if (infoList$gender == 'male') {
       textList$subset <- 'men -- '   ### \u2642 is Unicode for Mars
-    } else if (infoList$gender == 'women') {
-      textList$subset <- 'female -- ' ### \u2640 is Unicode for Venus
+    } else if (infoList$gender == 'female') {
+      textList$subset <- 'women -- ' ### \u2640 is Unicode for Venus
     } else if (infoList$gender == 'other') {
       textList$subset <- 'other -- '
     }
@@ -61,15 +62,15 @@ createTextList <- function(dataList, infoList) {
   
   if (infoList$age != 'all') {
     if (infoList$age == '_21') {
-      textList$subset <- paste0(textList$subset,'<21 years --')
+      textList$subset <- paste0(textList$subset,'<21 year olds -- ')
     } else if (infoList$age == '21_30') {
-      textList$subset <- paste0(textList$subset,'21-30 years --')
+      textList$subset <- paste0(textList$subset,'21-30 year olds -- ')
     } else if (infoList$age == '31_40') {
-      textList$subset <- paste0(textList$subset,'31-40 years --')
+      textList$subset <- paste0(textList$subset,'31-40 year olds -- ')
     } else if (infoList$age == '41_60') {
-      textList$subset <- paste0(textList$subset,'41-60 years --')
+      textList$subset <- paste0(textList$subset,'41-60 year olds -- ')
     } else if (infoList$age == '61_') {
-      textList$subset <- paste0(textList$subset,'>60 years --')
+      textList$subset <- paste0(textList$subset,'>60 year olds -- ')
     }
   }
 

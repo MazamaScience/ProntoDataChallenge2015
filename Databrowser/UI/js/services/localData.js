@@ -32,6 +32,9 @@
         text: "barplot_weekByDay",
         value: "barplot_weekByDay"
       }, {
+        text: "heatmap_weekByDay",
+        value: "heatmap_weekByDay"
+      }, {
         text: "heatmap_weekByHour",
         value: "heatmap_weekByHour"
       }, {

@@ -8,6 +8,7 @@
 
 if (FALSE) {
   
+  source('./R/addTitleAndAttribution.R')
   source('./R/createDataList.R')
   source('./R/createTextList_en.R')
   
@@ -16,7 +17,7 @@ if (FALSE) {
                    userType='annual',
                    gender='all',
                    age='all',
-                   dayType='weekday',
+                   dayType='all',
                    timeOfDay='all',
                    distance='all',
                    stationId='all',
@@ -45,7 +46,6 @@ heatmap_weekByDayPlot <- function(dataList, infoList, textList) {
   col_box <- 'gray50'
 
   # Heatmap
-  col_bg <- 'gray90'
   colors <- c('transparent',RColorBrewer::brewer.pal(9,'Purples'))
   lty_vert <- 1
   lwd_vert <- 1
@@ -58,20 +58,6 @@ heatmap_weekByDayPlot <- function(dataList, infoList, textList) {
   
   # Get dataframe from the dataList
   trip <- dataList$trip
-  
-  # Convert days from 00:00-23:00 to 04:00-27:00 by setting all times back four hours
-  startTime <- trip$startTime - lubridate::dhours(3)
-  timeSinceStart <- startTime - startTime[1]
-  daysSinceStart <- as.integer(as.numeric(timeSinceStart,units="days"))
-  weeksSinceStart <- as.integer(as.numeric(timeSinceStart,units="weeks"))
-  hourOfDay <- lubridate::hour(startTime)
-  month <- lubridate::month(startTime)
-  
-  # Create factors so the table function will add zeros for missing levels
-  weeksSinceStart <- factor(weeksSinceStart+1,levels=1:53)
-  daysSinceStart <- factor(daysSinceStart+1,levels=1:365)
-  hourOfDay <- factor(hourOfDay,levels=0:23)
-  month <- factor(month,levels=1:12)
   
   # Create a table of # of rides
   tbl <- table(trip$ProntoWeek,trip$dayOfWeek_MondayStart)
@@ -120,7 +106,7 @@ heatmap_weekByDayPlot <- function(dataList, infoList, textList) {
   # NOTE:  top to bottom.
   
   # Add the heatmap colored by data
-  image(weeks[1:52], 0:23, mat[1:52,24:1],
+  image(weeks[1:52], 1:7, mat[1:52,7:1],
         col=colors,
         # add=TRUE)
         axes=FALSE, xlab='', ylab='')
@@ -136,34 +122,14 @@ heatmap_weekByDayPlot <- function(dataList, infoList, textList) {
   text(xpos, ypos, textList$monthLabels_3[1:12],
        font=font, col=col, cex=cex, xpd=NA)
 
-  # TODO:  When a time-of-day is chosen we should put a box around it and 
-  # TODO:  change the labels to reflect the first and last hour of the time-of-day.
-  
   #  Y axis
-  # NOTE:  The new y axis goes, from bottom to top, from 0:23 and represents
-  # NOTE:  2AM, 1AM, Midnight, 11PM, ... with 3AM at the top
   xpos <- par('usr')[1]
-  
-  if (infoList$timeOfDay == 'early') {
-    times <- c(4,6); ypos <- rev(abs(times-26)); labels <- rev(c('4 A','6 A'))
-  } else if (infoList$timeOfDay == 'amCommute') {
-    times <- c(7,9); ypos <- rev(abs(times-26)); labels <- rev(c('7 A','9 A'))
-  } else if (infoList$timeOfDay == 'midday') {
-    times <- c(10,15); ypos <- rev(abs(times-26)); labels <- rev(c('10 A','3 P'))
-  } else if (infoList$timeOfDay == 'pmCommute') {
-    times <- c(16,18); ypos <- rev(abs(times-26)); labels <- rev(c('4 P','6 P'))
-  } else if (infoList$timeOfDay == 'evening') {
-    times <- c(19,22); ypos <- rev(abs(times-26)); labels <- rev(c('7 P','10 P'))
-  } else if (infoList$timeOfDay == 'night') {
-    times <- c(23,3); ypos <- rev(abs(times-26)); labels <- rev(c('11 P','3 A'))
-  } else {
-    times <- c(8,17); ypos <- rev(abs(times-26)); labels <- rev(c('8 A','5 P'))
-  }
-  
+  ypos <- 7:1
+  labels <- textList$dayLabels_1
   text(xpos, ypos, labels, pos=2, font=font, col=col, cex=cex, xpd=NA)
   
-  # Modify the passed in title
-  infoList$title <- paste0(textList$title,'  (max=',maxValue,')')
+  # Modify the subset string
+  textList$subset <- paste0(textList$subset,'  (max=',maxValue,')')
   
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)

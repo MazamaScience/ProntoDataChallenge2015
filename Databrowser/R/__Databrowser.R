@@ -120,9 +120,9 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
     
     returnValues <- calendar_weatherPlot(dataList,infoList,textList)
     
-  } else if (infoList$plotType == "heatmap_WeekByDay") { 
+  } else if (infoList$plotType == "heatmap_weekByDay") { 
     
-    returnValues <- heatmap_WeekByDayPlot(dataList,infoList,textList)
+    returnValues <- heatmap_weekByDayPlot(dataList,infoList,textList)
 
   } else if (infoList$plotType == "heatmap_weekByHour") { 
     
