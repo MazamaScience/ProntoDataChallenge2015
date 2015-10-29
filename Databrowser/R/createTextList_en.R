@@ -119,9 +119,9 @@ createTextList <- function(dataList, infoList) {
   
   # ----- Title ---------------------------------------------------------------
   
-  if (infoList$plotType == 'weeklyUsageByDayOfWeek') {
+  if (infoList$plotType == 'barplotDayByWeek') {
     textList$title <- 'Growth by Day'
-  } else if (infoList$plotType == 'weeklyUsageByHourOfDay') {
+  } else if (infoList$plotType == 'heatmapHourByDay') {
     textList$title <- 'Weekly Usage by Hour'
   } else if (infoList$plotType == 'stationBubble') {
     textList$title <- 'Station Usage'

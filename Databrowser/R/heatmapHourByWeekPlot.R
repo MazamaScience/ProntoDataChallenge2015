@@ -1,5 +1,5 @@
 ###############################################################################
-# weeklyUsageByHourOfDayPlot.R
+# heatmapHourByDayPlot.R
 #
 # Heatmap of weekly usage by hour of day.
 
@@ -12,7 +12,7 @@ if (FALSE) {
   source('./R/createTextList_en.R')
   
   infoList <- list(dataDir="./data_local",
-                   plotType='weeklyUsageByHourOfDay',
+                   plotType='heatmapHourByDay',
                    userType='annual',
                    gender='all',
                    age='all',
@@ -25,13 +25,13 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
   
-  weeklyUsageByHourOfDayPlot(dataList, infoList, textList)
+  heatmapHourByDayPlot(dataList, infoList, textList)
   
 }
 
 ###############################################################################
 
-weeklyUsageByHourOfDayPlot <- function(dataList, infoList, textList) {
+heatmapHourByDayPlot <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
   

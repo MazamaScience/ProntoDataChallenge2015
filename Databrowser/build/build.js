@@ -188,7 +188,7 @@ angular.module('App')
       language: "en",
       plotWidth: 640,
       productType: "systemTable",
-      plotType: "weeklyUsageByDayOfWeek",
+      plotType: "barplotDayByWeek",
       userType: "all",
       age: "all",
       gender: "all",
@@ -202,11 +202,11 @@ angular.module('App')
 
     var forms = {
       plotType: [{
-        text: "Growth by DoW",
-        value: "weeklyUsageByDayOfWeek"
+        text: "barplotDayByWeek",
+        value: "barplotDayByWeek"
       }, {
-        text: "Usage by Hour",
-        value: "weeklyUsageByHourOfDay"
+        text: "heatmapHourByDay",
+        value: "heatmapHourByDay"
       }, {
         text: "Daylight",
         value: "daylight"

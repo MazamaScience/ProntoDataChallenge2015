@@ -107,11 +107,31 @@ createDataList <- function(infoList) {
   print(paste0(endingRowCount,' of ',startingRowCount,' rows retained.'))
       
     
-  # ----- Other Data ----------------------------------------------------------
+  # ----- Station Data --------------------------------------------------------
   
   station <- get(load(paste0(infoList$dataDir,'/Mazama_station.RData')))
+  
+  # ----- Generate Counts Columns ---------------------------------------------
+  
+  trip$fromStationId <- as.factor(trip$fromStationId)
+  trip$toStationId <- as.factor(trip$toStationId)
+  
+  # Create a table of # of rides
+  fromTable <- table(trip$fromStationId)
+  toTable <- table(trip$toStationId)
+  
+  # Add these as columns to the 'station' dataframe, ensuring proper ordering
+  station$fromCount <- as.numeric(fromTable[station$terminal])
+  station$toCount <- as.numeric(toTable[station$terminal])
+  station$totalCount <- station$fromCount + station$toCount
+  
+  
+  # ----- Weather Data --------------------------------------------------------
+  
   weather <- get(load(paste0(infoList$dataDir,'/Mazama_weather.RData')))
   
+  
+  # ----- Finish and Return ---------------------------------------------------
   
   # Create dataList
   dataList <- list(trip=trip,

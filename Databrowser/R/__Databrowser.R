@@ -11,16 +11,34 @@
 library(stringr) # for sane string manipulations
 library(jsonlite) # for JSON support
 
-# Include all the supporting code
-source("__DATABROWSER_PATH__/R/createInfoList.R")
-source("__DATABROWSER_PATH__/R/createDataList.R")
+# Turn warnings into errors
+options(warn=2)
 
-source("__DATABROWSER_PATH__/R/addTitleAndAttribution.R")
-source("__DATABROWSER_PATH__/R/weeklyUsageByHourOfDayPlot.R")
-source("__DATABROWSER_PATH__/R/daylightPlot.R")
-source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
-source("__DATABROWSER_PATH__/R/weatherCalendarPlot.R")
-source("__DATABROWSER_PATH__/R/weeklyUsageByDayOfWeekPlot.R")
+result <- try( {
+  # Include all the supporting code
+  source("__DATABROWSER_PATH__/R/createInfoList.R")
+  source("__DATABROWSER_PATH__/R/createDataList.R")
+  
+  source("__DATABROWSER_PATH__/R/addTitleAndAttribution.R")
+  source("__DATABROWSER_PATH__/R/heatmapHourByWeekPlot.R")
+  source("__DATABROWSER_PATH__/R/daylightPlot.R")
+  source("__DATABROWSER_PATH__/R/stationBubblePlot.R")
+  source("__DATABROWSER_PATH__/R/weatherCalendarPlot.R")
+  source("__DATABROWSER_PATH__/R/barplotDayByWeekPlot.R")
+}, silent=TRUE)
+
+if ( class(result)[1] == "try-error" ) {
+  # Obtain the "cannot open file ..." information
+  err_msg <- geterrmessage()
+  if ( stringr::str_detect(err_msg,"cannot open file.*$") ) {
+    err_msg <- stringr::str_match(err_msg,"cannot open file.*$")[1,1]
+    err_msg <- paste0('---------- ',stringr::str_trim(err_msg))
+  }
+  stop(err_msg, call.=FALSE)
+}
+
+# Turn warnings into immediate warnings
+options(warn=1)
 
 # Global variables
 G_DEBUG <- TRUE
@@ -92,17 +110,17 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   returnValues <- c(0.0,0.0,0.0,0.0)
   
-  if (infoList$plotType == 'weeklyUsageByDayOfWeek') {
+  if (infoList$plotType == 'barplotDayByWeek') {
     
-    returnValues <- weeklyUsageByDayOfWeekPlot(dataList,infoList,textList)
+    returnValues <- barplotDayByWeekPlot(dataList,infoList,textList)
     
   } else if (infoList$plotType == "weatherCalendar") { 
     
     returnValues <- weatherCalendarPlot(dataList,infoList,textList)
     
-  } else if (infoList$plotType == "weeklyUsageByHourOfDay") { 
+  } else if (infoList$plotType == "heatmapHourByWeek") { 
     
-    returnValues <- weeklyUsageByHourOfDayPlot(dataList,infoList,textList)
+    returnValues <- heatmapHourByWeekPlot(dataList,infoList,textList)
 
   } else if (infoList$plotType == "weatherCalendar") { 
     

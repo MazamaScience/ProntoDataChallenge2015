@@ -1,7 +1,10 @@
 ###############################################################################
-# weeklyUsageByDayOfWeekPlot.R
+# barplotDayByWeekPlot.R
 #
 # Displays weekly usage by day of week for the selected trip subset.
+
+###############################################################################
+# Intialization for testing in RStudio
 
 if (FALSE) {
 
@@ -9,7 +12,7 @@ if (FALSE) {
   source('./R/createTextList_en.R')
   
   infoList <- list(dataDir="./data_local",
-                   plotType='weeklyUsageByDayOfWeek',
+                   plotType='barplotDayByWeek',
                    userType='all',
                    gender='all',
                    age='all',
@@ -22,11 +25,11 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
 
-  weeklyUsageByDayOfWeekPlot(dataList, infoList, textList)
+  barplotDayByWeekPlot(dataList, infoList, textList)
   
 }
 
-weeklyUsageByDayOfWeekPlot <- function(dataList, infoList, textList) {
+barplotDayByWeekPlot <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
 
