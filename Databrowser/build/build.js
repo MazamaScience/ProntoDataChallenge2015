@@ -249,13 +249,8 @@ angular.module('App')
     var request = {
       language: "en",
       plotWidth: 640,
-<<<<<<< HEAD
       productType: "systemTable", 
       plotTypes: "heatmapHourByDay,daylight,weatherCalendar",
-=======
-      productType: "systemTable",
-      plotType: "barplot_weekByDay",
->>>>>>> af84eec6a4850e9b013cb3be7dcd888d4a61abd8
       userType: "all",
       age: "all",
       gender: "all",
@@ -268,7 +263,6 @@ angular.module('App')
     };
 
     var forms = {
-<<<<<<< HEAD
 
       plotGroups: [{
         text: "Group 1",
@@ -279,23 +273,7 @@ angular.module('App')
       }, {
         text: "Group 3",
         value: "barplotDayByWeek,heatmapHourByDay"
-=======
-      plotType: [{
-        text: "barplot_weekByDay",
-        value: "barplot_weekByDay"
-      }, {
-        text: "heatmap_weekByHour",
-        value: "heatmap_weekByHour"
-      }, {
-        text: "pie_daylight",
-        value: "pie_daylight"
-      }, {
-        text: "calendar_weather",
-        value: "calendar_weather"
-      }, {
-        text: "bubble_station",
-        value: "bubble_station"
->>>>>>> af84eec6a4850e9b013cb3be7dcd888d4a61abd8
+
       }],
 
       userType: [{
