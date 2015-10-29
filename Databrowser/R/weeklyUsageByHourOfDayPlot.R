@@ -19,7 +19,10 @@ if (FALSE) {
                    dayType='weekday',
                    timeOfDay='all',
                    distance='all',
-                   stationId='all')
+                   stationId='all',
+                   layoutFraction_title=0.16,
+                   layoutFraction_attribution=0.08)
+
   
   dataList <- createDataList(infoList)
   
@@ -45,7 +48,7 @@ weeklyUsageByHourOfDayPlot <- function(dataList, infoList, textList) {
   col_bg <- 'gray90'
   colors <- c('transparent',RColorBrewer::brewer.pal(9,'Purples'))
   lty_vert <- 1
-  lwd_vert <- 2
+  lwd_vert <- 1
   col_vert <- 'white'
   
   # Label positions
@@ -80,9 +83,12 @@ weeklyUsageByHourOfDayPlot <- function(dataList, infoList, textList) {
   # Create x axes
   weeks <- seq(lubridate::ymd('2014-10-13',tz='America/Los_Angeles'),length.out=53,by='weeks')
   months <- seq(lubridate::ymd('2014-10-13',tz='America/Los_Angeles'),length.out=13,by='months')
-
-#   # Find the first Monday of each month
-#   newMonthMondays <- weeks[ which(diff(lubridate::month(weeks)) != 0) ]
+  
+  # Find the first Monday of each month
+  newMonthMondays <- weeks[ which(diff(lubridate::month(weeks)) != 0) ]
+  # NOTE:  Colored blocks are centered on the 'week' so we need to scoot half a week over to 
+  # NOTE:  draw verticalLines.
+  newMonthMondays <- newMonthMondays - 7*24*60*60/2
   
   
   # ----- Layout --------------------------------------------------------------
@@ -113,37 +119,48 @@ weeklyUsageByHourOfDayPlot <- function(dataList, infoList, textList) {
   # NOTE:  Plot columns (hours) in reverse order so that the time axis goes from
   # NOTE:  top to bottom.
   
-#   # Background gray in case we are only plotting parts of the day
-#   image(weeks[1:52], 0:23, mat[1:52,24:1]*0,
-#         col=col_bg,
-#         axes=FALSE, xlab='', ylab='')
-  
-#   # Add vertical lines at the first of each month
-#   abline(v=newMonthMondays, lty=lty_vert, lwd=lwd_vert, col=col_vert)
-  
   # Add the heatmap colored by data
   image(weeks[1:52], 0:23, mat[1:52,24:1],
         col=colors,
         # add=TRUE)
         axes=FALSE, xlab='', ylab='')
 
+  # Add vertical lines at the first of each month
+  abline(v=newMonthMondays, lty=lty_vert, lwd=lwd_vert, col=col_vert)
+  
   box(col=col_box)
   
   # X axis
   xpos <- months[1:12]
   ypos <- monthText_ypos
-  text(xpos, ypos, textList$monthLabels_3[1:12], pos=4,
+  text(xpos, ypos, textList$monthLabels_3[1:12],
        font=font, col=col, cex=cex, xpd=NA)
 
   # TODO:  When a time-of-day is chosen we should put a box around it and 
   # TODO:  change the labels to reflect the first and last hour of the time-of-day.
+  
   #  Y axis
   # NOTE:  The new y axis goes, from bottom to top, from 0:23 and represents
   # NOTE:  2AM, 1AM, Midnight, 11PM, ... with 3AM at the top
   xpos <- par('usr')[1]
-  ypos <- c(9,18)
-  text(xpos, ypos, c('5 P','8 A'), pos=2,
-       font=font, col=col, cex=cex, xpd=NA)
+  
+  if (infoList$timeOfDay == 'early') {
+    times <- c(4,6); ypos <- rev(abs(times-26)); labels <- rev(c('4 A','6 A'))
+  } else if (infoList$timeOfDay == 'amCommute') {
+    times <- c(7,9); ypos <- rev(abs(times-26)); labels <- rev(c('7 A','9 A'))
+  } else if (infoList$timeOfDay == 'midday') {
+    times <- c(10,15); ypos <- rev(abs(times-26)); labels <- rev(c('10 A','3 P'))
+  } else if (infoList$timeOfDay == 'pmCommute') {
+    times <- c(16,18); ypos <- rev(abs(times-26)); labels <- rev(c('4 P','6 P'))
+  } else if (infoList$timeOfDay == 'evening') {
+    times <- c(19,22); ypos <- rev(abs(times-26)); labels <- rev(c('7 P','10 P'))
+  } else if (infoList$timeOfDay == 'night') {
+    times <- c(23,3); ypos <- rev(abs(times-26)); labels <- rev(c('11 P','3 A'))
+  } else {
+    times <- c(8,17); ypos <- rev(abs(times-26)); labels <- rev(c('8 A','5 P'))
+  }
+  
+  text(xpos, ypos, labels, pos=2, font=font, col=col, cex=cex, xpd=NA)
   
   # Modify the passed in title
   infoList$title <- paste0(textList$title,'  (max=',maxValue,')')

@@ -10,13 +10,16 @@ if (FALSE) {
   
   infoList <- list(dataDir="./data_local",
                    plotType='weeklyUsageByDayOfWeek',
-                   userType='all',
+                   userType='annual',
                    gender='all',
                    age='all',
-                   dayType='all',
+                   dayType='weekday',
                    timeOfDay='all',
                    distance='all',
-                   stationId=)
+                   stationId='all',
+                   layoutFraction_title=0.16,
+                   layoutFraction_attribution=0.08)
+  
   
   dataList <- createDataList(infoList)
   

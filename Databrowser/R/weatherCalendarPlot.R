@@ -13,10 +13,15 @@ if (FALSE) {
   
   infoList <- list(dataDir="./data_local",
                    plotType='weatherCalendar',
-                   userType='all',
-                   dayType='all',
+                   userType='annual',
+                   gender='all',
+                   age='all',
+                   dayType='weekday',
                    timeOfDay='all',
-                   distance='all')
+                   distance='all',
+                   stationId='all',
+                   layoutFraction_title=0.16,
+                   layoutFraction_attribution=0.08)
   
   dataList <- createDataList(infoList)
   
@@ -35,10 +40,7 @@ weatherCalendarPlot <- function(dataList, infoList, textList) {
   # Overall
   col_text <- 'gray40'
   font <- 2
-  cexFactor <- 0.65
-  cex <- 2 * cexFactor
-  cex_title <- 3 * cexFactor
-  cex_attribution <- 1.5 * cexFactor
+  cex <- 1
   
   # Vertical month lines
   lwd_day <- 1
@@ -52,9 +54,6 @@ weatherCalendarPlot <- function(dataList, infoList, textList) {
   # Labels
   label_hadj <- 24.6 # 0:23
   
-  line_title <- 5.2
-  line_subtitle <- 3.7
-  line_attribution <- 1.9
   line_label <- 1.5
   
   # ----- Data Preparation ----------------------------------------------------
@@ -62,8 +61,10 @@ weatherCalendarPlot <- function(dataList, infoList, textList) {
   # Get dataframe from the dataList
   trip <- dataList$trip
   
-  # Create factors for use in table()
-  dayOfWeek <- factor(trip$dayOfWeek, levels=1:7)
+  # Shift the dayOfWeek so that weeks start on Monday
+  dayOfWeek <- as.numeric(trip$dayOfWeek) - 1
+  dayOfWeek[dayOfWeek == 0] <- 7
+  dayOfWeek <- factor(dayOfWeek, levels=1:7)
   
   # Create a table of # of rides
   tbl <- table(trip$ProntoWeek,dayOfWeek)
@@ -87,9 +88,28 @@ weatherCalendarPlot <- function(dataList, infoList, textList) {
   maxValue_precip <- round(max(mat_precip, na.rm=TRUE),digits=1)
   
   
-  # ----- Plot ----------------------------------------------------------------
+  # ----- Layout --------------------------------------------------------------
   
-  layout(matrix(c(5,seq(4))), heights=c(0.5,1,1,1,0.5))
+  # NOTE:  The layoutFraction_ components are the same in every plot and guarantee
+  # NOTE:  a similar look and feel across plots. The fractions are multiplied by
+  # NOTE:  the sum of heights used by all other plotting rows in your plot.
+  # NOTE:
+  # NOTE:  For instance, if you have three plots with heights of c(2,1,1) then the
+  # NOTE:  full set of plotting heights is 4 and the full set of heights will be:
+  # NOTE:  heights=c(layoutFraction_title*4,2,1,1,layoutFraction_attribution*4).
+  # NOTE:
+  # NOTE:  The order of plotting should always start with N and end with N-1 so 
+  # NOTE:  that the title is added last.
+  
+  # For this plot the sum of heights is 1
+  plotHeightSum <- 3
+  heights <- c(plotHeightSum * infoList$layoutFraction_title,
+               rep(1,3),
+               plotHeightSum * infoList$layoutFraction_attribution)
+  layout(matrix(c(5,1:4)), heights=heights)
+  
+  
+  # ----- Plot ----------------------------------------------------------------
   
   par(mar=c(1,4,1,2)+.1)  
   
@@ -98,11 +118,11 @@ weatherCalendarPlot <- function(dataList, infoList, textList) {
                       breaks=c(-1e9,seq(10,100,10),1e9),
                       col=rev(RColorBrewer::brewer.pal(11,'RdBu')))
   
-  label <- print(paste0(textList$temp,':  ',minValue_temp,' - ',maxValue_temp))
+  label <- print(paste0(textList$temp,':  ',minValue_temp,' - ',maxValue_temp,' F'))
   mtext(label, 2, font=font, col=col_text, cex=cex, line=line_label)
   
   # Rides
-  calendarHeatmap_sub(mat_temp[1:52,])
+  calendarHeatmap_sub(mat_rides[1:52,])
   
   label <- print(paste0(textList$rideCount,':  0 - ',maxValue_rides))
   mtext(label, 2, font=font, col=col_text, cex=cex, line=line_label)
@@ -112,7 +132,7 @@ weatherCalendarPlot <- function(dataList, infoList, textList) {
                       breaks=c(-1e9,0.05,0.1,0.15,0.3,0.5,1,1.5,2,1e9),
                       col=RColorBrewer::brewer.pal(9,'Greens'))
   
-  label <- print(paste0(textList$precip,':  0 - ',maxValue_precip))
+  label <- print(paste0(textList$precip,':  0 - ',maxValue_precip,' in'))
   mtext(label, 2, font=font, col=col_text, cex=cex, line=line_label)
   
   
@@ -138,20 +158,9 @@ weatherCalendarPlot <- function(dataList, infoList, textList) {
   #        font=font, col=col_text, cex=cex, xpd=NA)
   #   
   # 
-  # ---- Annotations ----------------------------------------------------------
-  
-  par(mar=c(0,0,0,0))
-  plot(0:1,0:1,col='transparent',axes=FALSE,xlab='',ylab='')
-  text(0.5, 0.5, textList$attribution, font=1, col=col_text, cex=cex_attribution, xpd=NA)
-  
-  # Title and subset information at the top
-  par(mar=c(0,0,0,0))
-  plot(0:1,0:1,col='transparent',axes=FALSE,xlab='',ylab='')
-  title <- paste0(textList$title)
-  text(0.5, 0.6, title, font=font, col=col_text, cex=cex_title, xpd=NA)
-  text(0.5, 0.2, textList$subset, font=1, col=col_text, cex=cex, xpd=NA)
-  
-  
+
+  # Add title and attribution as the last two plots
+  addTitleAndAttribution(dataList,infoList,textList)
   
   # ---- Cleanup and Return ---------------------------------------------------
   
@@ -160,6 +169,7 @@ weatherCalendarPlot <- function(dataList, infoList, textList) {
   layout(1)
   
   return(c(1.0,2.0,3.0,4.0))
+  
   
 }
 
