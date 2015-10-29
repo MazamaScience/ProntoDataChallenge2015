@@ -16,10 +16,13 @@ if (FALSE) {
                    userType='all',
                    gender='all',
                    age='all',
-                   dayType='all',
+                   dayType='weekday',
                    timeOfDay='all',
                    distance='all',
-                   stationId=)
+                   stationId='all',
+                   layoutFraction_title=0.16,
+                   layoutFraction_attribution=0.08)
+  
   
   dataList <- createDataList(infoList)
   

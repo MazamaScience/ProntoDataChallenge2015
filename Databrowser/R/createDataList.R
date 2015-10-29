@@ -62,9 +62,9 @@ createDataList <- function(infoList) {
   # dayType
   # NOTE:  Need to force to integer for integer comparison.
   if (infoList$dayType == 'weekday') {
-    trip <- subset(trip, as.integer(trip$dayOfWeek) <= 5)
+    trip <- subset(trip, trip$dayOfWeek %in% 2:6)    # lubridate weeks begin on Sunday
   } else if (infoList$dayType == 'weekend') {
-    trip <- subset(trip, as.integer(trip$dayOfWeek) > 5)
+    trip <- subset(trip, trip$dayOfWeek %in% c(1,7)) # lubridate weeks begin on Sunday
   }
   
   # timeOfDay

@@ -53,8 +53,8 @@ createTextList <- function(dataList, infoList) {
   
   if (infoList$gender != 'all') {
     if (infoList$gender == 'male') {
-      textList$subset <- 'male -- '   ### \u2642 is Unicode for Mars
-    } else if (infoList$gender == 'female') {
+      textList$subset <- 'men -- '   ### \u2642 is Unicode for Mars
+    } else if (infoList$gender == 'women') {
       textList$subset <- 'female -- ' ### \u2640 is Unicode for Venus
     } else if (infoList$gender == 'other') {
       textList$subset <- 'other -- '
@@ -76,24 +76,24 @@ createTextList <- function(dataList, infoList) {
   }
 
   if (infoList$dayType != 'all') {
-    if (infoList$dayType == 'weeday') {
-      textList$subset <- paste0(textList$subset,'Weekday -- ')
+    if (infoList$dayType == 'weekday') {
+      textList$subset <- paste0(textList$subset,'weekday -- ')
     } else {
-      textList$subset <- paste0(textList$subset,'Weekday -- ')
+      textList$subset <- paste0(textList$subset,'weekend -- ')
     }
   }
   
   if (infoList$timeOfDay != 'all') {
     if (infoList$timeOfDay == 'amCommute') {
-      textList$subset <- paste0(textList$subset,'AM Commute -- ')
+      textList$subset <- paste0(textList$subset,'am commute -- ')
     } else if (infoList$timeOfDay == 'midday') {
-      textList$subset <- paste0(textList$subset,'Mid Day -- ')
+      textList$subset <- paste0(textList$subset,'mid day -- ')
     } else if (infoList$timeOfDay == 'pmCommute') {
-      textList$subset <- paste0(textList$subset,'PM Commute -- ')
+      textList$subset <- paste0(textList$subset,'pm Commute -- ')
     } else if (infoList$timeOfDay == 'evening') {
-      textList$subset <- paste0(textList$subset,'Evening -- ')
+      textList$subset <- paste0(textList$subset,'evening -- ')
     } else if (infoList$timeOfDay == 'night') {
-      textList$subset <- paste0(textList$subset,'Night -- ')
+      textList$subset <- paste0(textList$subset,'night -- ')
     }
   }
   
