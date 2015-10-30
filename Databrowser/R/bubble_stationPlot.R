@@ -57,23 +57,13 @@ bubble_stationPlot <- function(dataList, infoList, textList) {
   trip <- dataList$trip
   station <- dataList$station
   
-  # Count up the trips
-  fromStationTbl <- table(trip$fromStationId)
-  fromCount <- as.numeric(fromStationTbl[station$terminal])
-  fromCount[is.na(fromCount)] <- 0
-  toStationTbl <- table(trip$toStation)
-  toCount <- as.numeric(toStationTbl[station$terminal])
-  toCount[is.na(toCount)] <- 0
-  
   # Remove 'Pronto Shop'
   station <- subset(station,terminal != 'XXX-01')
 
-  # Get adjust station usage
-  rawUsage <- fromCount + toCount
-  usage <- rawUsage * station$onlineDays/max(station$onlineDays)
-  
   # Create breaks
+  usage <- station$dailyUsage
   breaks=quantile(usage,probs=seq(0,1,1/9))
+
   # Give the first three breaks meaningful small numbers but only if they are currently bigger
   if (breaks[2] > 0.5*365) {
     breaks[1:2] <- c(0,0.5)*365

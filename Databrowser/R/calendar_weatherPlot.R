@@ -38,9 +38,9 @@ calendar_weatherPlot <- function(dataList, infoList, textList) {
   # ----- Style ---------------------------------------------------------------
   
   # Overall
-  col_text <- 'gray40'
+  col_text <- 'gray20'
   font <- 2
-  cex <- 1
+  cex <- 2
   
   # Vertical month lines
   lwd_day <- 1
@@ -52,19 +52,19 @@ calendar_weatherPlot <- function(dataList, infoList, textList) {
   colors <- c('transparent',RColorBrewer::brewer.pal(9,'Purples'))
   
   # Labels
-  label_hadj <- 24.6 # 0:23
-  
+  cex_label <- 1.2
   line_label <- 1.5
+  
+
+  # Label positions
+  monthText_ypos <- 9  # 1:7
+  dayText_xpos <- 0 # 1:53
+
   
   # ----- Data Preparation ----------------------------------------------------
   
   # Get dataframe from the dataList
   trip <- dataList$trip
-  
-#   # Shift the dayOfWeek so that weeks start on Monday
-#   dayOfWeek <- as.numeric(trip$dayOfWeek) - 1
-#   dayOfWeek[dayOfWeek == 0] <- 7
-#   dayOfWeek <- factor(dayOfWeek, levels=1:7)
   
   # Create a table of # of rides
   tbl <- table(trip$ProntoWeek,trip$dayOfWeek_MondayStart)
@@ -91,6 +91,10 @@ calendar_weatherPlot <- function(dataList, infoList, textList) {
   # TODO:  based on user temp and precip subsetting without changing the
   # TODO:  color scale.
 
+  # Create x axis
+  weeks <- seq(lubridate::ymd('2014-10-13',tz='America/Los_Angeles'),length.out=53,by='weeks')
+  months <- seq(lubridate::ymd('2014-10-13',tz='America/Los_Angeles'),length.out=13,by='months')
+
 
   # ----- Layout --------------------------------------------------------------
   
@@ -115,53 +119,59 @@ calendar_weatherPlot <- function(dataList, infoList, textList) {
   
   # ----- Plot ----------------------------------------------------------------
   
-  par(mar=c(1,4,1,2)+.1)  
   
   # Temp
+  par(mar=c(0,4,6,4))  
   calendarHeatmap_sub(mat_temp[1:52,],
                       breaks=c(-1e9,seq(10,100,10),1e9),
                       col=rev(RColorBrewer::brewer.pal(11,'RdBu')))
   
   label <- print(paste0(textList$temp,':  ',minValue_temp,' - ',maxValue_temp,' F'))
-  mtext(label, 2, font=font, col=col_text, cex=cex, line=line_label)
+  mtext(label, 2, font=font, col=col_text, cex=cex_label, line=line_label)
   
+  # X axis month labels for the top plot only
+  xpos <- 0.5:11.5 * (par('usr')[2] - par('usr')[1])/12
+  ypos <- monthText_ypos
+  text(xpos, ypos, textList$monthLabels_3[1:12],
+       font=font, col=col_text, cex=cex, xpd=NA)
+
+#  # Y axis day labels
+#  xpos <- 54
+#  ypos <- 1:7
+#  labels <- c('S','S','F','T','W','T','M')
+#  text(xpos, ypos, labels, pos=4,
+#       font=font, col=col_text, cex=cex, xpd=NA)
+  
+
   # Rides
+  par(mar=c(3,4,3,4))  
   calendarHeatmap_sub(mat_rides[1:52,])
   
   label <- print(paste0(textList$rideCount,':  0 - ',maxValue_rides))
-  mtext(label, 2, font=font, col=col_text, cex=cex, line=line_label)
+  mtext(label, 2, font=font, col=col_text, cex=cex_label, line=line_label)
   
+#  # Y axis day labels
+#  xpos <- 54
+#  ypos <- 1:7
+#  labels <- c('S','S','F','T','W','T','M')
+#  text(xpos, ypos, labels, pos=4,
+#       font=font, col=col_text, cex=cex, xpd=NA)
+
   # Precip
+  par(mar=c(6,4,0,4))  
   calendarHeatmap_sub(mat_precip[1:52,],
                       breaks=c(-1e9,0.05,0.1,0.15,0.3,0.5,1,1.5,2,1e9),
                       col=RColorBrewer::brewer.pal(9,'Greens'))
   
   label <- print(paste0(textList$precip,':  0 - ',maxValue_precip,' in'))
-  mtext(label, 2, font=font, col=col_text, cex=cex, line=line_label)
+  mtext(label, 2, font=font, col=col_text, cex=cex_label, line=line_label)
   
-  
-  #   # Find the location of the first Monday of each month
-  #   date <- seq(lubridate::ymd('2014-10-13',tz='America/Los_Angeles'),
-  #               lubridate::ymd('2015-10-12',tz='America/Los_Angeles'),
-  #               by="days")
-  #   newMonthMondayIndex <- which(diff(lubridate::month(date)) != 0)
-  #   newMonthMonday <- date[newMonthMondayIndex]
-  
-  #   # X axis
-  #   xpos <- newMonthMonday[1:11]
-  #   ypos <- label_hadj
-  #   text(xpos, ypos, textList$monthLabels_3[1:11], pos=4,
-  #        font=font, col=col_text, cex=cex, xpd=NA)
-  # 
-  #   #  Y axis
-  #   # NOTE:  The new y axis goes, from bottom to top, from 0:23 and represents
-  #   # NOTE:  2AM, 1AM, Midnight, 11PM, ... with 3AM at the top
-  #   xpos <- date[1]
-  #   ypos <- c(9,18)
-  #   text(xpos, ypos, c('5 pm','8 am'), pos=2,
-  #        font=font, col=col_text, cex=cex, xpd=NA)
-  #   
-  # 
+#  # Y axis day labels
+#  xpos <- 54
+#  ypos <- 1:7
+#  labels <- c('S','S','F','T','W','T','M')
+#  text(xpos, ypos, labels, pos=4,
+#       font=font, col=col_text, cex=cex, xpd=NA)
 
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)

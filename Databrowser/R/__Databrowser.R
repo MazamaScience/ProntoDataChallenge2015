@@ -140,7 +140,7 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         
       } else if (plotType == "calendar_weather") { 
         
-        textList$title <- 'Weather Calendar'
+        textList$title <- 'Daily Usage and Weather'
         returnValues <- calendar_weatherPlot(dataList,infoList,textList)
         
       } else if (plotType == "heatmap_weekByDay") { 
@@ -160,7 +160,7 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         
       } else if (plotType == "bubble_station") { 
         
-        textList$title <- 'Station Usage Map'
+        textList$title <- 'Station Usage'
         returnValues <- bubble_stationPlot(dataList,infoList,textList)
         
       } else if (plotType == "Map") { 

@@ -146,6 +146,7 @@ createDataList <- function(infoList) {
   station$fromCount <- as.numeric(fromTable[station$terminal])
   station$toCount <- as.numeric(toTable[station$terminal])
   station$totalCount <- station$fromCount + station$toCount
+  station$dailyUsage <- station$totalCount * station$onlineDays/max(station$onlineDays)
   
   
   # ----- Weather Data --------------------------------------------------------

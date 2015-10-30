@@ -132,21 +132,5 @@ createTextList <- function(dataList, infoList) {
   textList$subset <- stringr::str_sub(textList$subset, start=1, end=-4)
   
   
-  # ----- Title ---------------------------------------------------------------
-  
-  if (infoList$plotType == 'barplot_weekByDay') {
-    textList$title <- 'Growth by Day'
-  } else if (infoList$plotType == 'calendar_weather') {
-    textList$title <- 'Weather Calendar'
-  } else if (infoList$plotType == 'heatmap_weekByDay') {
-    textList$title <- 'Weekly Usage by Day'
-  } else if (infoList$plotType == 'heatmap_weekByHour') {
-    textList$title <- 'Weekly Usage by Hour'
-  } else if (infoList$plotType == 'bubble_station') {
-    textList$title <- 'Station Usage'
-  } else {
-    textList$title <- 'TITLE GOES HERE'
-  }
-  
   return(textList)
 }

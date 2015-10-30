@@ -47,11 +47,12 @@ heatmap_weekByHourPlot <- function(dataList, infoList, textList) {
   # Heatmap
   colors <- c('transparent',RColorBrewer::brewer.pal(9,'Purples'))
   lty_vert <- 1
-  lwd_vert <- 1
-  col_vert <- 'white'
+  lwd_vert <- 1.5
+  col_vert <- 'black'
   
   # Label positions
-  monthText_ypos <- 24 # 0:23
+  monthText_ypos <- 25 # 0:23
+  hourText_xpos <- lubridate::ymd('2014-10-01',tz='America/Los_Angeles')
 
   # ----- Data Preparation ----------------------------------------------------
   
@@ -60,15 +61,10 @@ heatmap_weekByHourPlot <- function(dataList, infoList, textList) {
   
   # Convert days from 00:00-23:00 to 04:00-27:00 by setting all times back four hours
   startTime <- trip$startTime - lubridate::dhours(3)
-#   timeSinceStart <- startTime - startTime[1]
-#   daysSinceStart <- as.integer(as.numeric(timeSinceStart,units="days"))
-#   weeksSinceStart <- as.integer(as.numeric(timeSinceStart,units="weeks"))
   hourOfDay <- lubridate::hour(startTime)
   month <- lubridate::month(startTime)
   
   # Create factors so the table function will add zeros for missing levels
-#   daysSinceStart <- factor(daysSinceStart+1,levels=1:365)
-#   weeksSinceStart <- factor(weeksSinceStart+1,levels=1:53)
   hourOfDay <- factor(hourOfDay,levels=0:23)
   month <- factor(month,levels=1:12)
   
@@ -87,7 +83,8 @@ heatmap_weekByHourPlot <- function(dataList, infoList, textList) {
   newMonthMondays <- weeks[ which(diff(lubridate::month(weeks)) != 0) ]
   # NOTE:  Colored blocks are centered on the 'week' so we need to scoot half a week over to 
   # NOTE:  draw verticalLines.
-  newMonthMondays <- newMonthMondays - 7*24*60*60/2
+  # TODO:  Verify newMonthMondays
+  newMonthMondays <- newMonthMondays + 7*24*60*60/2
   
   
   # ----- Layout --------------------------------------------------------------
@@ -113,7 +110,7 @@ heatmap_weekByHourPlot <- function(dataList, infoList, textList) {
   
   # ----- Plot ----------------------------------------------------------------
   
-  par(mar=c(2,4,2,4))
+  par(mar=c(6,6,6,3))
 
   # NOTE:  Plot columns (hours) in reverse order so that the time axis goes from
   # NOTE:  top to bottom.
@@ -130,7 +127,7 @@ heatmap_weekByHourPlot <- function(dataList, infoList, textList) {
   box(col=col_box)
   
   # X axis
-  xpos <- months[1:12]
+  xpos <- months[1:12] + 7*24*60*60/2 # TODO:  verify month label placement
   ypos <- monthText_ypos
   text(xpos, ypos, textList$monthLabels_3[1:12],
        font=font, col=col, cex=cex, xpd=NA)
@@ -141,25 +138,24 @@ heatmap_weekByHourPlot <- function(dataList, infoList, textList) {
   #  Y axis
   # NOTE:  The new y axis goes, from bottom to top, from 0:23 and represents
   # NOTE:  2AM, 1AM, Midnight, 11PM, ... with 3AM at the top
-  xpos <- par('usr')[1]
   
   if (infoList$timeOfDay == 'early') {
-    times <- c(4,6); ypos <- rev(abs(times-26)); labels <- rev(c('4 A','6 A'))
+    times <- c(4,6); ypos <- rev(abs(times-26)); labels <- rev(c('4 am','6 am'))
   } else if (infoList$timeOfDay == 'amCommute') {
-    times <- c(7,9); ypos <- rev(abs(times-26)); labels <- rev(c('7 A','9 A'))
+    times <- c(7,9); ypos <- rev(abs(times-26)); labels <- rev(c('7 am','9 am'))
   } else if (infoList$timeOfDay == 'midday') {
-    times <- c(10,15); ypos <- rev(abs(times-26)); labels <- rev(c('10 A','3 P'))
+    times <- c(10,15); ypos <- rev(abs(times-26)); labels <- rev(c('10 am','3 pm'))
   } else if (infoList$timeOfDay == 'pmCommute') {
-    times <- c(16,18); ypos <- rev(abs(times-26)); labels <- rev(c('4 P','6 P'))
+    times <- c(16,18); ypos <- rev(abs(times-26)); labels <- rev(c('4 pm','6 pm'))
   } else if (infoList$timeOfDay == 'evening') {
-    times <- c(19,22); ypos <- rev(abs(times-26)); labels <- rev(c('7 P','10 P'))
+    times <- c(19,22); ypos <- rev(abs(times-26)); labels <- rev(c('7 pm','10 pm'))
   } else if (infoList$timeOfDay == 'night') {
-    times <- c(23,3); ypos <- rev(abs(times-26)); labels <- rev(c('11 P','3 A'))
+    times <- c(23,3); ypos <- rev(abs(times-26)); labels <- rev(c('11 pm','3 am'))
   } else {
-    times <- c(8,17); ypos <- rev(abs(times-26)); labels <- rev(c('8 A','5 P'))
+    times <- c(8,17); ypos <- rev(abs(times-26)); labels <- rev(c('8 am','5 pm'))
   }
   
-  text(xpos, ypos, labels, pos=2, font=font, col=col, cex=cex, xpd=NA)
+  text(hourText_xpos, ypos, labels, pos=2, font=font, col=col, cex=cex, xpd=NA)
   
   # Modify the subset string
   textList$subset <- paste0(textList$subset,'  (max=',maxValue,')')

@@ -47,6 +47,7 @@ heatmap_weekByDayPlot <- function(dataList, infoList, textList) {
 
   # Heatmap
   colors <- c('transparent',RColorBrewer::brewer.pal(9,'Purples'))
+  colors <- c('transparent',RColorBrewer::brewer.pal(9,'Greys'))
   lty_vert <- 1
   lwd_vert <- 1
   col_vert <- 'white'
