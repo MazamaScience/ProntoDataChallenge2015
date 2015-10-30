@@ -31,16 +31,20 @@ if (FALSE) {
   dataList <- createDataList(infoList)
   
   textList <- createTextList(dataList,infoList)
-
-  GENERIC_Plot(dataList, infoList, textList)
   
+  
+  
+  
+
+  barplot_hourByUser_Plot(dataList, infoList, textList)
+ 
   
   
   
   
 }
 
-GENERIC_Plot <- function(dataList, infoList, textList) {
+barplot_hourByUser_Plot <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
 
@@ -48,6 +52,10 @@ GENERIC_Plot <- function(dataList, infoList, textList) {
   font_label <- 1
   cex_label <- 1
   col_label <- 'gray20'
+  
+  # ...
+  colors <- RColorBrewer::brewer.pal(4,'Set1')[c(4,1,2,3)]
+  for (i in 1:4) colors[i] <- adjustcolor(colors[i],0.2)
   
   ### ADD STUFF HERE
   ### ADD STUFF HERE
@@ -59,9 +67,15 @@ GENERIC_Plot <- function(dataList, infoList, textList) {
   # Get dataframe from the dataList
   trip <- dataList$trip
 
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
+  # Create a table of # of rides
+  table <- table(trip$hourOfDay, trip$gender)
+  ### table <- table(trip$gender, trip$hourOfDay) 
+  ### barplot(table)
+
+  # Convert the table (it's 1-D) into a matrix so we can rearrange the rows
+  mat <- matrix(table,nrow=24,byrow=FALSE)
+  maxValue <- max(mat, na.rm=TRUE)
+  sumValue <- sum(mat, na.rm=TRUE)
   
   
   # ----- Layout --------------------------------------------------------------
@@ -89,7 +103,34 @@ GENERIC_Plot <- function(dataList, infoList, textList) {
   
   par(mar=c(5,4,4,2)+.1)
   
-  plot(-1:1,-1:1)
+  # "" (Short Term) in column 1
+  barplot(mat[,1], ylim=c(0,maxValue*1.05), col=colors[1])
+  
+  # "Female" in column 2
+  barplot(mat[,2], col=colors[2], add=TRUE)
+  
+  # "Nake" in column 3
+  barplot(mat[,3], col=colors[3], add=TRUE) 
+  
+  # "Other" in column 4
+  barplot(mat[,4], col=colors[4], add=TRUE)
+  
+  # OR JUST
+  if (FALSE) {
+    
+    
+    table <- table(trip$gender, trip$hourOfDay) 
+    barplot(table, col=colors)
+    
+    
+    
+  }
+  
+  
+  
+  
+  
+  
 
   ### ADD STUFF HERE
   ### ADD STUFF HERE
