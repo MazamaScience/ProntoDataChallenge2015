@@ -44,6 +44,11 @@ createInfoList <- function(jsonArgs='{}') {
   infoList$col_attribution <- 'gray20'
   infoList$cex_attribution <- 1.5
   
+  infoList$ProntoGreen <- '#8EDD65'
+  infoList$ProntoTurquose <- '#68D2DF'
+  infoList$ProntoSlate <- '#063C4A'
+  
+  
   
   # ----- Databrowser specific parameters from the UI --------------------------
 

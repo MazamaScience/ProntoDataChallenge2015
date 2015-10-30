@@ -48,7 +48,7 @@ if (FALSE) {
   
 }
 
-barplot_hourByUser_Plot <- function(dataList, infoList, textList) {
+barplot_cumulativeWeekByUser_Plot <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
 
@@ -72,15 +72,16 @@ barplot_hourByUser_Plot <- function(dataList, infoList, textList) {
   trip <- dataList$trip
 
   # Create a table of # of rides
-  table <- table(trip$hourOfDay, trip$userType)
+  table <- table(trip$ProntoWeek, trip$userType)
   ### table <- table(trip$gender, trip$hourOfDay) 
   ### barplot(table)
 
   # Convert the table (it's 1-D) into a matrix so we can rearrange the rows
-  mat <- matrix(table,nrow=24,byrow=FALSE)
-  maxValue <- max(mat, na.rm=TRUE)
-  sumValue <- sum(mat, na.rm=TRUE)
+  mat <- matrix(table,nrow=53,byrow=FALSE)
+#   maxValue <- max(mat, na.rm=TRUE)
+#   sumValue <- sum(mat, na.rm=TRUE)
   
+  cumAnnual <- 
   
   # ----- Layout --------------------------------------------------------------
   
@@ -105,57 +106,9 @@ barplot_hourByUser_Plot <- function(dataList, infoList, textList) {
 
   # ----- Plot ----------------------------------------------------------------
   
+  par(mar=c(1,1,1,1))
   
   
-  layout(matrix(c(2,1),ncol=2))
-  
-  # NOTE:  To get the day to start at 4am we shift by 5 because the first hour is 0.
-  # NOTE:  For hours on the vertical axis, reverse to get 4 am at the top.
-  hourIndices <- rev(c(5:24,1:4))
-  
-  table <- table(trip$userType, trip$hourOfDay) 
-  #barplot(table[,c(5:24,1:4)], col=c(col_annual,col_shortTerm), border='white', space=0)
-  
-  par(mar=c(2,0,2,2))
-  
-  hourSums <- rowSums(mat)
-  hourMax <- max(hourSums)
-  
-  # TODO:  get nice measure lines
-  measureLines <- seq(0,hourMax,5000)
-  
-  barplotMatrix <- barplot(hourSums[hourIndices], horiz=TRUE,
-                          axes=FALSE, xlab='', ylab='',
-                          border='white', space=.1)
-  
-  #   barplot(rowSums(mat)[hourIndices], add=TRUE,
-#                        col='transparent',
-#                        border='black', space=.1)
-
-  ###abline(v=measureLines, col='white',lwd=1)
-  
-  # Hours
-  xpos <- 0
-  ypos <- as.numeric(barplotMatrix) # TODO:  Adjust based on par('usr') settings
-  text(xpos, ypos, 0:23, col='white', pos=4, xpd=NA)
-  
-  
-  
-  par(mar=c(2,2,2,))
-
-    # "Annual Member" in column 1
-  barplot(-1.0*mat[hourIndices,1], xlim=c(-hourMax*1.05,0), horiz=TRUE,
-          axes=FALSE, xlab='', ylab='',
-          border='white', space=.05,
-          col=col_annual)
-  
-  # "Short-Term Pass Holder" in column 2
-  barplot(-1.0*mat[hourIndices,2], add=TRUE, horiz=TRUE,
-          axes=FALSE, xlab='', ylab='',
-          border='white', space=.05,
-          col=col_shortTerm)
-  
-  abline(v=-1.0*measureLines, col='white',lwd=1)
   
 
   ### ADD STUFF HERE
