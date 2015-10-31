@@ -16,10 +16,6 @@ createTextList <- function(dataList, infoList) {
   # Extract variables from the 'infoList' object
   ########################################
 
-  # Extra information
-  plotType <- ifelse(is.null(infoList$plotType),'barplot_weekByDay',infoList$plotType)
-  plotWidth <- as.numeric( ifelse(is.null(infoList$plotWidth),'640',infoList$plotWidth) )
-
   ########################################
   # Create context dependent text strings
   ########################################
@@ -29,6 +25,7 @@ createTextList <- function(dataList, infoList) {
   textList$attribution <- paste("data:  ProntoCycleShare.com        graphic:  MazamaScience.com")
 
   textList$dayLabels_3 <- c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
+  textList$dayLabels_2 <- c('Mo','Tu','Wd','Th','Fr','Sa','Su')
   textList$dayLabels_1 <- c('M','T','W','T','F','S','S')
   textList$monthLabels_3 <- c('Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
   textList$monthLabels_1 <- c('O','N','D','J','F','M','A','M','J','J','A','S','O')
@@ -37,6 +34,11 @@ createTextList <- function(dataList, infoList) {
   textList$rideCount <- "Rides"
   textList$precip <- "Rain"
   
+  textList$rides <- "rides"
+  textList$trips <- "trips"
+  
+  textList$annual <- 'Annual'
+  textList$shortTerm <- 'Short-Term'
   
   # ----- Subset info ---------------------------------------------------------
 

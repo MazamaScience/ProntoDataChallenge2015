@@ -21,7 +21,7 @@ createInfoList <- function(jsonArgs='{}') {
   infoList$language <- ifelse(is.null(infoList$language),'en',infoList$language)
   infoList$responseType <- ifelse(is.null(infoList$responseType),'json',infoList$responseType)
   infoList$plotDevice <- ifelse(is.null(infoList$plotDevice),'png',infoList$plotDevice)
-  infoList$plotWidth <- ifelse(is.null(infoList$plotWidth),640,as.numeric(infoList$plotWidth))
+  infoList$plotWidth <- ifelse(is.null(infoList$plotWidth),1024,as.numeric(infoList$plotWidth))
   infoList$plotHeight <- ifelse(is.null(infoList$plotHeight),infoList$plotWidth,as.numeric(infoList$plotHeight))
 
   if (is.null(infoList$plotType)) {
@@ -36,14 +36,17 @@ createInfoList <- function(jsonArgs='{}') {
   infoList$layoutFraction_attribution <- 0.08
   infoList$font_title <- 2
   infoList$col_title <- 'black'
-  infoList$cex_title <- 3
+  infoList$cex_title <- 5
   infoList$font_subtitle <- 3
   infoList$col_subtitle <- 'gray20'
-  infoList$cex_subtitle <- 2.0
+  infoList$cex_subtitle <- 4
   infoList$font_attribution <- 1
   infoList$col_attribution <- 'gray20'
-  infoList$cex_attribution <- 1.5
+  infoList$cex_attribution <- 3
   
+  infoList$ProntoGreen <- '#8EDD65'
+  infoList$ProntoSlate <- '#003B49'
+  infoList$ProntoTurquoise <- '#68D2DF'
   
   # ----- Databrowser specific parameters from the UI --------------------------
 
@@ -57,6 +60,8 @@ createInfoList <- function(jsonArgs='{}') {
   infoList$timeOfDay <- ifelse(is.null(infoList$timeOfDay),'all',infoList$timeOfDay)
   infoList$distance <- ifelse(is.null(infoList$distance),'all',infoList$distance)
   infoList$stationId <- ifelse(is.null(infoList$stationId),'all',infoList$stationId)
+
+  
 
   return(infoList)
 }

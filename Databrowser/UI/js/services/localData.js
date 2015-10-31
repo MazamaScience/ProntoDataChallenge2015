@@ -13,9 +13,9 @@
 
     var request = {
       language: "en",
-      plotWidth: 640,
+      plotWidth: 1024,
       productType: "systemTable", 
-      plotTypes: "bubble_station",
+      plotTypes: "pie_user",
       userType: "all",
       age: "all",
       gender: "all",
@@ -30,8 +30,8 @@
     var forms = {
 
       plotGroups: [{
-        text: "Station Analysis",
-        value: "bubble_station"
+        text: "Members vs. Visitors",
+        value: "pie_user"
       }, {
         text: "Time of Day",
         value: "heatmap_weekByHour,pie_daylight"
@@ -39,8 +39,11 @@
         text: "Calendar Views",
         value: "heatmap_weekByHour,calendar_weather"
       }, {
+        text: "Station Analysis",
+        value: "bubble_station"
+      }, {
         text: "Everything",
-        value: "barplot_weekByDay,heatmap_weekByHour,pie_daylight,calendar_weather,bubble_station"
+        value: "pie_user,barplot_weekByDay,heatmap_weekByHour,pie_daylight,calendar_weather,bubble_station"
       }],
 
       userType: [{
