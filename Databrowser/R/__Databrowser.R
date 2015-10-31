@@ -21,11 +21,14 @@ result <- try( {
   
   source("__DATABROWSER_PATH__/R/addTitleAndAttribution.R")
 
+  source("__DATABROWSER_PATH__/R/barplot_cumulativeWeekByUser.R")
+  source("__DATABROWSER_PATH__/R/barplot_hourByUser.R")
   source("__DATABROWSER_PATH__/R/barplot_weekByDayPlot.R")
   source("__DATABROWSER_PATH__/R/bubble_stationPlot.R")
   source("__DATABROWSER_PATH__/R/calendar_weatherPlot.R")
   source("__DATABROWSER_PATH__/R/heatmap_weekByDayPlot.R")
   source("__DATABROWSER_PATH__/R/heatmap_weekByHourPlot.R")
+  source("__DATABROWSER_PATH__/R/pie_userPlot.R")
   source("__DATABROWSER_PATH__/R/pie_daylightPlot.R")
 }, silent=TRUE)
 
@@ -112,15 +115,6 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   
   if (infoList$productType == "systemTable") {
     
-#     plotDict <- list(barplot_weekByDay = barplot_weekByDayPlot,
-#                      calendar_weather = calendar_weatherPlot,
-#                      heatmap_weekByHour = heatmap_weekByHourPlot,
-#                      heatmap_weekByHour = heatmap_weekByHourPlot,
-#                      pie_daylight = pie_daylightPlot,
-#                      bubble_station = bubble_stationPlot,
-#                      map = mapPlot)
-#     
-    
     for (plotType in as.character(infoList$plotTypes[[1]])) {
       
       print("First element:")
@@ -138,6 +132,16 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         textList$title <- 'Growth by Day of Week'
         returnValues <- barplot_weekByDayPlot(dataList,infoList,textList)
         
+      } else if (plotType == "barplot_hourByUser") { 
+        
+        textList$title <- 'Hourly Usage'
+        returnValues <- barplot_hourByUser(dataList,infoList,textList)
+
+      } else if (plotType == "barplot_cumulativeWeekByUser") { 
+        
+        textList$title <- 'Cumulative Usage'
+        returnValues <- barplot_cumulativeWeekByUser(dataList,infoList,textList)
+
       } else if (plotType == "calendar_weather") { 
         
         textList$title <- 'Daily Usage and Weather'
@@ -153,6 +157,11 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         textList$title <- 'Weekly Usage by Hour'
         returnValues <- heatmap_weekByHourPlot(dataList,infoList,textList)
 
+      } else if (plotType == "pie_user") { 
+        
+        textList$title <- 'Users'
+        returnValues <- pie_userPlot(dataList,infoList,textList)
+        
       } else if (plotType == "pie_daylight") { 
         
         textList$title <- 'Daylight Preference'

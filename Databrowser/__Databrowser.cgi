@@ -30,7 +30,7 @@ ABS_OUT = DATABROWSER_PATH + '/' + OUTPUT_DIR
 # Minimal request object
 request = {'debug': 'none',
            'responseType': 'json',
-           'plotWidth': '640',
+           'plotWidth': '1024',
            'productType': 'systemTable',
            'plotType': 'barplot_weekByDay'}
 
@@ -38,8 +38,8 @@ request = {'debug': 'none',
 # NOTE:  this cgi script from the command line for debugging.
 #request = {'debug': 'transcript',
 #           'responseType': 'json',
-#           'plotWidth': '640',
-#           'plotHeight': '640',
+#           'plotWidth': '1024',
+#           'plotHeight': '1024',
 #           'plotDevice': 'png',
 #           'language': 'en',
 #           'lineColor': 'black',
@@ -142,7 +142,7 @@ for key in request:
     if key == 'plotWidth':
         try:
             if int(value) < 100 or int(value) > 2000:
-                request['plotWidth'] = '640'
+                request['plotWidth'] = '1024'
         except Exception, e:
             status = 'ERROR'
             error_text = "CGI ERROR: parameter '%s' has a value of '%s' which is not an integer: %s" % (key,value,e)

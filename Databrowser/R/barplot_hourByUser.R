@@ -40,7 +40,7 @@ if (FALSE) {
   
   
 
-  barplot_hourByUser_Plot(dataList, infoList, textList)
+  barplot_hourByUser(dataList, infoList, textList)
  
   
   
@@ -48,7 +48,7 @@ if (FALSE) {
   
 }
 
-barplot_hourByUser_Plot <- function(dataList, infoList, textList) {
+barplot_hourByUser <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
 
@@ -96,11 +96,11 @@ barplot_hourByUser_Plot <- function(dataList, infoList, textList) {
   # NOTE:  that the title is added last.
   
   # For this plot the sum of heights is 1
-  plotHeightSum <- 1
-  heights <- c(plotHeightSum * infoList$layoutFraction_title,
-               rep(1,1),
-               plotHeightSum * infoList$layoutFraction_attribution)
-  layout(matrix(c(3,1:2)), heights=heights)
+#   plotHeightSum <- 1
+#   heights <- c(plotHeightSum * infoList$layoutFraction_title,
+#                rep(1,1),
+#                plotHeightSum * infoList$layoutFraction_attribution)
+#   layout(matrix(c(3,1:2)), heights=heights)
   
 
   # ----- Plot ----------------------------------------------------------------
@@ -141,7 +141,7 @@ barplot_hourByUser_Plot <- function(dataList, infoList, textList) {
   
   
   
-  par(mar=c(2,2,2,))
+  par(mar=c(2,2,2,2))
 
     # "Annual Member" in column 1
   barplot(-1.0*mat[hourIndices,1], xlim=c(-hourMax*1.05,0), horiz=TRUE,
@@ -163,7 +163,7 @@ barplot_hourByUser_Plot <- function(dataList, infoList, textList) {
   ### ADD STUFF HERE
   
   # Add title and attribution as the last two plots
-  addTitleAndAttribution(dataList,infoList,textList)
+###  addTitleAndAttribution(dataList,infoList,textList)
   
   # ---- Cleanup and Return ---------------------------------------------------
  
