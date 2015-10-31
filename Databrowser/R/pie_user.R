@@ -56,6 +56,7 @@ pie_user <- function(dataList, infoList, textList) {
   cex_label <- 6
   col_label <- 'white'
   
+  # Ceenter of pie text
   font_center <- 2
   cex_center <- 8
   col_center <- infoList$col_subtitle
@@ -69,11 +70,11 @@ pie_user <- function(dataList, infoList, textList) {
   # Get dataframe from the dataList
   trip <- dataList$trip
   
-  table <- table(trip$userType)
-  sumValue <- sum(table)
+  tbl <- table(trip$userType)
+  sumValue <- sum(tbl)
   
-  memberPct <- round(100 * table['Annual Member'] / sumValue)
-  shortTermPct <- round(100 * table['Short-Term Pass Holder'] / sumValue)
+  memberPct <- round(100 * tbl['Annual Member'] / sumValue)
+  shortTermPct <- round(100 * tbl['Short-Term Pass Holder'] / sumValue)
   
   
   # ----- Layout --------------------------------------------------------------
@@ -102,11 +103,11 @@ pie_user <- function(dataList, infoList, textList) {
   par(mar=c(2,2,2,2))
   
   # Algorithm to center 'Annual Member' at top of plot
-  midMemberFraction <- table['Annual Member'] / 2
+  midMemberFraction <- tbl['Annual Member'] / 2
   init.angle <- (midMemberFraction/sumValue)*360 + 90
   
   # Colored donut
-  pie(table, border='white', labels=NA, col=colors,
+  pie(tbl, border='white', labels=NA, col=colors,
       rad=1.0, clockwise=T, init.angle=init.angle)
   
   par(new=TRUE)

@@ -22,7 +22,7 @@ createTextList <- function(dataList, infoList) {
 
   textList <- list()
 
-  textList$attribution <- paste("data:  ProntoCycleShare.com        graphic:  MazamaScience.com")
+  textList$attribution <- paste("data:  prontocycleshare.com        graphic:  mazamascience.com")
 
   textList$dayLabels_3 <- c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
   textList$dayLabels_2 <- c('Mo','Tu','Wd','Th','Fr','Sa','Su')
