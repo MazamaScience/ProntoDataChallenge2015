@@ -1,5 +1,5 @@
 ###############################################################################
-# pie_daylightPlot.R
+# pie_daylight.R
 #
 # Amount of daylight.
 
@@ -12,7 +12,7 @@ if (FALSE) {
   source('./R/createDataList.R')
   source('./R/createTextList_en.R')
   
-  source('./R/pie_daylightPlot.R')
+  source('./R/pie_daylight.R')
   
   infoList <- list(dataDir="./data_local",
                    plotType='pie_daylight',
@@ -31,7 +31,7 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
   
-  pie_daylightPlot(dataList, infoList, textList)
+  pie_daylight(dataList, infoList, textList)
   
   
   
@@ -51,7 +51,7 @@ if (FALSE) {
 
 ###############################################################################
 
-pie_daylightPlot <- function(dataList, infoList, textList) {
+pie_daylight <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
   colors <- c('#E77483', 'gold', 'orange', 'gray31')

@@ -1,5 +1,5 @@
 ###############################################################################
-# heatmap_weekByDayPlot.R
+# heatmap_weekByHour.R
 #
 # Heatmap of weekly usage by hour of day.
 
@@ -8,16 +8,15 @@
 
 if (FALSE) {
   
-  source('./R/addTitleAndAttribution.R')
   source('./R/createDataList.R')
   source('./R/createTextList_en.R')
   
   infoList <- list(dataDir="./data_local",
-                   plotType='heatmap_weekByDay',
+                   plotType='heatmap_weekByHour',
                    userType='annual',
                    gender='all',
                    age='all',
-                   dayType='all',
+                   dayType='weekday',
                    timeOfDay='all',
                    distance='all',
                    stationId='all',
@@ -29,39 +28,49 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
   
-  heatmap_weekByDayPlot(dataList, infoList, textList)
+  heatmap_weekByHour(dataList, infoList, textList)
   
 }
 
 ###############################################################################
 
-heatmap_weekByDayPlot <- function(dataList, infoList, textList) {
+heatmap_weekByHour <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
   
   # Overall
-  col <- 'gray20'
-  font <- 2
-  cex <- 2
+  font_label <- 1
+  cex_label <- 4
+  col_label <- 'gray20'
+  
   col_box <- 'gray50'
 
   # Heatmap
   colors <- c('transparent',RColorBrewer::brewer.pal(9,'Purples'))
-  colors <- c('transparent',RColorBrewer::brewer.pal(9,'Greys'))
   lty_vert <- 1
-  lwd_vert <- 1
-  col_vert <- 'white'
+  lwd_vert <- 1.5
+  col_vert <- 'black'
   
   # Label positions
-  monthText_ypos <- 24 # 0:23
+  monthText_ypos <- 25 # 0:23
+  hourText_xpos <- lubridate::ymd('2014-10-01',tz='America/Los_Angeles')
 
   # ----- Data Preparation ----------------------------------------------------
   
   # Get dataframe from the dataList
   trip <- dataList$trip
   
+  # Convert days from 00:00-23:00 to 04:00-27:00 by setting all times back four hours
+  startTime <- trip$startTime - lubridate::dhours(3)
+  hourOfDay <- lubridate::hour(startTime)
+  month <- lubridate::month(startTime)
+  
+  # Create factors so the table function will add zeros for missing levels
+  hourOfDay <- factor(hourOfDay,levels=0:23)
+  month <- factor(month,levels=1:12)
+  
   # Create a table of # of rides
-  tbl <- table(trip$ProntoWeek,trip$dayOfWeek_MondayStart)
+  tbl <- table(trip$ProntoWeek,hourOfDay)
   
   # Convert the table (it's 1-D) into a matrix so we can rearrange the rows
   mat <- matrix(tbl,nrow=53,byrow=FALSE)
@@ -75,7 +84,8 @@ heatmap_weekByDayPlot <- function(dataList, infoList, textList) {
   newMonthMondays <- weeks[ which(diff(lubridate::month(weeks)) != 0) ]
   # NOTE:  Colored blocks are centered on the 'week' so we need to scoot half a week over to 
   # NOTE:  draw verticalLines.
-  newMonthMondays <- newMonthMondays - 7*24*60*60/2
+  # TODO:  Verify newMonthMondays
+  newMonthMondays <- newMonthMondays + 7*24*60*60/2
   
   
   # ----- Layout --------------------------------------------------------------
@@ -101,13 +111,13 @@ heatmap_weekByDayPlot <- function(dataList, infoList, textList) {
   
   # ----- Plot ----------------------------------------------------------------
   
-  par(mar=c(2,4,2,4))
+  par(mar=c(6,12,10,3))
 
   # NOTE:  Plot columns (hours) in reverse order so that the time axis goes from
   # NOTE:  top to bottom.
   
   # Add the heatmap colored by data
-  image(weeks[1:52], 1:7, mat[1:52,7:1],
+  image(weeks[1:52], 0:23, mat[1:52,24:1],
         col=colors,
         # add=TRUE)
         axes=FALSE, xlab='', ylab='')
@@ -118,19 +128,39 @@ heatmap_weekByDayPlot <- function(dataList, infoList, textList) {
   box(col=col_box)
   
   # X axis
-  xpos <- months[1:12]
+  xpos <- months[1:12] + 7*24*60*60/2 # TODO:  verify month label placement
   ypos <- monthText_ypos
-  text(xpos, ypos, textList$monthLabels_3[1:12],
-       font=font, col=col, cex=cex, xpd=NA)
+  text(xpos, ypos, textList$monthLabels_3[1:12], xpd=NA,
+       col=col_label, cex=cex_label, font=font_label)
 
+  # TODO:  When a time-of-day is chosen we should put a box around it and 
+  # TODO:  change the labels to reflect the first and last hour of the time-of-day.
+  
   #  Y axis
-  xpos <- par('usr')[1]
-  ypos <- 7:1
-  labels <- textList$dayLabels_1
-  text(xpos, ypos, labels, pos=2, font=font, col=col, cex=cex, xpd=NA)
+  # NOTE:  The new y axis goes, from bottom to top, from 0:23 and represents
+  # NOTE:  2AM, 1AM, Midnight, 11PM, ... with 3AM at the top
+  
+  if (infoList$timeOfDay == 'early') {
+    times <- c(4,6); ypos <- rev(abs(times-26)); labels <- rev(c('4 am','6 am'))
+  } else if (infoList$timeOfDay == 'amCommute') {
+    times <- c(7,9); ypos <- rev(abs(times-26)); labels <- rev(c('7 am','9 am'))
+  } else if (infoList$timeOfDay == 'midday') {
+    times <- c(10,15); ypos <- rev(abs(times-26)); labels <- rev(c('10 am','3 pm'))
+  } else if (infoList$timeOfDay == 'pmCommute') {
+    times <- c(16,18); ypos <- rev(abs(times-26)); labels <- rev(c('4 pm','6 pm'))
+  } else if (infoList$timeOfDay == 'evening') {
+    times <- c(19,22); ypos <- rev(abs(times-26)); labels <- rev(c('7 pm','10 pm'))
+  } else if (infoList$timeOfDay == 'night') {
+    times <- c(23,3); ypos <- rev(abs(times-26)); labels <- rev(c('11 pm','3 am'))
+  } else {
+    times <- c(8,17); ypos <- rev(abs(times-26)); labels <- rev(c('8 am','5 pm'))
+  }
+  
+  text(hourText_xpos, ypos, labels, pos=2, xpd=NA,
+       col=col_label, cex=cex_label, font=font_label)
   
   # Modify the subset string
-  textList$subset <- paste0(textList$subset,'  (max=',maxValue,')')
+  textList$subset <- paste0(textList$subset,'  (max ',maxValue,' trips/hr/wk)')
   
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)

@@ -1,5 +1,5 @@
 ###############################################################################
-# barplot_stationPlot.R
+# barplot_station.R
 #
 # Displays ...
 
@@ -25,11 +25,11 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
 
-  barplot_stationPlot(dataList, infoList, textList)
+  barplot_station(dataList, infoList, textList)
   
 }
 
-barplot_stationPlot <- function(dataList, infoList, textList) {
+barplot_station <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
 

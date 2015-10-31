@@ -1,5 +1,5 @@
 ###############################################################################
-# calendar_weatherPlot.R
+# calendar_weather.R
 #
 # Multiple calendars showing weather and ridership.
 
@@ -27,20 +27,27 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
   
-  calendar_weatherPlot(dataList, infoList, textList)
+  calendar_weather(dataList, infoList, textList)
   
 }
 
 ###############################################################################
 
-calendar_weatherPlot <- function(dataList, infoList, textList) {
+calendar_weather <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
   
   # Overall
+  font_text <- 1
+  cex_text <- 4
   col_text <- 'gray20'
-  font <- 2
-  cex <- 2
+ 
+  # Side labels
+  cex_text2 <- 3.5
+  nudge_text2 <- 1.03
+  
+  cex_text3 <- 2.0
+  nudge_text3 <- 1.01
   
   # Vertical month lines
   lwd_day <- 1
@@ -52,14 +59,13 @@ calendar_weatherPlot <- function(dataList, infoList, textList) {
   colors <- c('transparent',RColorBrewer::brewer.pal(9,'Purples'))
   
   # Labels
-  cex_label <- 1.2
   line_label <- 1.5
   
-
+  
   # Label positions
   monthText_ypos <- 9  # 1:7
   dayText_xpos <- 0 # 1:53
-
+  
   
   # ----- Data Preparation ----------------------------------------------------
   
@@ -69,7 +75,7 @@ calendar_weatherPlot <- function(dataList, infoList, textList) {
   # Create a table of # of rides
   tbl <- table(trip$ProntoWeek,trip$dayOfWeek_MondayStart)
   
-  maxValue_rides <- max(tbl)
+  maxValue <- max(tbl)
   
   # Convert to a matrix
   mat_rides <- matrix(tbl,nrow=53,byrow=FALSE)
@@ -90,12 +96,12 @@ calendar_weatherPlot <- function(dataList, infoList, textList) {
   # TODO:  Figure out how to subset mat_temp and mat_precip while retaining
   # TODO:  based on user temp and precip subsetting without changing the
   # TODO:  color scale.
-
+  
   # Create x axis
   weeks <- seq(lubridate::ymd('2014-10-13',tz='America/Los_Angeles'),length.out=53,by='weeks')
   months <- seq(lubridate::ymd('2014-10-13',tz='America/Los_Angeles'),length.out=13,by='months')
-
-
+  
+  
   # ----- Layout --------------------------------------------------------------
   
   # NOTE:  The layoutFraction_ components are the same in every plot and guarantee
@@ -120,59 +126,99 @@ calendar_weatherPlot <- function(dataList, infoList, textList) {
   # ----- Plot ----------------------------------------------------------------
   
   
-  # Temp
-  par(mar=c(0,4,6,4))  
+  # ----- Temp ----------------------------------------------------------------
+  
+  par(mar=c(0,8,10,8))  
   calendarHeatmap_sub(mat_temp[1:52,],
                       breaks=c(-1e9,seq(10,100,10),1e9),
                       col=rev(RColorBrewer::brewer.pal(11,'RdBu')))
   
-  label <- print(paste0(textList$temp,':  ',minValue_temp,' - ',maxValue_temp,' F'))
-  mtext(label, 2, font=font, col=col_text, cex=cex_label, line=line_label)
+  # Days of the week
+  xpos <- par('usr')[2] - ( par('usr')[2] - par('usr')[1] ) * nudge_text3
+  ypos <- 1:7
+  label <- c('S','S','F','T','W','T','M') 
+  text(xpos, ypos, label, pos=2, xpd=NA,
+       font=font_text, col=col_text, cex=cex_text3)
+    
+  # Side label
+  label <- print(paste0(textList$temp,':  ',minValue_temp,' - ',maxValue_temp,' F'))  
+  xpos <- par('usr')[1] + ( par('usr')[2] - par('usr')[1] ) * nudge_text2
+  ypos <- par('usr')[3] + ( par('usr')[4] - par('usr')[3] ) / 2
+  text(xpos, ypos, label, xpd=NA, srt=-90,
+       font=font_text, col=col_text, cex=cex_text2)
+  
   
   # X axis month labels for the top plot only
   xpos <- 0.5:11.5 * (par('usr')[2] - par('usr')[1])/12
   ypos <- monthText_ypos
-  text(xpos, ypos, textList$monthLabels_3[1:12],
-       font=font, col=col_text, cex=cex, xpd=NA)
-
-#  # Y axis day labels
-#  xpos <- 54
-#  ypos <- 1:7
-#  labels <- c('S','S','F','T','W','T','M')
-#  text(xpos, ypos, labels, pos=4,
-#       font=font, col=col_text, cex=cex, xpd=NA)
+  text(xpos, ypos, textList$monthLabels_3[1:12], xpd=NA,
+       font=font_text, col=col_text, cex=cex_text)
   
-
-  # Rides
-  par(mar=c(3,4,3,4))  
+  #  # Y axis day labels
+  #  xpos <- 54
+  #  ypos <- 1:7
+  #  labels <- c('S','S','F','T','W','T','M')
+  #  text(xpos, ypos, labels, pos=4,
+  #       font=font_text, col=col_text, cex=cex_text, xpd=NA)
+  
+  # ----- Rides ---------------------------------------------------------------
+  
+  par(mar=c(3,8,3,8))  
   calendarHeatmap_sub(mat_rides[1:52,])
   
-  label <- print(paste0(textList$rideCount,':  0 - ',maxValue_rides))
-  mtext(label, 2, font=font, col=col_text, cex=cex_label, line=line_label)
+  # Days of the week
+  xpos <- par('usr')[2] - ( par('usr')[2] - par('usr')[1] ) * nudge_text3
+  ypos <- 1:7
+  label <- c('S','S','F','T','W','T','M') 
+  text(xpos, ypos, label, pos=2, xpd=NA,
+       font=font_text, col=col_text, cex=cex_text3)
   
-#  # Y axis day labels
-#  xpos <- 54
-#  ypos <- 1:7
-#  labels <- c('S','S','F','T','W','T','M')
-#  text(xpos, ypos, labels, pos=4,
-#       font=font, col=col_text, cex=cex, xpd=NA)
-
-  # Precip
-  par(mar=c(6,4,0,4))  
+  # Side label
+  label <- print(paste0(textList$rideCount,':  0 - ',maxValue_rides))
+  xpos <- par('usr')[1] + ( par('usr')[2] - par('usr')[1] ) * nudge_text2
+  ypos <- par('usr')[3] + ( par('usr')[4] - par('usr')[3] ) / 2
+  text(xpos, ypos, label, xpd=NA, srt=-90,
+       font=font_text, col=col_text, cex=cex_text2)
+  
+  
+  #  # Y axis day labels
+  #  xpos <- 54
+  #  ypos <- 1:7
+  #  text(xpos, ypos, labels, pos=4,
+  #       font=font_text, col=col_text, cex=cex_text, xpd=NA)
+  
+  # ----- Rides --------------------------------------------------------------- 
+  
+  par(mar=c(6,8,0,8))  
   calendarHeatmap_sub(mat_precip[1:52,],
                       breaks=c(-1e9,0.05,0.1,0.15,0.3,0.5,1,1.5,2,1e9),
                       col=RColorBrewer::brewer.pal(9,'Greens'))
-  
-  label <- print(paste0(textList$precip,':  0 - ',maxValue_precip,' in'))
-  mtext(label, 2, font=font, col=col_text, cex=cex_label, line=line_label)
-  
-#  # Y axis day labels
-#  xpos <- 54
-#  ypos <- 1:7
-#  labels <- c('S','S','F','T','W','T','M')
-#  text(xpos, ypos, labels, pos=4,
-#       font=font, col=col_text, cex=cex, xpd=NA)
 
+  # Days of the week
+  xpos <- par('usr')[2] - ( par('usr')[2] - par('usr')[1] ) * nudge_text3
+  ypos <- 1:7
+  label <- c('S','S','F','T','W','T','M') 
+  text(xpos, ypos, label, pos=2, xpd=NA,
+       font=font_text, col=col_text, cex=cex_text3)
+  
+  # Side label  
+  label <- print(paste0(textList$precip,':  0 - ',maxValue_precip,' in'))
+  xpos <- par('usr')[1] + ( par('usr')[2] - par('usr')[1] ) * nudge_text2
+  ypos <- par('usr')[3] + ( par('usr')[4] - par('usr')[3] ) / 2
+  text(xpos, ypos, label, xpd=NA, srt=-90,
+       font=font_text, col=col_text, cex=cex_text2)
+  
+  
+  #  # Y axis day labels
+  #  xpos <- 54
+  #  ypos <- 1:7
+  #  labels <- c('S','S','F','T','W','T','M')
+  #  text(xpos, ypos, labels, pos=4,
+  #       font=font_text, col=col_text, cex=cex_text, xpd=NA)
+  
+  # Modify the subset string
+  textList$subset <- paste0(textList$subset,'  (max ',maxValue,' trips/day)')
+  
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)
   

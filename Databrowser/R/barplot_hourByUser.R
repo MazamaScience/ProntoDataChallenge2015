@@ -53,13 +53,11 @@ barplot_hourByUser <- function(dataList, infoList, textList) {
   # ----- Style ---------------------------------------------------------------
   
   # Overall
-  font_label <- 2
-  cex_label <- 4
+  font_text <- 2
+  cex_text <- 4
   cex_userLabel <- 4
-  col_label <- 'gray20'
+  col_text <- 'gray20'
   
-  # Bars
-  barExpansion <- 1.0
   
   # ----- Data Preparation ----------------------------------------------------
   
@@ -112,26 +110,26 @@ barplot_hourByUser <- function(dataList, infoList, textList) {
   
   # Annual Members on the top
   par(mar=c(0.5,1,1,1))
-  barplotMatrix <- barplot(mat[hourIndices,1]*barExpansion,
+  barplotMatrix <- barplot(mat[hourIndices,1],
                            ylim=c(0,hourMax),                                                   
                            axes=FALSE, xlab='', ylab='',
                            border='white', space=.1,
                            col=infoList$ProntoSlate)
 
   text(par('usr')[2],hourMax/2, paste0(textList$annual), pos=2,
-       col=col_label, cex=cex_userLabel, font=font_label)
+       col=col_text, cex=cex_userLabel, font=font_text)
 
   
   # Short-Term Members on the bottom
   par(mar=c(1,1,0.5,1))
-  barplotMatrix <- barplot(-mat[hourIndices,2]*barExpansion,
+  barplotMatrix <- barplot(-mat[hourIndices,2],
                            ylim=c(-1*hourMax,0),                           
                            axes=FALSE, xlab='', ylab='',
                            border='white', space=.1,
                            col=infoList$ProntoGreen)
   
   text(par('usr')[2],-hourMax/2, paste0(textList$shortTerm), pos=2,
-       col=col_label, cex=cex_userLabel, font=font_label)
+       col=col_text, cex=cex_userLabel, font=font_text)
     
 
   # ----- Add hour labels ---------------------------------------------------
@@ -154,9 +152,9 @@ barplot_hourByUser <- function(dataList, infoList, textList) {
   
   xpos <- barplotMatrix[xposIndices,1]
   text(xpos,-hourMax*0.80, '|', pos=3,
-       col=col_label, cex=cex_label, font=font_label)
+       col=col_text, cex=cex_text, font=font_text)
   text(xpos-0.4,-hourMax*0.88, labels, pos=4,
-       col=col_label, cex=cex_label, font=font_label)
+       col=col_text, cex=cex_text, font=font_text)
   
   
   # Add title and attribution as the last two plots
