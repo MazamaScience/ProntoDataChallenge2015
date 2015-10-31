@@ -3,8 +3,26 @@
 
   <div class="container" ng-controller="Main as main" ng-cloak>
 
+    <!-- View -->
  
-    <!-- plot controls -->
+    <div class="row margin-md">
+
+        <div class="col-md-2 margin-sm">
+          <p>Choose a View:</p>
+        </div>
+
+        <div class="col-md-2 margin-sm">
+          <select-menu model="main.request.plotTypes" options="main.forms.plotGroups"></select-menu>
+        </div>
+
+        <!-- <div class="col-md-2 col-md-offset-8"> -->
+        <div class="col-md-2 margin-sm">
+          <button class="btn btn-primary btn-block" ng-click="main.updatePlot()">Update Plot</button>  
+        </div>
+
+    </div>
+
+   <!-- Subset by User -->
     <div class="row margin-md">
 
         <div class="col-md-2 margin-sm">
@@ -25,6 +43,7 @@
 
     </div>
 
+   <!-- Subset by Trip -->
     <div class="row margin-md">
 
         <div class="col-md-2 margin-sm">
@@ -45,20 +64,6 @@
 
         <div class="col-md-2 margin-sm">
           <select-menu model="main.request.stationId" options="main.forms.stationId"></select-menu>
-        </div>
-
-    </div>
-
-    <div class="row margin-md">
-
-        <div class="col-md-2 margin-sm">
-          <label>Plot Type</label>
-          <select-menu model="main.request.plotTypes" options="main.forms.plotGroups"></select-menu>
-        </div>
-
-        <!-- <div class="col-md-2 col-md-offset-8"> -->
-        <div class="col-md-2 margin-sm">
-          <button class="btn btn-primary btn-block" ng-click="main.updatePlot()">Update Plot</button>  
         </div>
 
     </div>
