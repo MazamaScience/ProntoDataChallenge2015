@@ -250,7 +250,7 @@ angular.module('App')
       language: "en",
       plotWidth: 1024,
       productType: "systemTable", 
-      plotGroups: "pie_user,barplot_hourbyUser,barplot_cumulativeWeekByUser",
+      plotGroups: "pie_user,barplot_hourByUser,barplot_monthByUser",
       plotTypes: "pie_user",
       userType: "all",
       age: "all",
@@ -267,21 +267,24 @@ angular.module('App')
 
       plotGroups: [{
         text: "System Overview",
-        value: "pie_user,barplot_hourByUser,barplot_cumulativeWeekByUser"
+        value: "pie_user,barplot_hourByUser,barplot_monthByUser"
       }, {
-        text: "Time and Date",
-        value: "pie_daylight,heatmap_weekByHour,calendar_weather"
+        text: "Time of Day",
+        value: "heatmap_weekByHour,pie_daylight"
       }, {
-        text: "Station Usage",
+        text: "Calendar",
+        value: "heatmap_weekByHour,calendar_weather"
+      }, {
+        text: "Stations",
         value: "bubble_station,pie_user,pie_user,pie_user"
       }, {
         text: "Station Clustering",
         value: "pie_user,pie_user"
       }, {
         text: "Chart Junkie",
-        value: "pie_user,barplot_weekByDay,heatmap_weekByHour,pie_daylight,calendar_weather,bubble_station"
+        value: "pie_user,barplot_hourByUser,barplot_monthByUser,pie_daylight,heatmap_weekByHour,calendar_weather,bubble_station,barplot_weekByDay"
       }, {
-        text: "... work in progress ...",
+        text: "... works in progress ...",
         value: "pie_user,pie_user"
       }],
 

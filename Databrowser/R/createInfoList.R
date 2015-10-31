@@ -32,11 +32,11 @@ createInfoList <- function(jsonArgs='{}') {
   # ----- Plot styling to be used in all plots ---------------------------------
   
   # Title and attribution
-  infoList$layoutFraction_title <- 0.16
+  infoList$layoutFraction_title <- 0.18
   infoList$layoutFraction_attribution <- 0.08
   infoList$font_title <- 2
   infoList$col_title <- 'black'
-  infoList$cex_title <- 5
+  infoList$cex_title <- 6
   infoList$font_subtitle <- 3
   infoList$col_subtitle <- 'gray20'
   infoList$cex_subtitle <- 4

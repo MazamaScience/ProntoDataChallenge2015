@@ -21,14 +21,14 @@ result <- try( {
   
   source("__DATABROWSER_PATH__/R/addTitleAndAttribution.R")
 
-  source("__DATABROWSER_PATH__/R/barplot_cumulativeWeekByUser.R")
   source("__DATABROWSER_PATH__/R/barplot_hourByUser.R")
+  source("__DATABROWSER_PATH__/R/barplot_monthByUser.R")
   source("__DATABROWSER_PATH__/R/barplot_weekByDayPlot.R")
   source("__DATABROWSER_PATH__/R/bubble_stationPlot.R")
   source("__DATABROWSER_PATH__/R/calendar_weatherPlot.R")
   source("__DATABROWSER_PATH__/R/heatmap_weekByDayPlot.R")
   source("__DATABROWSER_PATH__/R/heatmap_weekByHourPlot.R")
-  source("__DATABROWSER_PATH__/R/pie_userPlot.R")
+  source("__DATABROWSER_PATH__/R/pie_user.R")
   source("__DATABROWSER_PATH__/R/pie_daylightPlot.R")
 }, silent=TRUE)
 
@@ -134,13 +134,13 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         
       } else if (plotType == "barplot_hourByUser") { 
         
-        textList$title <- 'Hourly Usage'
+        textList$title <- 'Usage by Hour of Day'
         returnValues <- barplot_hourByUser(dataList,infoList,textList)
 
-      } else if (plotType == "barplot_cumulativeWeekByUser") { 
+      } else if (plotType == "barplot_monthByUser") { 
         
-        textList$title <- 'Cumulative Usage'
-        returnValues <- barplot_cumulativeWeekByUser(dataList,infoList,textList)
+        textList$title <- 'Usage by Month'
+        returnValues <- barplot_monthByUser(dataList,infoList,textList)
 
       } else if (plotType == "calendar_weather") { 
         
@@ -154,17 +154,17 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
     
       } else if (plotType == "heatmap_weekByHour") { 
         
-        textList$title <- 'Weekly Usage by Hour'
+        textList$title <- 'Weekly Usage by Hour of Day'
         returnValues <- heatmap_weekByHourPlot(dataList,infoList,textList)
 
       } else if (plotType == "pie_user") { 
         
-        textList$title <- 'Users'
-        returnValues <- pie_userPlot(dataList,infoList,textList)
+        textList$title <- 'Annual Usage'
+        returnValues <- pie_user(dataList,infoList,textList)
         
       } else if (plotType == "pie_daylight") { 
         
-        textList$title <- 'Daylight Preference'
+        textList$title <- 'Usage During Day/Night'
         returnValues <- pie_daylightPlot(dataList,infoList,textList)
         
       } else if (plotType == "bubble_station") { 

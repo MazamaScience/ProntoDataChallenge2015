@@ -36,9 +36,6 @@ if (FALSE) {
   
   textList <- createTextList(dataList,infoList)
   
-  
-  
-  
 
   barplot_cumulativeWeekByUser(dataList, infoList, textList)
  
@@ -53,10 +50,11 @@ barplot_cumulativeWeekByUser <- function(dataList, infoList, textList) {
   # ----- Style ---------------------------------------------------------------
 
   # Overall
-  font_label <- 1
-  cex_label <- 1
+  font_label <- 2
+  cex_label <- 4
+  cex_userLabel <- 4
   col_label <- 'gray20'
-  
+    
   # ...
   col_annual <- adjustcolor(infoList$ProntoSlate, 0.6)
   col_shortTerm <- adjustcolor(infoList$ProntoGreen, 0.6)
@@ -70,19 +68,20 @@ barplot_cumulativeWeekByUser <- function(dataList, infoList, textList) {
   
   # Get dataframe from the dataList
   trip <- dataList$trip
-
+  
   # Create a table of # of rides
-  table <- table(trip$ProntoWeek, trip$userType)
-  ### table <- table(trip$gender, trip$hourOfDay) 
-  ### barplot(table)
+  tbl <- table(trip$ProntoWeek, trip$userType)
+  
+  # Convert the table into a matrix so we can calculate rowSums
+  mat <- matrix(tbl,nrow=53,byrow=FALSE)
+  total <- rowSums(mat)
+  
+  # Cumulative sums
+  cumTotal <- cumsum(total)
+  cumAnnual <- cumsum(mat[,1])
+  cumShortTerm <- cumsum(mat[,2])
+  
 
-  # Convert the table (it's 1-D) into a matrix so we can rearrange the rows
-  mat <- matrix(table,nrow=53,byrow=FALSE)
-#   maxValue <- max(mat, na.rm=TRUE)
-#   sumValue <- sum(mat, na.rm=TRUE)
-  
-  cumAnnual <- 0
-  
   # ----- Layout --------------------------------------------------------------
   
   # NOTE:  The layoutFraction_ components are the same in every plot and guarantee
@@ -109,11 +108,17 @@ barplot_cumulativeWeekByUser <- function(dataList, infoList, textList) {
   par(mar=c(1,1,1,1))
   
   
+#   # Cumulative line first
+#   plot(0.5:51.5, cumTotal[1:52], type='s', lwd=4, col='black')
+#   points(1.5:52.5, cumTotal[1:52], type='S', lwd=4, col='black')
+#   
+#   # Now the bars
+#   points(1:52, cumAnnual[1:52], type='h', lend=2, lwd=12, col=col_annual)  
+#   points(1:52, cumShortTerm[1:52], type='h', lend=2, lwd=12, col=col_shortTerm)
   
-
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
+  # Short Term color underneath so it appears on top
+  plot(1:52, cumTotal[1:52], type='h', lend=2, lwd=12, col=infoList$ProntoSlate)
+  points(1:52, cumShortTerm[1:52], type='h', lend=2, lwd=12, col=infoList$ProntoGreen)  
   
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)
