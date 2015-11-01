@@ -158,7 +158,7 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         
       } else if (plotType == "pie_daylight") { 
         
-        textList$title <- 'Usage During Day/Night'
+        textList$title <- 'Daylight Preference'
         returnValues <- pie_daylight(dataList,infoList,textList)
         
       } else if (plotType == "bubble_station") { 

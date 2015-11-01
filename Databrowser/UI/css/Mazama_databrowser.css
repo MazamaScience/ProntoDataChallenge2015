@@ -31,8 +31,39 @@
 
 /* Navbar */
 
+/* Use ProntoTurquoise in the header */
+
+.navbar-default {
+  background-color: #68D2DF; /*ProntoTurquoise*/
+  border-bottom: 2px solid #043B49; /*ProntoSlate*/
+}
+
+/* navbar menu items */
+.navbar-default .navbar-nav > li > a {
+  font-size: 18px;
+  /*line-height: 2em;*/
+  color: white;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+  color: white;
+  text-decoration: underline;
+}
 
 /* Controls */
+
+/* adds standard blue to buttons */
+.btn-primary {
+  background-color: #68D2DF; /*ProntoTurquoise*/
+  border-color: #043B49; /*ProntoSlate*/
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #90DC6B; /*ProntoGreen*/
+}
 
 
 /* Plots */

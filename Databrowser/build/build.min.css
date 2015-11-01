@@ -671,3 +671,4 @@ slider div.handle:after, [slider] div.handle:after {
     -webkit-transform: scale(1.0);
   }
 }
+.navbar-default{background-color:#68D2DF;border-bottom:2px solid #043B49}.navbar-default .navbar-nav > li > a{font-size:18px;color:white}.navbar-default .navbar-nav > li > a:hover{color:white;text-decoration:underline}.btn-primary{background-color:#68D2DF;border-color:#043B49}.btn-primary:hover,.btn-primary:focus,.btn-primary:active,.btn-primary.active{background-color:#90DC6B}

@@ -18,7 +18,7 @@ if (FALSE) {
                    plotType='pie_daylight',
                    userType='all',
                    gender='all',
-                   age='all',
+                   age='21_30',
                    dayType='all',
                    timeOfDay='all',
                    distance='all',
@@ -64,8 +64,15 @@ pie_daylight <- function(dataList, infoList, textList) {
   cex_center <- 8
   col_center <- infoList$col_subtitle
   
-  # Daylight colors: dawn - day - dusk - night
-  colors <- c('#E77483', 'gold', 'orange', 'gray31')
+  # Sunset colors: day-dusk-night
+  col_day <- '#F9E101'
+  col_sunset1 <- '#FC7B04'
+  col_sunset2 <- '#CD152D'
+  col_sunset3 <- '#782B48'
+  col_sunset4 <- '#2E1E39'
+  sunsetPalette <- colorRampPalette(c(col_day,col_sunset1,col_sunset2,col_sunset3,col_sunset4))
+
+  segmentCount <- 11
   
   
   # ----- Data Preparation ----------------------------------------------------
@@ -116,25 +123,25 @@ pie_daylight <- function(dataList, infoList, textList) {
   
   par(mar=c(0,6,6,0))
   centerText <- paste0(prettyNum(nrow(trip_male), big.mark=','),'\n',textList$trips)
-  miniDaylightPlot(trip_male, colors, centerText)
+  miniDaylightPlot(trip_male, sunsetPalette, segmentCount, centerText)
   text(0, 1.1, paste0(malePct,'% Men'), col=col_label, cex=cex_label, font=font_label, pos=3, xpd=NA)
   #   box()
   
   par(mar=c(0,0,6,6))
   centerText <- paste0(prettyNum(nrow(trip_female), big.mark=','),'\n',textList$trips)
-  miniDaylightPlot(trip_female, colors, centerText)
+  miniDaylightPlot(trip_female, sunsetPalette, segmentCount, centerText)
   text(0, 1.1, paste0(femalePct,'% Women'), col=col_label, cex=cex_label, font=font_label, pos=3, xpd=NA)
   #   box()
   
   par(mar=c(0,6,6,0))
   centerText <- paste0(prettyNum(nrow(trip_other), big.mark=','),'\n',textList$trips) 
-  miniDaylightPlot(trip_other, colors, centerText)  
+  miniDaylightPlot(trip_other, sunsetPalette, segmentCount, centerText)  
   text(0, 1.1, paste0(otherPct, '% Other'), col=col_label, cex=cex_label, font=font_label, pos=3, xpd=NA)  
   #   box()
   
   par(mar=c(0,0,6,6))
   centerText <- paste0(prettyNum(nrow(trip_shortTerm), big.mark=','),'\n',textList$trips)
-  miniDaylightPlot(trip_shortTerm, colors, centerText)
+  miniDaylightPlot(trip_shortTerm, sunsetPalette, segmentCount, centerText)
   text(0, 1.1, paste0(shortTermPct, '% Short-Term'), col=col_label, cex=cex_label, font=font_label, pos=3, xpd=NA)    
   #   box()
   
@@ -156,7 +163,7 @@ pie_daylight <- function(dataList, infoList, textList) {
 
 ###############################################################################
 
-miniDaylightPlot <- function(trip, col = 'gray80', centerText = 'No\nTrips', titleText = '') {
+miniDaylightPlot <- function(trip, sunsetPalette, segmentCount=21, centerText='No\nTrips', titleText='') {
   
   # Style
   font_center <- 2
@@ -169,15 +176,27 @@ miniDaylightPlot <- function(trip, col = 'gray80', centerText = 'No\nTrips', tit
   init.angle <- (middayFraction/sum(counts))*360 + 90
   
   
-  tbl <- table(trip$solarPosition)    
+  tbl <- table(trip$solarPosition) # dawn,day,dusk,night
+  
+  # Create fade-in, fade-out segments and colors
+  
+  dawn <- rep(tbl[1]/segmentCount,segmentCount)
+  day <- tbl[2]
+  dusk <- rep(tbl[3]/segmentCount,segmentCount)
+  night <- tbl[4]
+  fullDay <- c(dawn,day,dusk,night)
+  
+  sunsetColors <- sunsetPalette(segmentCount)
+  fullDayColors <- c(rev(sunsetColors),sunsetColors[1],sunsetColors,sunsetColors[segmentCount])
+  
+  # Create the pie plots
   
   if ( all(tbl==0) ) {
     
     # Gray donut with "no trips" message
-    pie(1, border='gray80', labels=NA, rad=1.0)
-    ###title('No Trips')
+    pie(1, border='transparent', col='gray50', labels=NA, rad=1.0)
     par(new=TRUE) 
-    pie(c(1), border='white', labels=NA, radius=0.5)
+    pie(c(1), border='white', col='white', labels=NA, radius=0.5)
     centerText <- 'No\ntrips'
     text(0, 0, labels=centerText, font=font_center, cex=cex_center, col=col_center)
     par(new=FALSE)
@@ -185,7 +204,7 @@ miniDaylightPlot <- function(trip, col = 'gray80', centerText = 'No\nTrips', tit
   } else {
     
     # Colored donut
-    pie(tbl, border='white', labels=NA, col=col, rad=1.0, clockwise=T, init.angle=init.angle)
+    pie(fullDay, border='transparent', labels=NA, col=fullDayColors, rad=1.0, clockwise=T, init.angle=init.angle)
     title(titleText)
     par(new=TRUE)
     pie(c(1), border='white', labels=NA, radius=0.5)
