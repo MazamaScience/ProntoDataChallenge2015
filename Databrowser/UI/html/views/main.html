@@ -11,20 +11,12 @@
           <p>Choose a View:</p>
         </div>
 
-        <div class="col-md-2 margin-sm">
+        <div class="col-md-4 margin-sm">
           <select-menu model="main.request.plotTypes" options="main.forms.plotGroups"></select-menu>
         </div>
 
         <div class="col-md-2 margin-sm">
           <button class="btn btn-primary btn-block" ng-click="main.updatePlot()">Update Plot</button>  
-        </div>
-
-        <div class="col-md-2 margin-sm">
-          <p>Subset by Station:</p>
-        </div>
-
-        <div class="col-md-4 margin-sm">
-          <select-menu model="main.request.stationId" options="main.forms.stationId"></select-menu>
         </div>
 
     </div>
@@ -34,6 +26,10 @@
 
         <div class="col-md-2 margin-sm">
           <p>Subset by Trip:</p>
+        </div>
+
+        <div class="col-md-4 margin-sm">
+          <select-menu model="main.request.stationId" options="main.forms.stationId"></select-menu>
         </div>
 
         <div class="col-md-2 margin-sm">
@@ -73,7 +69,7 @@
 
     <!-- Plot Table -->
 
-    <div class="row margin-md">
+    <div class="row margin-md plot-table">
 
       <div class="col-md-12">
 

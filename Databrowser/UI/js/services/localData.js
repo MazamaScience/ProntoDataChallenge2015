@@ -16,7 +16,7 @@
       plotWidth: 1024,
       productType: "systemTable", 
       plotGroups: "pie_user,barplot_hourByUser,barplot_monthByUser",
-      plotTypes: "pie_user",
+      plotTypes: "pie_user,barplot_hourByUser,barplot_monthByUser",
       userType: "all",
       age: "all",
       gender: "all",
@@ -34,20 +34,20 @@
         text: "System Overview",
         value: "pie_user,barplot_hourByUser,barplot_monthByUser"
       }, {
-        text: "Time of Day",
-        value: "heatmap_weekByHour,pie_daylight"
-      }, {
-        text: "Calendar",
-        value: "heatmap_weekByHour,calendar_weather"
-      }, {
         text: "Departure/Arrival Maps",
         value: "bubble_stationFrom,bubble_stationTo"
       }, {
         text: "Station Usage",
         value: "bubble_stationTotal,barplot_station"
       }, {
-        text: "Individual Station",
-        value: "bubble_stationTotal,barplot_station,heatmap_weekByHour,pie_daylight"
+        text: "Calendar",
+        value: "heatmap_weekByHour,calendar_weather"
+      }, {
+        text: "Time of Day",
+        value: "heatmap_weekByHour,pie_daylight"
+      }, {
+        text: "Single Station Focus",
+        value: "bubble_stationTotal,heatmap_weekByHour,barplot_station,barplot_hourByUser"
       }, {
         text: "Chart Junkie",
         value: "pie_user,barplot_hourByUser,barplot_monthByUser,pie_daylight," +
@@ -148,6 +148,9 @@
         text: "> 70 F",
         value: "temp_70"
 */
+      }, {
+        text: "APA Conference: Apr 18-21",
+        value: "APA_conference"
       }],
 
       timeOfDay: [{
@@ -197,7 +200,7 @@
       }],
 
       stationId: [{
-        text: "All Stations",
+        text: "from Any Station",
         value: "all"
       }, {
         text: "from 1st Ave & Marion St",

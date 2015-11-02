@@ -102,6 +102,8 @@ createTextList <- function(dataList, infoList) {
       textList$subset <- paste0(textList$subset,'>60 F -- ')
     } else if (infoList$dayType == 'temp_70') {
       textList$subset <- paste0(textList$subset,'>70 F -- ')
+    } else if (infoList$dayType == 'APA_conference') {
+      textList$subset <- paste0(textList$subset,'APA Conference: Apr 18-21 -- ')
     }
   }
   

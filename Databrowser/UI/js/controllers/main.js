@@ -87,7 +87,6 @@
         // Two columns
         case 1:
         case 2:
-        case 4:
           return "col-md-6";
           break;
         // Three columns
@@ -98,6 +97,7 @@
           return "col-md-4";
           break;
         // Four columns
+        case 4:
         case 7:
         case 8:
         case 10:

@@ -91,6 +91,10 @@ createDataList <- function(infoList) {
     trip <- subset(trip, trip$meanTempF >= 70)
   } else if (infoList$dayType == 'temp_70') {
     trip <- subset(trip, trip$meanTempF >= 70)
+  } else if (infoList$dayType == 'APA_conference') {
+    APA_startTime <- lubridate::ymd("2015-04-18",tz="America/Los_Angeles")
+    APA_stopTime <- lubridate::ymd("2015-04-22",tz="America/Los_Angeles")
+    trip <- subset(trip, startTime > APA_startTime & startTime < APA_stopTime)
   }
   
   # timeOfDay
