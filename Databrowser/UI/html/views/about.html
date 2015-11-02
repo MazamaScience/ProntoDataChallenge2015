@@ -3,34 +3,60 @@
 
   <div class="container" ng-cloak>
 
-  	<div class="row margin-md">
+    <div class="row margin-md">
 
-  		<div class="col-md-8 col-md-offset-2 text-document">
+      <div class="col-md-8 col-md-offset-2 text-document">
 
-		    <h1> This is the About Page </h1>
+        <h1> About this Databrowser </h1>
 
-		    <h3> Subheader </h3>
+        <h3> Goals </h3>
 
-		    <p> You can put whatever you want in here. The paragraph font size is a bit larger so the content is more legible. The column occupies the center 2/3rds of the page so lines aren't too long.</p>
-
-		    <div class="row">
-			    <div class="col-sm-10 col-sm-offset-1">
-				    <img src="data_local/sample-image.png"/>
-				    <p class="caption">
-				    	This is an image caption.
-				    </p>
-				  </div>
-				</div>
-
-		    <h3> Another Subheader </h3>
-
-		    <p> This is the second paragraph.</p>
-
-		  </div>
-
-	  </div>
+        <p>
+This <b><i>databrowser</i></b> attempts to make it easy for anyone with a question
+about Pronto Cycle usage to answer that question quickly and easily with
+self-explanatory, publication-ready graphics.
+        </p>
+        <p>
+In public discourse, people often make confident statements about an issue
+without consulting available data. With disturbing regularity, many of
+these confident statements are 'demonstrably false' after one finds
+and analyzes relevant data.
+        </p>
+        <p>
+By familiarizing youself with the actual bikeshare trip data you can decide
+for yourself how well it is working and how/where it should be modified or expanded.
+<i>(Perhaps underperforming stations should be moved?)</i>
+        </p>
 
 
+        <h3> Software </h3>
+
+        <p>
+All calculations and data visualization are performed with the 
+<a href="https://www.cran.r-project.org/">R</a> statistical programming language.
+The user interface was built with <a href="https://angularjs.org/">AngularJS</a>
+and <a href="http://getbootstrap.com/2.3.2/">Boostrap</a>. A python CGI script
+connects requests from the user interface to R code using the python
+<a href="http://rpy.sourceforge.net/">rpy2</a> module. All communication between
+the client and server is via http GET using
+<a href="http://json.org/">JSON</a>.
+
+        </p>
+        <p>
+Full, ugly, unrefactored, seat-of-the-pants source code is available on github at:
+<a href="https://github.com/MazamaScience/ProntoDataChallenge2015">https://github.com/MazamaScience/ProntoDataChallenge2015</a>.
+        </p>
+
+
+        <h3> Data </h3>
+        <p>
+Trip, Station and Weather data are all available from Pronto's
+<a href="https://www.prontocycleshare.com/datachallenge">Data Challenge</a>
+page. Additional information on elevation was obtained from the
+<a href="https://developers.google.com/maps/documentation/elevation/intro">Google Maps Elevation API</a>.
+Ephemerides calculations (dawn/dusk) are provided by the
+<a href="https://cran.r-project.org/web/packages/maptools/">maptools</a> package in R.
+        </p>
 
     <!-- end container -->
  

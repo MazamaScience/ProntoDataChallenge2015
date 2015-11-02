@@ -34,7 +34,11 @@
     padding: 2px 8px;
 }
 
+/* Tighten up the paragraphs on the about page*/
 
+.text-document p {
+    margin-bottom: 1.0em;
+}
 
 /* OBJECTS ...................................................................*/
 /* Abstract classes */
