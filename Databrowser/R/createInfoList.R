@@ -15,7 +15,7 @@ createInfoList <- function(jsonArgs='{}') {
   # ----- Minumum set of infoList parameters from the UI -----------------------
   
   # Initialize the infoList from the jsonArgs
-  infoList <- as.list(fromJSON(jsonArgs))
+  infoList <- as.list(jsonlite::fromJSON(jsonArgs))
   
   # Guarantee that the following variables always have a default
   infoList$language <- ifelse(is.null(infoList$language),'en',infoList$language)

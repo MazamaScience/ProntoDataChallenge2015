@@ -65,12 +65,13 @@ pie_daylight <- function(dataList, infoList, textList) {
   col_center <- infoList$col_subtitle
   
   # Sunset colors: day-dusk-night
-  col_day <- '#F9E101'
-  col_sunset1 <- '#FC7B04'
-  col_sunset2 <- '#CD152D'
-  col_sunset3 <- '#782B48'
-  col_sunset4 <- '#2E1E39'
-  sunsetPalette <- colorRampPalette(c(col_day,col_sunset1,col_sunset2,col_sunset3,col_sunset4))
+  col_day <- '#F9E101'       # gold
+  col_sunset1 <- '#FC7B04'   # orange
+  col_sunset2 <- '#CD152D'   # red
+  col_sunset3 <- '#782B48'   # red-purple
+  col_sunset4 <- '#2E1E39'   # purple-black
+  #sunsetPalette <- colorRampPalette(c(col_day,col_sunset1,col_sunset2,col_sunset3,col_sunset4))
+  sunsetPalette <- colorRampPalette(c(col_day,col_sunset1,col_sunset3,col_sunset4))
 
   segmentCount <- 11
   

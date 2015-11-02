@@ -82,6 +82,10 @@ createTextList <- function(dataList, infoList) {
       textList$subset <- paste0(textList$subset,'weekday -- ')
     } else if (infoList$dayType == 'weekend') {
       textList$subset <- paste0(textList$subset,'weekend -- ')
+    } else if (infoList$dayType == 'Oct_Mar') {
+      textList$subset <- paste0(textList$subset,'Oct-Mar -- ')
+    } else if (infoList$dayType == 'Apr_Sep') {
+      textList$subset <- paste0(textList$subset,'Apr-Sep -- ')
     } else if (infoList$dayType == 'rain__02') {
       textList$subset <- paste0(textList$subset,'<0.2 in rain -- ')
     } else if (infoList$dayType == 'rain_02') {
@@ -102,7 +106,9 @@ createTextList <- function(dataList, infoList) {
   }
   
   if (infoList$timeOfDay != 'all') {
-    if (infoList$timeOfDay == 'amCommute') {
+    if (infoList$timeOfDay == 'early') {
+      textList$subset <- paste0(textList$subset,'early -- ')
+    } else if (infoList$timeOfDay == 'amCommute') {
       textList$subset <- paste0(textList$subset,'am commute -- ')
     } else if (infoList$timeOfDay == 'midday') {
       textList$subset <- paste0(textList$subset,'mid day -- ')

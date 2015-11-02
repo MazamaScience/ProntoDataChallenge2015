@@ -7,10 +7,6 @@
 # Modify library search path to look for packages installed with the databrowser
 .libPaths( c("__DATABROWSER_PATH__/R/library",.libPaths()) )
 
-# Required R packages
-library(stringr) # for sane string manipulations
-library(jsonlite) # for JSON support
-
 # Turn warnings into errors
 options(warn=2)
 
@@ -23,6 +19,7 @@ result <- try( {
 
   source("__DATABROWSER_PATH__/R/barplot_hourByUser.R")
   source("__DATABROWSER_PATH__/R/barplot_monthByUser.R")
+  source("__DATABROWSER_PATH__/R/barplot_station.R")
   source("__DATABROWSER_PATH__/R/barplot_weekByDay.R")
   source("__DATABROWSER_PATH__/R/bubble_station.R")
   source("__DATABROWSER_PATH__/R/calendar_weather.R")
@@ -82,28 +79,6 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   textList = createTextList(dataList, infoList)
   
   
-  # ----- Create the png file --------------------------------------------------
-    
-#   absPlotPNG <- paste(infoList$outputDir,infoList$outputFileBase,'.png',sep="")
-#   
-#   if (infoList$plotDevice == "cairo") {
-#       
-#     library(Cairo) # CairoPNG is part of the Cairo package
-#     CairoPNG(filename=absPlotPNG,
-#              width=infoList$plotWidth, height=infoList$plotHeight,
-#              units='px', bg='white')
-#     print(paste("Working on", absPlotPNG))
-#       
-#   } else if (infoList$plotDevice == "png") {
-#       
-#     png(filename=absPlotPNG,
-#         width=infoList$plotWidth, height=infoList$plotHeight,
-#         units='px', bg='white')
-#     print(paste("Working on",absPlotPNG))
-#       
-#   }
-#   
-  
   # ----- Subset the data -----------------------------------------------------
   
   
@@ -141,6 +116,11 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         textList$title <- 'Usage by Month'
         returnValues <- barplot_monthByUser(dataList,infoList,textList)
 
+      } else if (plotType == "barplot_station") { 
+        
+        textList$title <- 'Total Station Usage'
+        returnValues <- barplot_station(dataList,infoList,textList)
+
       } else if (plotType == "calendar_weather") { 
         
         textList$title <- 'Daily Usage and Weather'
@@ -161,9 +141,22 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         textList$title <- 'Daylight Preference'
         returnValues <- pie_daylight(dataList,infoList,textList)
         
-      } else if (plotType == "bubble_station") { 
+      } else if (plotType == "bubble_stationFrom") {
         
-        textList$title <- 'Station Usage'
+        infoList$plotType <- 'bubble_stationFrom'
+        textList$title <- 'Station Departures'
+        returnValues <- bubble_station(dataList,infoList,textList)
+
+      } else if (plotType == "bubble_stationTo") {
+        
+        infoList$plotType <- 'bubble_stationTo'
+        textList$title <- 'Station Arrivals'
+        returnValues <- bubble_station(dataList,infoList,textList)
+
+      } else if (plotType == "bubble_stationTotal") {
+        
+        infoList$plotType <- 'bubble_stationTotal'
+        textList$title <- 'Total Station Usage'
         returnValues <- bubble_station(dataList,infoList,textList)
         
       } else {
@@ -203,7 +196,7 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
                        totalSecs=as.numeric(totalSecs),
                        returnValues=returnValues)
   
-  returnJSON <- toJSON(returnValues)
+  returnJSON <- jsonlite::toJSON(returnValues)
   
   return(returnJSON)
   

@@ -32,7 +32,7 @@ request = {'debug': 'none',
            'responseType': 'json',
            'plotWidth': '1024',
            'productType': 'systemTable',
-           'plotType': 'barplot_weekByDay'}
+           'plotType': 'NO_PLOTTYPE_DEFINED'}
 
 # NOTE:  You can set up a request object with all required parameters and run this
 # NOTE:  this cgi script from the command line for debugging.
@@ -215,9 +215,9 @@ if status == 'OK':
     # modify the request
     request['outputFileBase'] = unique_ID
 
-    # Determine whether the output file is found in cache
+    # Determine whether the output is found in cache
     if (request['responseType'] == 'json'):
-        from_cache = os.path.exists(abs_png) and os.path.exists(abs_json)
+        from_cache = os.path.exists(abs_json)
     else:
         from_cache = os.path.exists(abs_file)
 
