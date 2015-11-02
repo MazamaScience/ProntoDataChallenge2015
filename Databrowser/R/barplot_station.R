@@ -25,7 +25,7 @@ if (FALSE) {
                    dayType='all',
                    timeOfDay='all',
                    distance='all',
-                   stationId='all',
+                   stationId='SLU-02',
                    layoutFraction_title=0.16,
                    layoutFraction_attribution=0.08)
   
@@ -49,9 +49,9 @@ barplot_station <- function(dataList, infoList, textList) {
   # ----- Style ---------------------------------------------------------------
 
   # Overall
-  font_goodStation <- 3
+  font_goodStation <- 4
   cex_goodStation <- 4
-  col_goodStation <- 'white'
+  col_goodStation <- infoList$col_subtitle
   
   font_badStation <- 3
   cex_badStation <- 4
@@ -93,27 +93,34 @@ barplot_station <- function(dataList, infoList, textList) {
   indices <- order(usage, decreasing=FALSE)
   station <- station[indices,c('name','terminal','dailyToUsage','dailyFromUsage','dailyTotalUsage')]
 
+  # TODO:  The below is a mess but we need y_firstFew, y_middleOne and y_lastFew
+  y_firstFew <- 1:fewCount
+  y_middleOne <- fewCount + 1
+  y_lastFew <- y_middleOne:(2*fewCount+1)
+  
+  
   # Top few and bottom few wit a gap in the middle
   if (infoList$stationId == 'all') {
     firstFew <- 1:fewCount
     middleOne <- max(firstFew) + 1
     lastFew <- (middleOne+1):(2*fewCount+1)
+    lastFewIndices <- (nrow(station)-fewCount+1):nrow(station)
+    barCount <- 2 * fewCount + 1
+    # NOTE:  One extra that will be in the middle
+    mat <- as.matrix(station[c(firstFew,middleOne,lastFewIndices),c('dailyFromUsage','dailyToUsage')])
+    mat[y_middleOne,] <- NA
+    labels <- as.character(c(station$name[firstFew],'...',station$name[lastFewIndices]))
   } else {
     firstFew <- (nrow(station)-2*fewCount):(nrow(station)-fewCount-1)
     middleOne <- max(firstFew) + 1
     lastFew <- (middleOne+1):(nrow(station))
+    lastFewIndices <- (nrow(station)-fewCount+1):nrow(station)
+    barCount <- 2 * fewCount + 1
+    # NOTE:  One extra that will be in the middle
+    mat <- as.matrix(station[c(firstFew,middleOne,lastFewIndices),c('dailyFromUsage','dailyToUsage')])
+    ###mat[y_middleOne,] <- NA
+    labels <- as.character(c(station$name[firstFew],station$name[middleOne],station$name[lastFewIndices]))
   }
-  lastFewIndices <- (nrow(station)-fewCount+1):nrow(station)
-  barCount <- 2 * fewCount + 1
-  # NOTE:  One extra that will be in the middle
-  mat <- as.matrix(station[c(firstFew,middleOne,lastFewIndices),c('dailyFromUsage','dailyToUsage')])
-  mat[middleOne,] <- NA
-  labels <- as.character(c(station$name[firstFew],'...',station$name[lastFewIndices]))
-  
-  # TODO:  The above is a mess but we need y_firstFew, y_middleOne and y_lastFew
-  y_firstFew <- 1:fewCount
-  y_middleOne <- fewCount + 1
-  y_lastFew <- y_middleOne:(2*fewCount+1)
   
   # Modify daily/yearly based on maxValue
   if (infoList$stationId == 'all') {
@@ -203,16 +210,17 @@ barplot_station <- function(dataList, infoList, textList) {
     
   } else {
     
-    xpos <- 1.1 * usage[max(y_firstFew)] * factor
+    xpos <- usr[1] + 0.02 * (usr[2] -usr[1])
     if (xpos == 0) xpos <- usr[1] + 0.02 * (usr[2] -usr[1])
     ypos <- locations[y_firstFew]
     text(xpos, ypos, labels[y_firstFew], font=font_badStation, col=col_badStation, cex=cex_badStation, pos=4)
-    xpos <- usr[1] + 0.02 * (usr[2] -usr[1])
-    ypos <- locations[y_middleOne]
-    text(xpos, ypos, labels[y_middleOne], font=font_badStation, col=col_badStation, cex=cex_goodStation, pos=4)
+    # NOTE:  Overplotting this one for some reason.
+#     xpos <- usr[1] + 0.02 * (usr[2] -usr[1])
+#     ypos <- locations[y_middleOne]
+#     text(xpos, ypos, labels[y_middleOne], font=font_badStation, col=col_badStation, cex=cex_goodStation, pos=4)
     xpos <- usr[1] + 0.02 * (usr[2] - usr[1])
     ypos <- locations[y_lastFew]
-    text(xpos, ypos, labels[y_lastFew], font=font_goodStation, col=col_goodStation, cex=cex_goodStation, pos=4)
+    text(xpos, ypos, labels[y_lastFew], font=font_goodStation, col=col_badStation, cex=cex_goodStation, pos=4)
     
   }
   
@@ -220,6 +228,10 @@ barplot_station <- function(dataList, infoList, textList) {
   ypos <- usr[3] + 0.2 * (usr[4] - usr[3])
   legend(xpos,ypos,legend=c('Departures','Arrivals'),fill=cols,
          text.font=1, col=text.col_badStation, cex=cex_legend)
+  
+  if (infoList$stationId != 'all') {
+    textList$title <- paste0('Destinations from ',infoList$stationId)
+  }
   
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)

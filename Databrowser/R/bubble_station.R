@@ -69,7 +69,7 @@ bubble_station <- function(dataList, infoList, textList) {
   # Create breaks
   if ( infoList$plotType == 'bubble_stationFrom' ) {
     usage <- station$dailyFromUsage
-  } else if ( infoList$plotType == 'bubble_stationTo' ) {
+  } else if ( infoList$plotType == 'bubble_stationTo' || infoList$stationId != 'all') {
     usage <- station$dailyToUsage
   } else {
     usage <- station$dailyTotalUsage
@@ -87,7 +87,7 @@ bubble_station <- function(dataList, infoList, textList) {
   # Departures = blue-end, Arrivals = blue-end
   if ( infoList$plotType == 'bubble_stationFrom' ) {
     cols <- RColorBrewer::brewer.pal(max(usageIndex),'Reds')[usageIndex]
-  } else if ( infoList$plotType == 'bubble_stationTo' ) {
+  } else if ( infoList$plotType == 'bubble_stationTo'  || infoList$stationId != 'all') {
     cols <- RColorBrewer::brewer.pal(max(usageIndex),'Blues')[usageIndex]
   } else {
     cols <- RColorBrewer::brewer.pal(max(usageIndex),'Purples')[usageIndex]
@@ -169,25 +169,21 @@ bubble_station <- function(dataList, infoList, textList) {
   points(station$lon[stationOrdering], station$lat[stationOrdering], col=cols[stationOrdering], pch=16, cex=cex[stationOrdering])
   points(station$lon[stationOrdering], station$lat[stationOrdering], col=cols_border[stationOrdering], pch=1, cex=cex[stationOrdering])
   
-#   # Add a legend for the top three categories
-#   xpos <- usr[1] + 0.05 * (usr[2] - usr[1])
-#   xpos <- rep(xpos, 3)
-#   ypos <- usr[3] + c(0.75,0.85,0.95) * (usr[4] - usr[3])
-#   ignoreIndices <- seq(1,(max(usageIndex)-3))
-#   cols <- RColorBrewer::brewer.pal(max(usageIndex),'Spectral')[-ignoreIndices]
-#   for (i in 1:length(cols)) cols[i] <- adjustcolor(cols[i],0.8)
-#   ignoreIndices <- seq(1,(length(breaks)-3))
-#   breakValues <- breaks[-ignoreIndices]
-#   cex <- stationExpansion * breakValues/max(usage)
-#   points(xpos, ypos, col=cols, pch=16, cex=cex, xpd=NA)
-#   ###points(xpos, ypos, col=cols_border, pch=1, cex=cex, xpd=NA)
-#   labels <- floor(breakValues)
-#   xpos <- usr[1] + 0.05 * (usr[2] - usr[1])
-#   xpos <- rep(xpos, 3)
-#   text(xpos, ypos, labels, font=font_legendText, col=col_legendText, cex=cex_legendText)
-  
+  # Add a locator circle if needed
+  if (infoList$stationId != 'all') {
+    lon <- station$lon[station$terminal == infoList$stationId]
+    lat <- station$lat[station$terminal == infoList$stationId]
+    points(lon,lat, col='white', pch=16, cex=6)
+    points(lon,lat, col='red', pch=16, cex=4)
+    points(lon,lat, col='white', pch=16, cex=2)
+  }
   
   # Modify the passed in title
+  if (infoList$infoList$stationId != 'all') {
+    textList$title <- paste0('Destinations from ',infoList$stationId)
+  }
+
+  # Modify the passed in subtitle
   maxValue <- max(usage,na.rm=TRUE)
   if (maxValue > 900) {
     textList$subset <- paste0(textList$subset,'  (max ',round(maxValue/365,1),'/day)')
