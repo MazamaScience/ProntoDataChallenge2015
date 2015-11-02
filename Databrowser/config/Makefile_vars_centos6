@@ -15,13 +15,14 @@
 # CACHE_SIZE                  -- size of cache in megabytes
 
 SERVER=localhost
-OWNERSHIP=root:apache
-CGI_PATH=/var/www/cgi-bin
-DATABROWSER_PATH=/var/www/html/GenericDatabrowser
-DATABROWSER=GenericDatabrowser
+###OWNERSHIP=root:apache
+OWNERSHIP=root:mazama
+CGI_PATH=/var/www/mazamascience.com/cgi-bin
+DATABROWSER_PATH=/var/www/mazamascience.com/html/ProntoDataChallenge
+DATABROWSER=ProntoDataChallenge
 DATA_DIR=data_local
 OUTPUT_DIR=output_en
-CACHE_SIZE=0.5
+CACHE_SIZE=1000
 
 # sed scripts applied to *.in files
 #
@@ -36,7 +37,7 @@ CACHE_SIZE=0.5
 # NOTE:  The sed scripts below use '%' as the delimiter instead of the typical '/'.
 # NOTE:  This allows us to include paths without escaping the '/'s embedded in the path.
 
-PYTHON_SED_SCRIPT='s%__PYTHON__%/usr/bin/python%'
+PYTHON_SED_SCRIPT='s%__PYTHON__%/usr/bin/python2.7%'
 URL_PATH_SED_SCRIPT='s%__URL_PATH__%http://$(SERVER)/$(DATABROWSER)%'
 DATABROWSER_PATH_SED_SCRIPT='s%__DATABROWSER_PATH__%$(DATABROWSER_PATH)%'
 OUTPUT_DIR_SED_SCRIPT='s%__OUTPUT_DIR__%$(OUTPUT_DIR)%'
