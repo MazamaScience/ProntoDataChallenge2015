@@ -179,8 +179,14 @@ bubble_station <- function(dataList, infoList, textList) {
   }
   
   # Modify the passed in title
-  if (infoList$infoList$stationId != 'all') {
-    textList$title <- paste0('Destinations from ',infoList$stationId)
+  if (infoList$stationId != 'all') {
+    if (infoList$plotType == 'bubble_stationTo') {
+      textList$title <- paste0('Arrivals from ',infoList$stationId)
+    } else if (infoList$plotType == 'bubble_stationFrom') {
+      textList$title <- paste0('Departures from ',infoList$stationId)
+    } else if (infoList$plotType == 'bubble_stationTotal') {
+      textList$title <- paste0('Destinations from ',infoList$stationId)
+    }
   }
 
   # Modify the passed in subtitle
