@@ -98,12 +98,35 @@ cumulative_coasting <- function(dataList, infoList, textList) {
 
   # ----- Plot ----------------------------------------------------------------
   
-  par(mar=c(5,4,4,2)+.1)
+  par(mar=c(5,8,4,4))
   
-  
-  plot(elevationDay$minuteOfDay, systemElevation, xlim=c(1,60*24), type='s')
-  
+  xpos <- elevationDay$minuteOfDay
+  plot(elevationDay$minuteOfDay, systemElevation, xlim=c(1,60*24), type='l',
+       axes=FALSE, xlab='', ylab='',
+       lwd=3)
 
+  # Bottom Line
+  xpos <- seq(1,60*27,30)
+  ypos <- rep(1.05 * min(systemElevation), length(xpos))
+  bottomLine <- loess.smooth(xpos, jitter(ypos, factor=2.0))
+  points(bottomLine, type='l', lwd=1.5, col=adjustcolor('black',0.8), xpd=NA)
+                       
+  # Left Line ()
+  xpos <- seq(1.00 * min(systemElevation), max(systemElevation), length.out=48)
+  ypos <- rep(-60,length(xpos))
+  leftLine <- loess.smooth(xpos, jitter(ypos, factor=40.0))
+  points(leftLine$y, leftLine$x, type='l', lwd=1.5, col=adjustcolor('black',0.8), xpd=NA)
+  
+  if (FALSE) {
+    
+    xrange <- range(mtcars$mpg)
+    yrange <- range(mtcars$wt)
+    set.seed(123) # for reproducibility
+    p <- ggplot() + geom_point(aes(mpg, wt), data=mtcars) + xkcdaxis(xrange,yrange)
+    p
+    
+  }
+  
   ### ADD STUFF HERE
   ### ADD STUFF HERE
   ### ADD STUFF HERE
@@ -120,3 +143,27 @@ cumulative_coasting <- function(dataList, infoList, textList) {
   return(c(1.0,2.0,3.0,4.0))
 
 }
+
+
+###################################
+# Install xkcd fonts
+
+installXkcdFonts <- function() {
+  
+#  download.file("http://simonsoftware.se/other/xkcd.ttf", dest="xkcd.ttf", mode="wb")
+#  system("mkdir ~/.fonts")
+#  system("cp xkcd.ttf ~/.fonts")
+  font_import(paths='~/.fonts', pattern = "[X/x]kcd", prompt=FALSE)
+  fonts()
+  fonttable()
+  if(.Platform$OS.type != "unix") {
+    ## Register fonts for Windows bitmap output
+    loadfonts(device="win")
+  } else {
+    loadfonts()
+  }
+  
+}
+
+
+
