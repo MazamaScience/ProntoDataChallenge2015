@@ -22,11 +22,12 @@ createTextList <- function(dataList, infoList) {
 
   textList <- list()
 
-  textList$attribution <- paste("data:  ProntoCycleShare.com        graphic:  MazamaScience.com")
+  textList$attribution <- paste("data:  prontocycleshare.com        graphic:  mazamascience.com")
 
   textList$dayLabels_3 <- c('Mon','Tue','Wed','Thu','Fri','Sat','Sun')
   textList$dayLabels_2 <- c('Mo','Tu','Wd','Th','Fr','Sa','Su')
   textList$dayLabels_1 <- c('M','T','W','T','F','S','S')
+  # TODO:  monthLabels should start with January, not October
   textList$monthLabels_3 <- c('Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct')
   textList$monthLabels_1 <- c('O','N','D','J','F','M','A','M','J','J','A','S','O')
   
@@ -37,7 +38,7 @@ createTextList <- function(dataList, infoList) {
   textList$rides <- "rides"
   textList$trips <- "trips"
   
-  textList$annual <- 'Annual'
+  textList$annual <- 'Member'
   textList$shortTerm <- 'Short-Term'
   
   # ----- Subset info ---------------------------------------------------------
@@ -81,6 +82,10 @@ createTextList <- function(dataList, infoList) {
       textList$subset <- paste0(textList$subset,'weekday -- ')
     } else if (infoList$dayType == 'weekend') {
       textList$subset <- paste0(textList$subset,'weekend -- ')
+    } else if (infoList$dayType == 'Oct_Mar') {
+      textList$subset <- paste0(textList$subset,'Oct-Mar -- ')
+    } else if (infoList$dayType == 'Apr_Sep') {
+      textList$subset <- paste0(textList$subset,'Apr-Sep -- ')
     } else if (infoList$dayType == 'rain__02') {
       textList$subset <- paste0(textList$subset,'<0.2 in rain -- ')
     } else if (infoList$dayType == 'rain_02') {
@@ -97,11 +102,15 @@ createTextList <- function(dataList, infoList) {
       textList$subset <- paste0(textList$subset,'>60 F -- ')
     } else if (infoList$dayType == 'temp_70') {
       textList$subset <- paste0(textList$subset,'>70 F -- ')
+    } else if (infoList$dayType == 'APA_conference') {
+      textList$subset <- paste0(textList$subset,'APA Conference: Apr 18-21 -- ')
     }
   }
   
   if (infoList$timeOfDay != 'all') {
-    if (infoList$timeOfDay == 'amCommute') {
+    if (infoList$timeOfDay == 'early') {
+      textList$subset <- paste0(textList$subset,'early -- ')
+    } else if (infoList$timeOfDay == 'amCommute') {
       textList$subset <- paste0(textList$subset,'am commute -- ')
     } else if (infoList$timeOfDay == 'midday') {
       textList$subset <- paste0(textList$subset,'mid day -- ')

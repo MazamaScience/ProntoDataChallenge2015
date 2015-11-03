@@ -1,5 +1,5 @@
 ###############################################################################
-# barplot_stationPlot.R
+# GENERIC_Plot.R
 #
 # Displays ...
 
@@ -8,28 +8,39 @@
 
 if (FALSE) {
 
+  
+  
+  
+  
+  source('./R/addTitleAndAttribution.R')  
   source('./R/createDataList.R')
   source('./R/createTextList_en.R')
   
-  infoList <- list(dataDir="data_local",
-                   plotType='stationBarplot',
+  infoList <- list(dataDir="./data_local",
+                   plotType='generic',
                    userType='all',
                    gender='all',
                    age='all',
                    dayType='all',
                    timeOfDay='all',
                    distance='all',
-                   stationId='all')
+                   stationId='all',
+                   layoutFraction_title=0.16,
+                   layoutFraction_attribution=0.08)
   
   dataList <- createDataList(infoList)
   
   textList <- createTextList(dataList,infoList)
 
-  barplot_stationPlot(dataList, infoList, textList)
+  cumulative_coasting(dataList, infoList, textList)
+  
+  
+  
+  
   
 }
 
-barplot_stationPlot <- function(dataList, infoList, textList) {
+cumulative_coasting <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
 
@@ -45,15 +56,20 @@ barplot_stationPlot <- function(dataList, infoList, textList) {
   
   # ----- Data Preparation ----------------------------------------------------
   
-  # Get dataframes from the dataList
+  # Get dataframe from the dataList
   trip <- dataList$trip
-  station <- dataList$station
-  
 
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
-  
+
+  # Convert days from 00:00-23:00 to 04:00-27:00 by setting all times back four hours
+  startTime <- trip$startTime - lubridate::dhours(3)
+
+  # Create a dataframe with just "minuteOfDay" and "elevationGain" columns
+  trip$minuteOfDay <- 60 * lubridate::hour(startTime) + lubridate::minute(startTime) + 1
+
+  trip %>% select(minuteOfDay,elevationDiff) %>% 
+    group_by(minuteOfDay) %>% 
+    summarise(elevationGain=sum(elevationDiff)) %>% 
+    arrange(minuteOfDay) -> elevationDay
   
   # ----- Layout --------------------------------------------------------------
   
@@ -80,10 +96,9 @@ barplot_stationPlot <- function(dataList, infoList, textList) {
   
   par(mar=c(5,4,4,2)+.1)
   
-  plot(-1:1,-1:1)
-
-  #dplyr
-  bop <- station %>% select(terminal,toCount,fromCount,totalCount) %>% arrange(desc(fromCount))
+  
+  plot(elevationDay$minuteOfDay, cumsum(elevationDay$elevationGain), xlim=c(1,60*24), type='s')
+  
 
   ### ADD STUFF HERE
   ### ADD STUFF HERE

@@ -37,10 +37,7 @@ if (FALSE) {
   textList <- createTextList(dataList,infoList)
   
   
-  
-  
-  
-  barplot_hourByUser(dataList, infoList, textList)
+  barplot_monthByUser(dataList, infoList, textList)
   
   
   
@@ -48,16 +45,18 @@ if (FALSE) {
   
 }
 
-barplot_hourByUser <- function(dataList, infoList, textList) {
+barplot_monthByUser <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
   
   # Overall
-  font_text <- 2
-  cex_text <- 4
+  font_label <- 2
+  cex_label <- 4
   cex_userLabel <- 4
-  col_text <- 'gray20'
+  col_label <- 'gray20'
   
+  # Bars
+  barExpansion <- 1.0
   
   # ----- Data Preparation ----------------------------------------------------
   
@@ -65,25 +64,18 @@ barplot_hourByUser <- function(dataList, infoList, textList) {
   trip <- dataList$trip
   
   # Create a table of # of rides
-  tbl <- table(trip$hourOfDay, trip$userType)
+  tbl <- table(trip$month, trip$userType)
   
   # Convert the table (it's 1-D) into a matrix so we can rearrange the rows
-  mat <- matrix(tbl,nrow=24,byrow=FALSE)
+  mat <- matrix(tbl,nrow=12,byrow=FALSE)
   maxValue <- max(mat, na.rm=TRUE)
   sumValue <- sum(mat, na.rm=TRUE)
   
-  # NOTE:  To get the day to start at 4am we shift by 5 because the first hour is 0.
-  # NOTE:  For hours on the vertical axis, reverse to get 4 am at the top.
-  #hourIndices <- rev(c(5:24,1:4)) # top to bottom 
-  hourIndices <- c(5:24,1:4)      # left to right
+  # TODO:  Create a ProntoMonth in the trip dataframe
   
-  hourSums <- rowSums(mat)
-  hourMax <- max(hourSums)
-  
-  #   # TODO:  get nice measure lines
-  #   measureLines <- seq(0,hourMax,5000)
-  
-  
+  monthSums <- rowSums(mat)
+  monthMax <- max(monthSums)
+    
   
   # ----- Layout --------------------------------------------------------------
   
@@ -108,53 +100,40 @@ barplot_hourByUser <- function(dataList, infoList, textList) {
   
   # ----- Plot ----------------------------------------------------------------
   
+  monthIndices <- 1:12 # Jan - Dec
+  
   # Annual Members on the top
   par(mar=c(0.5,1,1,1))
-  barplotMatrix <- barplot(mat[hourIndices,1],
-                           ylim=c(0,hourMax),                                                   
+  barplotMatrix <- barplot(mat[monthIndices,1]*barExpansion,
+                           ylim=c(0,monthMax),                                                   
                            axes=FALSE, xlab='', ylab='',
                            border='white', space=.1,
                            col=infoList$ProntoSlate)
 
-  text(par('usr')[2],hourMax/2, paste0(textList$annual), pos=2,
-       col=col_text, cex=cex_userLabel, font=font_text)
+  text(par('usr')[2],monthMax/2, paste0(textList$annual), pos=2,
+       col=col_label, cex=cex_userLabel, font=font_label)
 
   
   # Short-Term Members on the bottom
   par(mar=c(1,1,0.5,1))
-  barplotMatrix <- barplot(-mat[hourIndices,2],
-                           ylim=c(-1*hourMax,0),                           
+  barplotMatrix <- barplot(-mat[monthIndices,2]*barExpansion,
+                           ylim=c(-1*monthMax,0),                           
                            axes=FALSE, xlab='', ylab='',
                            border='white', space=.1,
                            col=infoList$ProntoGreen)
   
-  text(par('usr')[2],-hourMax/2, paste0(textList$shortTerm), pos=2,
-       col=col_text, cex=cex_userLabel, font=font_text)
+  text(par('usr')[2],-monthMax/2, paste0(textList$shortTerm), pos=2,
+       col=col_label, cex=cex_userLabel, font=font_label)
     
 
-  # ----- Add hour labels ---------------------------------------------------
+  # ----- Add month labels ----------------------------------------------------
 
-  if (infoList$timeOfDay == 'early') {
-    times <- c(4,6); xposIndices <- times-3; labels <- c('4 am','6 am')
-  } else if (infoList$timeOfDay == 'amCommute') {
-    times <- c(7,9); xposIndices <- times-3; labels <- c('7 am','9 am')
-  } else if (infoList$timeOfDay == 'midday') {
-    times <- c(10,15); xposIndices <- times-3; labels <- c('10 am','3 pm')
-  } else if (infoList$timeOfDay == 'pmCommute') {
-    times <- c(16,18); xposIndices <- times-3; labels <- c('4 pm','6 pm')
-  } else if (infoList$timeOfDay == 'evening') {
-    times <- c(19,22); xposIndices <- times-3; labels <- c('7 pm','10 pm')
-  } else if (infoList$timeOfDay == 'night') {
-    times <- c(23,3); xposIndices <- c(20,23); labels <- c('11 pm','3 am')
-  } else {
-    times <- c(8,17); xposIndices <- times-3; labels <- c('8 am','5 pm')
-  }
-  
+  xposIndices <- 1:12
   xpos <- barplotMatrix[xposIndices,1]
-  text(xpos,-hourMax*0.80, '|', pos=3,
-       col=col_text, cex=cex_text, font=font_text)
-  text(xpos-0.4,-hourMax*0.88, labels, pos=4,
-       col=col_text, cex=cex_text, font=font_text)
+  # TODO:  Use names from textList when they start with January
+  labels <- c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
+  text(xpos-0.4, -monthMax*0.88, labels, pos=4,
+       col=col_label, cex=cex_label, font=font_label)
   
   
   # Add title and attribution as the last two plots

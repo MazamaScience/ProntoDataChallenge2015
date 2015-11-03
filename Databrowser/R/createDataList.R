@@ -71,6 +71,10 @@ createDataList <- function(infoList) {
     trip <- subset(trip, trip$dayOfWeek %in% 2:6)    # lubridate weeks begin on Sunday
   } else if (infoList$dayType == 'weekend') {
     trip <- subset(trip, trip$dayOfWeek %in% c(1,7)) # lubridate weeks begin on Sunday
+  } else if (infoList$dayType == 'Oct_Mar') {
+    trip <- subset(trip, trip$month %in% c(10:12,1:3))
+  } else if (infoList$dayType == 'Apr_Sep') {
+    trip <- subset(trip, trip$month %in% c(4:9))
   } else if (infoList$dayType == 'rain__02') {
     trip <- subset(trip, trip$precipIn < 0.02)
   } else if (infoList$dayType == 'rain_02') {
@@ -87,6 +91,10 @@ createDataList <- function(infoList) {
     trip <- subset(trip, trip$meanTempF >= 70)
   } else if (infoList$dayType == 'temp_70') {
     trip <- subset(trip, trip$meanTempF >= 70)
+  } else if (infoList$dayType == 'APA_conference') {
+    APA_startTime <- lubridate::ymd("2015-04-18",tz="America/Los_Angeles")
+    APA_stopTime <- lubridate::ymd("2015-04-22",tz="America/Los_Angeles")
+    trip <- subset(trip, startTime > APA_startTime & startTime < APA_stopTime)
   }
   
   # timeOfDay
@@ -121,7 +129,7 @@ createDataList <- function(infoList) {
   
   # station
   if (infoList$stationId != 'all') {
-    trip <- subset(trip, trip$fromStationId == infoList$stationId | trip$toStationId == infoList$stationId)
+    trip <- subset(trip, trip$fromStationId == infoList$stationId)
   }
       
   endingRowCount <- nrow(trip)
@@ -144,9 +152,16 @@ createDataList <- function(infoList) {
   
   # Add these as columns to the 'station' dataframe, ensuring proper ordering
   station$fromCount <- as.numeric(fromTable[station$terminal])
+  station$fromCount[is.na(station$fromCount)] <- 0
   station$toCount <- as.numeric(toTable[station$terminal])
+  station$toCount[is.na(station$toCount)] <- 0
   station$totalCount <- station$fromCount + station$toCount
-  station$dailyUsage <- station$totalCount * station$onlineDays/max(station$onlineDays)
+  
+  scaling <- station$onlineDays/max(station$onlineDays)
+  
+  station$dailyFromUsage <- station$fromCount * scaling
+  station$dailyToUsage <- station$toCount * scaling
+  station$dailyTotalUsage <- station$totalCount * scaling
   
   
   # ----- Weather Data --------------------------------------------------------

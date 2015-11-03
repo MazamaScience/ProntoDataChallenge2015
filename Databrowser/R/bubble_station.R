@@ -1,5 +1,5 @@
 ###############################################################################
-# bubble_stationPlot.R
+# bubble_station.R
 #
 # Bubbles sized by overallstation usage.
 
@@ -8,49 +8,55 @@
 
 if (FALSE) {
  
+  
+  
+  
+  
+  source('./R/addTitleAndAttribution.R')  
   source('./R/createDataList.R')
   source('./R/createTextList_en.R')
   
-  source('./R/bubble_stationPlot.R')
+  source('./R/bubble_station.R')
   
   infoList <- list(dataDir="./data_local",
-                   plotType='bubble_station',
-                   userType='annual',
+                   plotType='bubble_stationFrom',
+                   userType='all',
+                   gender='female',
+                   age='41_60',
                    dayType='all',
                    timeOfDay='all',
-                   distance='all')
+                   distance='all',
+                   stationId='all',
+                   layoutFraction_title=0.16,
+                   layoutFraction_attribution=0.08)
   
   dataList <- createDataList(infoList)
   
   textList <- createTextList(dataList,infoList)
   
-  bubble_stationPlot(dataList, infoList, textList)
+  
+  
+  bubble_station(dataList, infoList, textList)
+  
+  
+  
+  
+  
   
 }
 
 
 ###############################################################################
 
-bubble_stationPlot <- function(dataList, infoList, textList) {
+bubble_station <- function(dataList, infoList, textList) {
  
   # ----- Style ---------------------------------------------------------------
   
   # Overall
-  col_text <- 'gray40'
-  font <- 2
-  cexFactor <- 0.5
+  stationMin <- 2
+  stationExpansion <- 18
   
-  # Bad stations
-  cex_station <- 1.0
-  col_station <- 'white'
-  font_station <- 2
-  
-  # Annotations
-  line_title <- 3
-  line_subtitle <- 1.5
-  line_attribution <- 1.5
-  
-  
+
   # ----- Data Preparation ----------------------------------------------------
     
   # Get dataframe from the dataList
@@ -61,27 +67,35 @@ bubble_stationPlot <- function(dataList, infoList, textList) {
   station <- subset(station,terminal != 'XXX-01')
 
   # Create breaks
-  usage <- station$dailyUsage
+  if ( infoList$plotType == 'bubble_stationFrom' ) {
+    usage <- station$dailyFromUsage
+  } else if ( infoList$plotType == 'bubble_stationTo' || infoList$stationId != 'all') {
+    usage <- station$dailyToUsage
+  } else {
+    usage <- station$dailyTotalUsage
+  }
+  
+  # Keep track of station ordering
+  stationOrdering <- order(usage)
+
+  # Calculate breaks
   breaks=quantile(usage,probs=seq(0,1,1/9))
 
-  # Give the first three breaks meaningful small numbers but only if they are currently bigger
-  if (breaks[2] > 0.5*365) {
-    breaks[1:2] <- c(0,0.5)*365
-  }
-  
   # Set colors and sizes based on usage categories
   usageIndex <- .bincode(usage,breaks=breaks,include.lowest=TRUE)
-  cols <- RColorBrewer::brewer.pal(max(usageIndex),'Spectral')[usageIndex]
+
+  # Departures = blue-end, Arrivals = blue-end
+  if ( infoList$plotType == 'bubble_stationFrom' ) {
+    cols <- RColorBrewer::brewer.pal(max(usageIndex),'Reds')[usageIndex]
+  } else if ( infoList$plotType == 'bubble_stationTo'  || infoList$stationId != 'all') {
+    cols <- RColorBrewer::brewer.pal(max(usageIndex),'Blues')[usageIndex]
+  } else {
+    cols <- RColorBrewer::brewer.pal(max(usageIndex),'Purples')[usageIndex]
+  }
+
   cols_border <- rep('black',length(cols))
   for (i in 1:length(cols)) cols[i] <- adjustcolor(cols[i],0.8)
-  cex <- 8 * usage/max(usage)
-  
-  # Make the smallest circles a background for the numbers
-  if (breaks[2] > 0.5*365) {
-    cols[usageIndex == 1 | usageIndex == 2] <- 'red'
-    cols_border[usageIndex == 1 | usageIndex == 2] <- 'red'
-    cex[usageIndex == 1 | usageIndex == 2] <- 2.2 * cex_station
-  }
+  cex <- stationMin + stationExpansion * usage/max(usage)
   
   # Load background image
   ima <- png::readPNG(paste0(infoList$dataDir,"/seattlebg.png"))
@@ -152,27 +166,41 @@ bubble_stationPlot <- function(dataList, infoList, textList) {
   box()
 
   # Draw circles
-  points(station$lon,station$lat, col=cols, pch=16, cex=cex)
-  points(station$lon,station$lat, col=cols_border, pch=1, cex=cex)
-
-  if (breaks[2] > 0.5*365) {
-    # Color stations with minimal usage
-    text(station$lon[daily_0], station$lat[daily_0], '0', col=col_station, cex=cex_station, font=font_station)
-    text(station$lon[daily_1], station$lat[daily_1], '1', col=col_station, cex=cex_station, font=font_station)
+  points(station$lon[stationOrdering], station$lat[stationOrdering], col=cols[stationOrdering], pch=16, cex=cex[stationOrdering])
+  points(station$lon[stationOrdering], station$lat[stationOrdering], col=cols_border[stationOrdering], pch=1, cex=cex[stationOrdering])
+  
+  # Add a locator circle if needed
+  if (infoList$stationId != 'all') {
+    lon <- station$lon[station$terminal == infoList$stationId]
+    lat <- station$lat[station$terminal == infoList$stationId]
+    points(lon,lat, col='white', pch=16, cex=6)
+    points(lon,lat, col='red', pch=16, cex=4)
+    points(lon,lat, col='white', pch=16, cex=2)
   }
   
   # Modify the passed in title
+  if (infoList$stationId != 'all') {
+    if (infoList$plotType == 'bubble_stationTo') {
+      textList$title <- paste0('Arrivals from ',infoList$stationId)
+    } else if (infoList$plotType == 'bubble_stationFrom') {
+      textList$title <- paste0('Departures from ',infoList$stationId)
+    } else if (infoList$plotType == 'bubble_stationTotal') {
+      textList$title <- paste0('Destinations from ',infoList$stationId)
+    }
+  }
+
+  # Modify the passed in subtitle
   maxValue <- max(usage,na.rm=TRUE)
   if (maxValue > 900) {
-    textList$subset <- paste0(textList$subset,'  (max=',round(maxValue/365,1),'/day)')
+    textList$subset <- paste0(textList$subset,'  (max ',round(maxValue/365,1),'/day)')
   } else {
-    textList$subset <- paste0(textList$subset,'  (max=',maxValue,'/year)')
+    textList$subset <- paste0(textList$subset,'  (max ',maxValue,'/year)')
   }
 
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)
 
-
+  
   # ---- Cleanup and Return ---------------------------------------------------
   
   # Restore Global Graphical Parameters

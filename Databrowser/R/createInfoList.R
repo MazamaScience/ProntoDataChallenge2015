@@ -15,7 +15,7 @@ createInfoList <- function(jsonArgs='{}') {
   # ----- Minumum set of infoList parameters from the UI -----------------------
   
   # Initialize the infoList from the jsonArgs
-  infoList <- as.list(fromJSON(jsonArgs))
+  infoList <- as.list(jsonlite::fromJSON(jsonArgs))
   
   # Guarantee that the following variables always have a default
   infoList$language <- ifelse(is.null(infoList$language),'en',infoList$language)
@@ -32,7 +32,7 @@ createInfoList <- function(jsonArgs='{}') {
   # ----- Plot styling to be used in all plots ---------------------------------
   
   # Title and attribution
-  infoList$layoutFraction_title <- 0.16
+  infoList$layoutFraction_title <- 0.18
   infoList$layoutFraction_attribution <- 0.08
   infoList$font_title <- 2
   infoList$col_title <- 'black'
@@ -47,6 +47,7 @@ createInfoList <- function(jsonArgs='{}') {
   infoList$ProntoGreen <- '#8EDD65'
   infoList$ProntoSlate <- '#003B49'
   infoList$ProntoTurquoise <- '#68D2DF'
+
   
   # ----- Databrowser specific parameters from the UI --------------------------
 

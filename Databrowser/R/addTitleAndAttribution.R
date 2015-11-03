@@ -22,7 +22,7 @@ addTitleAndAttribution <- function(dataList, infoList, textList) {
        font=infoList$font_title,
        col=infoList$col_title,
        cex=infoList$cex_title, xpd=NA)
-  text(0.5, 0.3, textList$subset,
+  text(0.5, 0.2, textList$subset,
        font=infoList$font_subtitle,
        col=infoList$col_subtitle,
        cex=infoList$cex_subtitle, xpd=NA)

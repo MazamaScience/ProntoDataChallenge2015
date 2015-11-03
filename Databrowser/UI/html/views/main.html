@@ -3,8 +3,50 @@
 
   <div class="container" ng-controller="Main as main" ng-cloak>
 
+    <!-- View -->
  
-    <!-- plot controls -->
+    <div class="row margin-md">
+
+        <div class="col-md-2 margin-sm">
+          <p>Choose a View:</p>
+        </div>
+
+        <div class="col-md-4 margin-sm">
+          <select-menu model="main.request.plotTypes" options="main.forms.plotGroups"></select-menu>
+        </div>
+
+        <div class="col-md-2 margin-sm">
+          <button class="btn btn-primary btn-block" ng-click="main.updatePlot()">Update Plot</button>  
+        </div>
+
+    </div>
+
+   <!-- Subset by Trip -->
+    <div class="row margin-md">
+
+        <div class="col-md-2 margin-sm">
+          <p>Subset by Trip:</p>
+        </div>
+
+        <div class="col-md-4 margin-sm">
+          <select-menu model="main.request.stationId" options="main.forms.stationId"></select-menu>
+        </div>
+
+        <div class="col-md-2 margin-sm">
+          <select-menu model="main.request.dayType" options="main.forms.dayType"></select-menu>
+        </div>
+
+        <div class="col-md-2 margin-sm">
+          <select-menu model="main.request.timeOfDay" options="main.forms.timeOfDay"></select-menu>
+        </div>
+
+        <div class="col-md-2 margin-sm">
+          <select-menu model="main.request.distance" options="main.forms.distance"></select-menu>
+        </div>
+
+    </div>
+
+   <!-- Subset by User -->
     <div class="row margin-md">
 
         <div class="col-md-2 margin-sm">
@@ -25,47 +67,9 @@
 
     </div>
 
-    <div class="row margin-md">
-
-        <div class="col-md-2 margin-sm">
-          <p>Subset by Trip:</p>
-        </div>
-
-        <div class="col-md-2 margin-sm">
-          <select-menu model="main.request.dayType" options="main.forms.dayType"></select-menu>
-        </div>
-
-        <div class="col-md-2 margin-sm">
-          <select-menu model="main.request.timeOfDay" options="main.forms.timeOfDay"></select-menu>
-        </div>
-
-        <div class="col-md-2 margin-sm">
-          <select-menu model="main.request.distance" options="main.forms.distance"></select-menu>
-        </div>
-
-        <div class="col-md-2 margin-sm">
-          <select-menu model="main.request.stationId" options="main.forms.stationId"></select-menu>
-        </div>
-
-    </div>
-
-    <div class="row margin-md">
-
-        <div class="col-md-2 margin-sm">
-          <label>Plot Type</label>
-          <select-menu model="main.request.plotTypes" options="main.forms.plotGroups"></select-menu>
-        </div>
-
-        <!-- <div class="col-md-2 col-md-offset-8"> -->
-        <div class="col-md-2 margin-sm">
-          <button class="btn btn-primary btn-block" ng-click="main.updatePlot()">Update Plot</button>  
-        </div>
-
-    </div>
-
     <!-- Plot Table -->
 
-    <div class="row margin-md">
+    <div class="row margin-md plot-table">
 
       <div class="col-md-12">
 

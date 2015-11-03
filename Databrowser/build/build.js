@@ -113,21 +113,29 @@
     function plotTableClass() {
       switch(vm.returnData.plotTypes.length) {
 
+        // Two columns
         case 1:
         case 2:
           return "col-md-6";
           break;
+        // Three columns
         case 3:
         case 5:
         case 6:
+        case 9:
           return "col-md-4";
           break;
+        // Four columns
         case 4:
         case 7:
         case 8:
+        case 10:
+        case 11:
+        case 12:
           return "col-md-3";
           break;
 
+        // Two columns
         default:
           return "col-md-6";
 
@@ -250,7 +258,8 @@ angular.module('App')
       language: "en",
       plotWidth: 1024,
       productType: "systemTable", 
-      plotTypes: "pie_user",
+      plotGroups: "pie_user,barplot_hourByUser,barplot_monthByUser",
+      plotTypes: "pie_user,barplot_hourByUser,barplot_monthByUser",
       userType: "all",
       age: "all",
       gender: "all",
@@ -265,20 +274,31 @@ angular.module('App')
     var forms = {
 
       plotGroups: [{
-        text: "Members vs. Visitors",
-        value: "pie_user"
+        text: "System Overview",
+        value: "pie_user,barplot_hourByUser,barplot_monthByUser"
+      }, {
+        text: "Departure/Arrival Maps",
+        value: "bubble_stationFrom,bubble_stationTo"
+      }, {
+        text: "Station Usage",
+        value: "bubble_stationTotal,barplot_station"
+      }, {
+        text: "Calendar",
+        value: "heatmap_weekByHour,calendar_weather"
       }, {
         text: "Time of Day",
         value: "heatmap_weekByHour,pie_daylight"
       }, {
-        text: "Calendar Views",
-        value: "heatmap_weekByHour,calendar_weather"
+        text: "Single Station Focus",
+        value: "bubble_stationTotal,heatmap_weekByHour,barplot_station,barplot_hourByUser"
       }, {
-        text: "Station Analysis",
-        value: "bubble_station"
+        text: "Chart Junkie",
+        value: "pie_user,barplot_hourByUser,barplot_monthByUser,pie_daylight," +
+               "bubble_stationFrom,bubble_stationTo,bubble_stationTotal,barplot_station," +
+               "heatmap_weekByHour,calendar_weather" 
       }, {
-        text: "Everything",
-        value: "pie_user,barplot_weekByDay,heatmap_weekByHour,pie_daylight,calendar_weather,bubble_station"
+        text: "... experimental ...",
+        value: "pie_user"
       }],
 
       userType: [{
@@ -335,6 +355,12 @@ angular.module('App')
       }, {
         text: "Weekend",
         value: "weekend"
+      }, {
+        text: "October - March",
+        value: "Oct_Mar"
+      }, {
+        text: "April - September",
+        value: "Apr_Sep"
 /*
       }, {
         text: "< .02 in Rain",
@@ -342,18 +368,22 @@ angular.module('App')
       }, {
         text: "> 0.2 in Rain",
         value: "rain_02"
+*/
       }, {
         text: "> 0.5 in Rain",
         value: "rain_05"
+/*
       }, {
         text: "> 1.0 in Rain",
         value: "rain_10"
+*/
       }, {
         text: "< 50 F",
         value: "temp__50"
       }, {
         text: "> 50 F",
         value: "temp_50"
+/*
       }, {
         text: "> 60 F",
         value: "temp_60"
@@ -361,6 +391,9 @@ angular.module('App')
         text: "> 70 F",
         value: "temp_70"
 */
+      }, {
+        text: "APA Conference: Apr 18-21",
+        value: "APA_conference"
       }],
 
       timeOfDay: [{
@@ -410,11 +443,173 @@ angular.module('App')
       }],
 
       stationId: [{
-        text: "All Stations",
+        text: "from Any Station",
         value: "all"
       }, {
-        text: "Pier 69",
-        value: "WF-01"
+        text: "from 1st Ave & Marion St",
+        value: "CBD-05",
+      }, {
+        text: "from 2nd Ave & Blanchard St",
+        value: "BT-05",
+      }, {
+        text: "from 2nd Ave & Pine St",
+        value: "CBD-13",
+      }, {
+        text: "from 2nd Ave & Vine St",
+        value: "BT-03",
+      }, {
+        text: "from 2nd Ave & Spring St",
+        value: "CBD-06",
+      }, {
+        text: "from 3rd Ave & Broad St",
+        value: "BT-01",
+      }, {
+        text: "from 6th Ave & Blanchard St",
+        value: "BT-04",
+      }, {
+        text: "from 6th Ave S & S King St",
+        value: "ID-04",
+      }, {
+        text: "from 7th Ave & Union St",
+        value: "CBD-03",
+      }, {
+        text: "from 9th Ave N & Mercer St",
+        value: "DPD-01",
+      }, {
+        text: "from 12th Ave & E Denny Way",
+        value: "CH-06",
+      }, {
+        text: "from 12th Ave & E Mercer St",
+        value: "CH-15",
+      }, {
+        text: "from 12th Ave & NE Campus Pkwy",
+        value: "UD-04",
+      }, {
+        text: "from 12th Ave & E Yesler Way",
+        value: "CD-01",
+      }, {
+        text: "from 15th Ave NE & NE 40th St",
+        value: "UW-04",
+      }, {
+        text: "from 15th Ave E & E Thomas St",
+        value: "CH-05",
+      }, {
+        text: "from Bellevue Ave & E Pine St",
+        value: "CH-12",
+      }, {
+        text: "from Burke Museum",
+        value: "UW-02",
+      }, {
+        text: "from Burke-Gilman Trail",
+        value: "UD-01",
+      }, {
+        text: "from Cal Anderson Park",
+        value: "CH-08",
+      }, {
+        text: "from Children's Hospital",
+        value: "DPD-03",
+      }, {
+        text: "from City Hall",
+        value: "CBD-07",
+      }, {
+        text: "from Dexter Ave & Denny Way",
+        value: "SLU-18",
+      }, {
+        text: "from Dexter Ave N & Aloha St",
+        value: "SLU-02",
+      }, {
+        text: "from E Blaine St & Fairview Ave E",
+        value: "EL-03",
+      }, {
+        text: "from E Harrison St & Broadway Ave E",
+        value: "CH-02",
+      }, {
+        text: "from E Pine St & 16th Ave",
+        value: "CH-07",
+      }, {
+        text: "from Eastlake Ave E & E Allison St",
+        value: "EL-05",
+      }, {
+        text: "from Fred Hutchinson Cancer Research Center",
+        value: "EL-01",
+      }, {
+        text: "from Frye Art Museum",
+        value: "FH-01",
+      }, {
+        text: "from Harvard Ave & E Pine St",
+        value: "CH-09",
+      }, {
+        text: "from Key Arena",
+        value: "SLU-19",
+      }, {
+        text: "from King Street Station Plaza",
+        value: "PS-05",
+      }, {
+        text: "from Mercer St & 9th Ave N",
+        value: "SLU-21"
+      }, {
+        text: "from NE 42nd St & University Way NE",
+        value: "UD-02",
+      }, {
+        text: "from NE 47th St & 12th Ave NE",
+        value: "UD-07",
+      }, {
+        text: "from Occidental Park",
+        value: "PS-04",
+      }, {
+        text: "from PATH",
+        value: "SLU-07",
+      }, {
+        text: "from Pier 69",
+        value: "WF-01",
+      }, {
+        text: "from Pine St & 9th Ave",
+        value: "SLU-16",
+      }, {
+        text: "from Pronto shop",
+        value: "XXX-01",
+      }, {
+        text: "from REI",
+        value: "SLU-01",
+      }, {
+        text: "from Republican St & Westlake Ave N",
+        value: "SLU-04",
+      }, {
+        text: "from Seattle Aquarium",
+        value: "WF-04",
+      }, {
+        text: "from Seattle University",
+        value: "FH-04",
+      }, {
+        text: "from Lake Union Park",
+        value: "SLU-17",
+      }, {
+        text: "from Summit Ave & E Denny Way",
+        value: "CH-01",
+      }, {
+        text: "from Summit Ave E & E Republican St",
+        value: "CH-03",
+      }, {
+        text: "from Terry Ave & Stewart St",
+        value: "SLU-20",
+      }, {
+        text: "from Union St & 4th Ave",
+        value: "CBD-04",
+      }, {
+        text: "from UW Engineering Library",
+        value: "UW-06",
+      }, {
+        text: "from UW Magnuson Health Sciences Center Rotunda",
+        value: "UW-10",
+      }, {
+        text: "from UW McCarty Hall",
+        value: "UW-01",
+      }, {
+        text: "from UW Intramural Activities Building",
+        value: "UW-07",
+      }, {
+        text: "from Westlake Ave & 6th Ave",
+        value: "SLU-15"
       }]
 
     };

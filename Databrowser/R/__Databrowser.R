@@ -7,10 +7,6 @@
 # Modify library search path to look for packages installed with the databrowser
 .libPaths( c("__DATABROWSER_PATH__/R/library",.libPaths()) )
 
-# Required R packages
-library(stringr) # for sane string manipulations
-library(jsonlite) # for JSON support
-
 # Turn warnings into errors
 options(warn=2)
 
@@ -21,13 +17,15 @@ result <- try( {
   
   source("__DATABROWSER_PATH__/R/addTitleAndAttribution.R")
 
-  source("__DATABROWSER_PATH__/R/barplot_weekByDayPlot.R")
-  source("__DATABROWSER_PATH__/R/bubble_stationPlot.R")
-  source("__DATABROWSER_PATH__/R/calendar_weatherPlot.R")
-  source("__DATABROWSER_PATH__/R/heatmap_weekByDayPlot.R")
-  source("__DATABROWSER_PATH__/R/heatmap_weekByHourPlot.R")
-  source("__DATABROWSER_PATH__/R/pie_userPlot.R")
-  source("__DATABROWSER_PATH__/R/pie_daylightPlot.R")
+  source("__DATABROWSER_PATH__/R/barplot_hourByUser.R")
+  source("__DATABROWSER_PATH__/R/barplot_monthByUser.R")
+  source("__DATABROWSER_PATH__/R/barplot_station.R")
+  source("__DATABROWSER_PATH__/R/barplot_weekByDay.R")
+  source("__DATABROWSER_PATH__/R/bubble_station.R")
+  source("__DATABROWSER_PATH__/R/calendar_weather.R")
+  source("__DATABROWSER_PATH__/R/heatmap_weekByHour.R")
+  source("__DATABROWSER_PATH__/R/pie_user.R")
+  source("__DATABROWSER_PATH__/R/pie_daylight.R")
 }, silent=TRUE)
 
 if ( class(result)[1] == "try-error" ) {
@@ -81,28 +79,6 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
   textList = createTextList(dataList, infoList)
   
   
-  # ----- Create the png file --------------------------------------------------
-    
-#   absPlotPNG <- paste(infoList$outputDir,infoList$outputFileBase,'.png',sep="")
-#   
-#   if (infoList$plotDevice == "cairo") {
-#       
-#     library(Cairo) # CairoPNG is part of the Cairo package
-#     CairoPNG(filename=absPlotPNG,
-#              width=infoList$plotWidth, height=infoList$plotHeight,
-#              units='px', bg='white')
-#     print(paste("Working on", absPlotPNG))
-#       
-#   } else if (infoList$plotDevice == "png") {
-#       
-#     png(filename=absPlotPNG,
-#         width=infoList$plotWidth, height=infoList$plotHeight,
-#         units='px', bg='white')
-#     print(paste("Working on",absPlotPNG))
-#       
-#   }
-#   
-  
   # ----- Subset the data -----------------------------------------------------
   
   
@@ -128,42 +104,60 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
       if (plotType == 'barplot_weekByDay') {
         
         textList$title <- 'Growth by Day of Week'
-        returnValues <- barplot_weekByDayPlot(dataList,infoList,textList)
+        returnValues <- barplot_weekByDay(dataList,infoList,textList)
         
+      } else if (plotType == "barplot_hourByUser") { 
+        
+        textList$title <- 'Usage by Hour of Day'
+        returnValues <- barplot_hourByUser(dataList,infoList,textList)
+
+      } else if (plotType == "barplot_monthByUser") { 
+        
+        textList$title <- 'Usage by Month'
+        returnValues <- barplot_monthByUser(dataList,infoList,textList)
+
+      } else if (plotType == "barplot_station") { 
+        
+        textList$title <- 'Total Station Usage'
+        returnValues <- barplot_station(dataList,infoList,textList)
+
       } else if (plotType == "calendar_weather") { 
         
         textList$title <- 'Daily Usage and Weather'
-        returnValues <- calendar_weatherPlot(dataList,infoList,textList)
+        returnValues <- calendar_weather(dataList,infoList,textList)
         
-      } else if (plotType == "heatmap_weekByDay") { 
-        
-        textList$title <- 'Weekly Usage by Day'
-        returnValues <- heatmap_weekByDayPlot(dataList,infoList,textList)
-    
       } else if (plotType == "heatmap_weekByHour") { 
         
-        textList$title <- 'Weekly Usage by Hour'
-        returnValues <- heatmap_weekByHourPlot(dataList,infoList,textList)
+        textList$title <- 'Weekly Usage by Hour of Day'
+        returnValues <- heatmap_weekByHour(dataList,infoList,textList)
 
       } else if (plotType == "pie_user") { 
         
-        textList$title <- 'Users'
-        returnValues <- pie_userPlot(dataList,infoList,textList)
+        textList$title <- 'Annual Usage'
+        returnValues <- pie_user(dataList,infoList,textList)
         
       } else if (plotType == "pie_daylight") { 
         
         textList$title <- 'Daylight Preference'
-        returnValues <- pie_daylightPlot(dataList,infoList,textList)
+        returnValues <- pie_daylight(dataList,infoList,textList)
         
-      } else if (plotType == "bubble_station") { 
+      } else if (plotType == "bubble_stationFrom") {
         
-        textList$title <- 'Station Usage'
-        returnValues <- bubble_stationPlot(dataList,infoList,textList)
+        infoList$plotType <- 'bubble_stationFrom'
+        textList$title <- 'Station Departures'
+        returnValues <- bubble_station(dataList,infoList,textList)
+
+      } else if (plotType == "bubble_stationTo") {
         
-      } else if (plotType == "Map") { 
+        infoList$plotType <- 'bubble_stationTo'
+        textList$title <- 'Station Arrivals'
+        returnValues <- bubble_station(dataList,infoList,textList)
+
+      } else if (plotType == "bubble_stationTotal") {
         
-        textList$title <- 'XXX'
-        returnValues <- mapPlot(dataList,infoList,textList)
+        infoList$plotType <- 'bubble_stationTotal'
+        textList$title <- 'Total Station Usage'
+        returnValues <- bubble_station(dataList,infoList,textList)
         
       } else {
         
@@ -202,7 +196,7 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
                        totalSecs=as.numeric(totalSecs),
                        returnValues=returnValues)
   
-  returnJSON <- toJSON(returnValues)
+  returnJSON <- jsonlite::toJSON(returnValues)
   
   return(returnJSON)
   
