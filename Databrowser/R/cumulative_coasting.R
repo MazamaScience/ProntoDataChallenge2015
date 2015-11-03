@@ -58,6 +58,7 @@ cumulative_coasting <- function(dataList, infoList, textList) {
   
   # Get dataframe from the dataList
   trip <- dataList$trip
+  station <- dataList$station
 
 
   # Convert days from 00:00-23:00 to 04:00-27:00 by setting all times back four hours
@@ -117,19 +118,24 @@ cumulative_coasting <- function(dataList, infoList, textList) {
   leftLine <- loess.smooth(xpos, jitter(ypos, factor=40.0))
   points(leftLine$y, leftLine$x, type='l', lwd=1.5, col=adjustcolor('black',0.8), xpd=NA)
   
-  if (FALSE) {
-    
-    xrange <- range(mtcars$mpg)
-    yrange <- range(mtcars$wt)
-    set.seed(123) # for reproducibility
-    p <- ggplot() + geom_point(aes(mpg, wt), data=mtcars) + xkcdaxis(xrange,yrange)
-    p
-    
+  usr <- par('usr')
+  
+  # X axis noting that day starts at 04:00
+  xpos <- (c(6,9,12,15,18,21,25) - 4) * 60
+  y0 <- usr[3] - 0.05 * (usr[4] - usr[3])
+  ypos <- jitter(rep(y0,length(xpos)), factor=0.2)
+  srt <- sample(-10:10,length(xpos),replace=TRUE)
+  labels <- rep('|',length(xpos))
+  for (i in 1:length(xpos)) {
+    text(xpos[i], ypos[i], labels=labels[i], pos=3, srt=srt[i], xpd=NA)
+  }
+  srt <- sample(-2:2,length(xpos),replace=TRUE)
+  labels <- c('6 am','9 am','noon','3 pm','6 pm','9 pm','midnight')
+  for (i in 1:length(xpos)) {
+    text(xpos[i], ypos[i], labels=labels[i], pos=1, srt=srt[i], xpd=NA)
   }
   
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
+
   
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)
@@ -144,6 +150,16 @@ cumulative_coasting <- function(dataList, infoList, textList) {
 
 }
 
+
+###################################
+#
+# IGNORE EVERYTHING BELOW HERE
+#
+###################################
+
+###################################
+###################################
+###################################
 
 ###################################
 # Install xkcd fonts
@@ -165,5 +181,17 @@ installXkcdFonts <- function() {
   
 }
 
+
+
+
+if (FALSE) {
+  
+  xrange <- range(mtcars$mpg)
+  yrange <- range(mtcars$wt)
+  set.seed(123) # for reproducibility
+  p <- ggplot() + geom_point(aes(mpg, wt), data=mtcars) + xkcdaxis(xrange,yrange)
+  p
+  
+}
 
 
