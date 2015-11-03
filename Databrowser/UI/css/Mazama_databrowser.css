@@ -32,6 +32,7 @@
 
 .btn {
     padding: 2px 8px;
+    font-size: 1.2em;
 }
 
 /* Tighten up the paragraphs on the about page*/
@@ -73,6 +74,11 @@
 }
 
 /* Controls */
+
+/* make row-labels bold */
+.row-label {
+  font-weight: bold;
+}
 
 /* adds standard blue to buttons */
 .btn-primary {

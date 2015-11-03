@@ -35,7 +35,7 @@ if (FALSE) {
   cumulative_coasting(dataList, infoList, textList)
   
   
-  
+
   
   
 }
@@ -71,6 +71,10 @@ cumulative_coasting <- function(dataList, infoList, textList) {
     summarise(elevationGain=sum(elevationDiff)) %>% 
     arrange(minuteOfDay) -> elevationDay
   
+  initialElevation <- sum( (station$elevation * station$dockCount)/2 )
+  systemElevation <- initialElevation + cumsum(elevationDay$elevationGain)
+  systemElevation <- systemElevation / 500 # 500 bikes in system
+  
   # ----- Layout --------------------------------------------------------------
   
   # NOTE:  The layoutFraction_ components are the same in every plot and guarantee
@@ -97,7 +101,7 @@ cumulative_coasting <- function(dataList, infoList, textList) {
   par(mar=c(5,4,4,2)+.1)
   
   
-  plot(elevationDay$minuteOfDay, cumsum(elevationDay$elevationGain), xlim=c(1,60*24), type='s')
+  plot(elevationDay$minuteOfDay, systemElevation, xlim=c(1,60*24), type='s')
   
 
   ### ADD STUFF HERE
