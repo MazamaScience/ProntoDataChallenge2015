@@ -172,8 +172,11 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         
       } else if (plotType == "clustering_nonUW") {
         
-        textList$title <- 'Non-UW Station Clustering'
-        returnValues <- clustering_nonUW(dataList,infoList,textList)
+        # NOTE:  must have at least two from stations to perform clustering
+        if (infoList$stationId == 'all') {
+          textList$title <- 'Non-UW Station Clustering'
+          returnValues <- clustering_nonUW(dataList,infoList,textList)
+        }
         
       } else {
         
