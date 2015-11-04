@@ -108,7 +108,7 @@ cumulative_coasting <- function(dataList, infoList, textList) {
   par(mar=c(10,10,4,10))
   
   xpos <- elevationDay$minuteOfDay
-  plot(xpos, systemElevation, xlim=c(1,60*24), type='l',
+  plot(xpos, systemElevation, xlim=c(1,60*24), ylim=c(-55,155), type='l',
        axes=FALSE, xlab='', ylab='',
        lwd=3)
   
