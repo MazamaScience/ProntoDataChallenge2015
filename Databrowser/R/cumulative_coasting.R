@@ -106,37 +106,57 @@ cumulative_coasting <- function(dataList, infoList, textList) {
        axes=FALSE, xlab='', ylab='',
        lwd=3)
 
-  # Bottom Line
-  xpos <- seq(1,60*27,30)
-  ypos <- rep(1.05 * min(systemElevation), length(xpos))
-  bottomLine <- loess.smooth(xpos, jitter(ypos, factor=2.0))
-  points(bottomLine, type='l', lwd=1.5, col=adjustcolor('black',0.8), xpd=NA)
-                       
-  # Left Line ()
-  xpos <- seq(1.00 * min(systemElevation), max(systemElevation), length.out=48)
-  ypos <- rep(-60,length(xpos))
-  leftLine <- loess.smooth(xpos, jitter(ypos, factor=40.0))
-  points(leftLine$y, leftLine$x, type='l', lwd=1.5, col=adjustcolor('black',0.8), xpd=NA)
+  axis(1, las=1)  
+  axis(2, las=2, tck=1, lty="dotted", col='gray80')
   
-  usr <- par('usr')
+  differences <- diff(systemElevation)
+  minIndex <- which(differences==min(differences))
+  text(minIndex, systemElevation[minIndex], labels='Largest decrease in\nbicycle-meters/minute: -17', col='blue', pos=4)
   
-  # X axis noting that day starts at 04:00
-  xpos <- (c(6,9,12,15,18,21,25) - 4) * 60
-  y0 <- usr[3] - 0.05 * (usr[4] - usr[3])
-  ypos <- jitter(rep(y0,length(xpos)), factor=0.2)
-  srt <- sample(-10:10,length(xpos),replace=TRUE)
-  labels <- rep('|',length(xpos))
-  for (i in 1:length(xpos)) {
-    text(xpos[i], ypos[i], labels=labels[i], pos=3, srt=srt[i], xpd=NA)
-  }
-  srt <- sample(-2:2,length(xpos),replace=TRUE)
-  labels <- c('6 am','9 am','noon','3 pm','6 pm','9 pm','midnight')
-  for (i in 1:length(xpos)) {
-    text(xpos[i], ypos[i], labels=labels[i], pos=1, srt=srt[i], xpd=NA)
-  }
+  ystart <- systemElevation[1]
+  text(0, ystart, labels=paste0('start = ', round(ystart)), pos=3)
   
+  yend <- systemElevation[length(systemElevation)]
+  text(1200, yend, labels= paste0('End = ', round(yend)), pos=3)
+#   # Bottom Line
+#   xpos <- seq(1,60*27,30)
+#   ypos <- rep(1.05 * min(systemElevation), length(xpos))
+#   bottomLine <- loess.smooth(xpos, jitter(ypos, factor=2.0))
+#   points(bottomLine, type='l', lwd=1.5, col=adjustcolor('black',0.8), xpd=NA)
+#                        
+#   # Left Line ()
+#   xpos <- seq(1.00 * min(systemElevation), max(systemElevation), length.out=48)
+#   ypos <- rep(-60,length(xpos))
+#   leftLine <- loess.smooth(xpos, jitter(ypos, factor=40.0))
+#   points(leftLine$y, leftLine$x, type='l', lwd=1.5, col=adjustcolor('black',0.8), xpd=NA)
+#   
+#   usr <- par('usr')
+#   
+#   # X axis noting that day starts at 04:00
+#   xpos <- (c(6,9,12,15,18,21,25) - 4) * 60
+#   y0 <- usr[3] - 0.05 * (usr[4] - usr[3])
+#   ypos <- jitter(rep(y0,length(xpos)), factor=0.2)
+#   srt <- sample(-10:10,length(xpos),replace=TRUE)
+#   labels <- rep('|',length(xpos))
+#   for (i in 1:length(xpos)) {
+#     text(xpos[i], ypos[i], labels=labels[i], pos=3, srt=srt[i], xpd=NA)
+#   }
+#   srt <- sample(-2:2,length(xpos),replace=TRUE)
+#   labels <- c('6 am','9 am','noon','3 pm','6 pm','9 pm','midnight')
+#   for (i in 1:length(xpos)) {
+#     text(xpos[i], ypos[i], labels=labels[i], pos=1, srt=srt[i], xpd=NA)
+#   }
+#   
+# 
+#   
+# Plot numeric slope values at each tick mark at top of graph
+#   axisIndices <- axis(1)
+#   derivative <- diff(systemElevation)
+#   points(diff(systemElevation*150)~elevationDay$minuteOfDay[-1], type='l', lwd=2, col='red')
 
-  
+
+
+
   # Add title and attribution as the last two plots
   addTitleAndAttribution(dataList,infoList,textList)
   
