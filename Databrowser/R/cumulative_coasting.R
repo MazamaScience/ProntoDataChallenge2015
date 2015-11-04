@@ -121,8 +121,8 @@ cumulative_coasting <- function(dataList, infoList, textList) {
   # Y axis
   axis(2, las=2, tck=1, lty="dotted", lwd=1.5, mgp=c(5,1,0),
        font=font_label, cex.axis=cex_axis, col='gray70')
-  mtext("ft above Puget Sound", 2, line=7,
-        font=font_label, cex=cex_axis, col=col_label)
+  mtext("ft above Puget Sound", 2, line=6,
+        font=font_label, cex=0.8*cex_axis, col=col_label)
   
   # Draw a "water" line
   water <- sin(0.008*pi*xpos)

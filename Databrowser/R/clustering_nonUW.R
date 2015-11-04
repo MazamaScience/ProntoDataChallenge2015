@@ -148,7 +148,7 @@ clustering_nonUW <- function(dataList, infoList, textList) {
           #RowSideColors=fromColors, # NOTE:  Total trips
           labRow=labRow, labCol=labCol)
   
-  title(main=textList$title, sub=textList$subset, cex.main=cex_title)
+  title(main=textList$title, cex.main=cex_title)
   
 #   # Add title and attribution as the last two plots
 #   addTitleAndAttribution(dataList,infoList,textList)

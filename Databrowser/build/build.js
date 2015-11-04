@@ -84,7 +84,7 @@
         }
         console.log(index);
         vm.popup.plotType = vm.returnData.plotTypes[index];
-        vm.popup.url = vm.popup.relBase + "_" + vm.popup.plotType;
+        vm.popup.url = vm.popup.relBase + "_" + vm.popup.plotType + ".png";
         $scope.$apply();
       }
     }
@@ -294,13 +294,13 @@ angular.module('App')
         text: "Single Station Focus",
         value: "bubble_stationTotal,heatmap_weekByHour,barplot_station,barplot_hourByUser"
       }, {
+        text: "Station Clustering (experimental)",
+        value: "clustering_nonUW"
+      }, {
         text: "Chart Junkie",
         value: "pie_user,barplot_hourByUser,barplot_monthByUser,pie_daylight," +
                "bubble_stationFrom,bubble_stationTo,bubble_stationTotal,cumulative_coasting," +
-               "barplot_station,heatmap_weekByHour,calendar_weather" 
-      }, {
-        text: "... experimental ...",
-        value: "clustering_nonUW"
+               "barplot_station,heatmap_weekByHour,calendar_weather,clustering_nonUW" 
       }],
 
       userType: [{

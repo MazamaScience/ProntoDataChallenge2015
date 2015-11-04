@@ -55,7 +55,7 @@
         }
         console.log(index);
         vm.popup.plotType = vm.returnData.plotTypes[index];
-        vm.popup.url = vm.popup.relBase + "_" + vm.popup.plotType;
+        vm.popup.url = vm.popup.relBase + "_" + vm.popup.plotType + ".png";
         $scope.$apply();
       }
     }

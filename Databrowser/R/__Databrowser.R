@@ -7,10 +7,6 @@
 # Modify library search path to look for packages installed with the databrowser
 .libPaths( c("__DATABROWSER_PATH__/R/library",.libPaths()) )
 
-# Load requied libraries
-library(dplyr)
-library(magrittr)
-
 # Turn warnings into errors
 options(warn=2)
 
@@ -134,6 +130,10 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
 
       } else if (plotType == "cumulative_coasting") { 
         
+        # Load requied libraries
+        library(dplyr)
+        library(magrittr)
+
         textList$title <- 'Average Elevation Loss'
         returnValues <- cumulative_coasting(dataList,infoList,textList)
         
