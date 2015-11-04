@@ -278,7 +278,7 @@ angular.module('App')
         value: "pie_user,barplot_hourByUser,barplot_monthByUser"
       }, {
         text: "Departure/Arrival Maps",
-        value: "bubble_stationFrom,bubble_stationTo"
+        value: "bubble_stationFrom,bubble_stationTo,cumulative_coasting"
       }, {
         text: "Station Usage",
         value: "bubble_stationTotal,barplot_station"
@@ -294,8 +294,8 @@ angular.module('App')
       }, {
         text: "Chart Junkie",
         value: "pie_user,barplot_hourByUser,barplot_monthByUser,pie_daylight," +
-               "bubble_stationFrom,bubble_stationTo,bubble_stationTotal,barplot_station," +
-               "heatmap_weekByHour,calendar_weather" 
+               "bubble_stationFrom,bubble_stationTo,bubble_stationTotal,cumulative_coasting," +
+               "barplot_station,heatmap_weekByHour,calendar_weather" 
       }, {
         text: "... experimental ...",
         value: "pie_user"

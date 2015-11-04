@@ -40,18 +40,17 @@ if (FALSE) {
   
 }
 
+
 cumulative_coasting <- function(dataList, infoList, textList) {
   
   # ----- Style ---------------------------------------------------------------
 
   # Overall
   font_label <- 1
-  cex_label <- 1
+  cex_label <- 5
   col_label <- 'gray20'
   
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
-  ### ADD STUFF HERE
+  cex_axis <- 3
   
   
   # ----- Data Preparation ----------------------------------------------------
@@ -60,6 +59,9 @@ cumulative_coasting <- function(dataList, infoList, textList) {
   trip <- dataList$trip
   station <- dataList$station
 
+  # Calculate number of days in this subset
+  JulianDay <- strftime(trip$startTime,"%Wj")
+  dayCount <- length(unique(JulianDay))
 
   # Convert days from 00:00-23:00 to 04:00-27:00 by setting all times back four hours
   startTime <- trip$startTime - lubridate::dhours(3)
@@ -73,8 +75,12 @@ cumulative_coasting <- function(dataList, infoList, textList) {
     arrange(minuteOfDay) -> elevationDay
   
   initialElevation <- sum( (station$elevation * station$dockCount)/2 )
-  systemElevation <- initialElevation + cumsum(elevationDay$elevationGain)
+  systemElevation <- initialElevation + cumsum(elevationDay$elevationGain) / dayCount
   systemElevation <- systemElevation / 500 # 500 bikes in system
+  
+  # Convert to feet
+  systemElevation <- systemElevation * 3.28084
+  
   
   # ----- Layout --------------------------------------------------------------
   
@@ -99,25 +105,67 @@ cumulative_coasting <- function(dataList, infoList, textList) {
 
   # ----- Plot ----------------------------------------------------------------
   
-  par(mar=c(5,8,4,4))
+  par(mar=c(10,10,4,10))
   
   xpos <- elevationDay$minuteOfDay
-  plot(elevationDay$minuteOfDay, systemElevation, xlim=c(1,60*24), type='l',
+  plot(xpos, systemElevation, xlim=c(1,60*24), type='l',
        axes=FALSE, xlab='', ylab='',
        lwd=3)
-
-  axis(1, las=1)  
-  axis(2, las=2, tck=1, lty="dotted", col='gray80')
   
-  differences <- diff(systemElevation)
-  minIndex <- which(differences==min(differences))
-  text(minIndex, systemElevation[minIndex], labels='Largest decrease in\nbicycle-meters/minute: -17', col='blue', pos=4)
+  # X axis
+  at <- (c(6,9,12,15,18,21,24) - 4) * 60
+  labels <- c('6 am','9 am','noon','3 pm','6 pm','9 pm','midnight')
+  axis(1, tck=1, lty="dotted", lwd=1.5, at=at, labels=labels, las=1, mgp=c(5,1,0),
+       font=font_label, cex.axis=cex_axis, col='gray70')  
+  
+  # Y axis
+  axis(2, las=2, tck=1, lty="dotted", lwd=1.5, mgp=c(5,1,0),
+       font=font_label, cex.axis=cex_axis, col='gray70')
+  mtext("ft above Puget Sound", 2, line=7,
+        font=font_label, cex=cex_axis, col=col_label)
+  
+  # Draw a "water" line
+  water <- sin(0.008*pi*xpos)
+  water <- -6 * abs(water) + 3
+  points(xpos, water, type='l', lwd=4, col='steelblue2')
+  
+  
+  # ----- Annotations ---------------------------------------------------------
+  
+  usr <- par('usr')
   
   ystart <- systemElevation[1]
-  text(0, ystart, labels=paste0('start = ', round(ystart)), pos=3)
+  xpos <- 1
+  ypos <- usr[3] + 1.02 * (usr[4] - usr[3])
+  text(xpos, ypos, labels=paste0('start = ', round(ystart),' ft'), pos=4, xpd=NA,
+       font=font_label, cex=cex_label, col=col_label)
   
   yend <- systemElevation[length(systemElevation)]
-  text(1200, yend, labels= paste0('End = ', round(yend)), pos=3)
+  xpos <- 60*24
+  ypos <- yend
+  text(xpos, ypos, labels= paste0(round(yend),' ft'), pos=4, xpd=NA,
+       font=font_label, cex=cex_label, col=col_label)
+ 
+  # TODO:  Need smoothing for derivative to be reliable
+  
+#   differences <- diff(systemElevation)
+#   maxSpeed <- abs(min(differences))
+#   minIndex <- which(differences==min(differences))
+#   xpos <- minIndex
+#   ypos <- systemElevation[minIndex]
+#   points(xpos, ypos, pch=8, lwd=2, col='red', cex=4)
+#   hour <- minIndex %/% 60 + 4
+#   minute <- minIndex %% 60
+#   label <- paste0(round(maxSpeed,2), ' ft/min at ',sprintf("%02d",hour),':',sprintf("%02d",minute))
+#   text(xpos+60, ypos, label=label, pos=4,
+#        font=font_label, cex=cex_label, col=col_label)
+  
+  
+  # Add title and attribution as the last two plots
+  addTitleAndAttribution(dataList,infoList,textList)
+  
+  
+  
 #   # Bottom Line
 #   xpos <- seq(1,60*27,30)
 #   ypos <- rep(1.05 * min(systemElevation), length(xpos))
@@ -155,10 +203,6 @@ cumulative_coasting <- function(dataList, infoList, textList) {
 #   points(diff(systemElevation*150)~elevationDay$minuteOfDay[-1], type='l', lwd=2, col='red')
 
 
-
-
-  # Add title and attribution as the last two plots
-  addTitleAndAttribution(dataList,infoList,textList)
   
   # ---- Cleanup and Return ---------------------------------------------------
  
