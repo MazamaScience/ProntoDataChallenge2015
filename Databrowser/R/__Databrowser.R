@@ -23,6 +23,7 @@ result <- try( {
   source("__DATABROWSER_PATH__/R/barplot_weekByDay.R")
   source("__DATABROWSER_PATH__/R/bubble_station.R")
   source("__DATABROWSER_PATH__/R/calendar_weather.R")
+  source("__DATABROWSER_PATH__/R/clustering_nonUW.R")
   source("__DATABROWSER_PATH__/R/heatmap_weekByHour.R")
   source("__DATABROWSER_PATH__/R/pie_user.R")
   source("__DATABROWSER_PATH__/R/pie_daylight.R")
@@ -158,6 +159,11 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         infoList$plotType <- 'bubble_stationTotal'
         textList$title <- 'Total Station Usage'
         returnValues <- bubble_station(dataList,infoList,textList)
+        
+      } else if (plotType == "clustering_nonUW") {
+        
+        textList$title <- 'Non-UW Station Clustering'
+        returnValues <- clustering_nonUW(dataList,infoList,textList)
         
       } else {
         

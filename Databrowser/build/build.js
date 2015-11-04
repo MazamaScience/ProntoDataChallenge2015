@@ -115,6 +115,8 @@
 
         // Two columns
         case 1:
+          return "col-md-12";
+          break;
         case 2:
           return "col-md-6";
           break;
@@ -298,7 +300,7 @@ angular.module('App')
                "heatmap_weekByHour,calendar_weather" 
       }, {
         text: "... experimental ...",
-        value: "pie_user"
+        value: "clustering_nonUW"
       }],
 
       userType: [{

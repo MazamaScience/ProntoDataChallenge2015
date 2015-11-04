@@ -55,7 +55,7 @@
                "heatmap_weekByHour,calendar_weather" 
       }, {
         text: "... experimental ...",
-        value: "pie_user"
+        value: "clustering_nonUW"
       }],
 
       userType: [{

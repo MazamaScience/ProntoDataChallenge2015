@@ -50,7 +50,7 @@ salmon <- adjustcolor('salmon',.5)
 # # Add elevation difference
 # rownames(station) <- station$terminal
 # # NOTE:  Access by rownames requires matrix notation
-# trip$elevationDiff <- station[trip$to_station_id,'elevation'] - station[trip$from_station_id,'elevation']
+# trip$elevationDiff <- station[trip$toStationId,'elevation'] - station[trip$fromStationId,'elevation']
 # 
 # # TODO:  Use lubridate functions to add weekend/weekday and other
 # # TODO:  Use maptools::sunriset() and and maptools::crepescule() to add daylight information
@@ -140,9 +140,9 @@ suppressWarnings( par(oldPar) )
 
 # All combinations of from-to stations
 morningCommute %>%
-  filter(from_station_id != 'Pronto shop') %>%
-  filter(to_station_id != 'Pronto shop') %>%
-  group_by(from_station_id,to_station_id) %>%
+  filter(fromStationId != 'Pronto shop') %>%
+  filter(toStationId != 'Pronto shop') %>%
+  group_by(fromStationId,toStationId) %>%
   summarize(count=n()) ->
   from_to_stations
 
@@ -163,20 +163,20 @@ trip %>% ###filter(weekend) %>%
   to_stations
 
 # All combinations of from-to stations
-trip %>% filter(from_station_id == to_station_id) %>%
-  group_by(from_station_id) %>%
+trip %>% filter(fromStationId == toStationId) %>%
+  group_by(fromStationId) %>%
   summarize(count=n()) %>%
   arrange(desc(count)) ->
   self_stations
 
 # All combinations of from-to stations
-trip %>% filter(from_station_id != to_station_id) %>%
-  group_by(from_station_id) %>%
+trip %>% filter(fromStationId != toStationId) %>%
+  group_by(fromStationId) %>%
   summarize(count=n()) %>%
   arrange(desc(count)) ->
   non_self_stations
 
-non_self <- dplyr::filter(trip, from_station_id != to_station_id)
+non_self <- dplyr::filter(trip, fromStationId != toStationId)
 hist(non_self$elevationDiff,breaks=seq(-150,150,2))
 plot(non_self$elevationDiff ~ non_self$hourOfDay, pch=15, col=adjustcolor('black',0.01))
 abline(h=0,lwd=4,col=adjustcolor('salmon',0.5))
@@ -186,8 +186,8 @@ abline(h=0,lwd=4,col=adjustcolor('salmon',0.5))
 
 # ---- Subset for d3 chord diagram --------------------------------------------
 
-trip$from_area_id <- stringr::str_replace(trip$from_station_id,'-.*$','')
-trip$to_area_id <- stringr::str_replace(trip$to_station_id,'-.*$','')
+trip$from_area_id <- stringr::str_replace(trip$fromStationId,'-.*$','')
+trip$to_area_id <- stringr::str_replace(trip$toStationId,'-.*$','')
 
 # All combinations of from-to stations
 trip %>% filter(from_area_id != to_area_id) %>%
@@ -213,7 +213,7 @@ readr::write_csv(from_to_df,'area_connections.csv')
 
 # All combinations of from-to stations
 trip %>% filter(weekend) %>%
-  group_by(from_station_id,to_station_id) %>%
+  group_by(fromStationId,toStationId) %>%
   summarize(count=n()) %>%
   arrange(desc(count)) ->
   from_to_stations
@@ -224,9 +224,9 @@ trip %>% filter(weekend) %>%
 #trip %>% filter(gender == 'Female') %>%
 #trip %>% filter(daysInOperation > 200) %>%
 #trip %>% filter(hourOfDay > 4) %>%
-trip %>% filter(gender == 'Male' & birthyear == 1963) %>%
+trip %>% ###filter(gender == 'Male' & birthyear == 1963) %>%
   #filter(usertype == 'Annual Member') %>%
-  group_by(from_station_id,to_station_id) %>%
+  group_by(fromStationId,toStationId) %>%
   summarize(count=n()) ->
   from_to_stations
 
@@ -234,9 +234,9 @@ trip %>% filter(gender == 'Male' & birthyear == 1963) %>%
 
 # Create a dataframe for a heatmap
 melted <- reshape2::melt(from_to_stations, measure.vars='count')
-cohort <- intersect(melted$to_station_id, melted$from_station_id)
-melted <- subset(melted, to_station_id %in% cohort & from_station_id %in% cohort)
-from_to_df <- reshape2::dcast(melted, from_station_id ~ to_station_id)
+cohort <- intersect(melted$toStationId, melted$fromStationId)
+melted <- subset(melted, toStationId %in% cohort & fromStationId %in% cohort)
+from_to_df <- reshape2::dcast(melted, fromStationId ~ toStationId)
 from_to_df[is.na(from_to_df)] <- 0
 from_to_matrix <- as.matrix(from_to_df[,-1])
 labRow <- from_to_df[,1]
@@ -256,10 +256,10 @@ toCodes <- .bincode(toCount,
                     include.lowest=TRUE)
 toColors <- rev(heat.colors(NUM_CATEGORIES))[toCodes]
 
-heatmap(as.matrix(from_to_matrix),col=rev(heat.colors(12)),
+heatmap(as.matrix(from_to_matrix),col=RColorBrewer::brewer.pal(5,'Purples'),
         margins=c(6,6),
-        #xlab='To Station', ylab='From Station',            # confusion here?
-        xlab='From Station', ylab='To Station', symm=TRUE, # confusion here?
+        xlab='To Station', ylab='From Station',            # confusion here?
+        #xlab='From Station', ylab='To Station', symm=TRUE, # confusion here?
         #Rowv=NA, Colv=NA, # to remove reordering for culstering
         #ColSideColors=toColors, # NOTE:  Total trips breaks are linear (heatmap exponential?)
         #RowSideColors=fromColors, # NOTE:  Total trips
