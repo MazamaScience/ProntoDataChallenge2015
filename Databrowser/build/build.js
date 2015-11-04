@@ -103,7 +103,7 @@
 
     // Plot click popup behavior
     function clicked(relBase, plotType){
-      var url = relBase + "_" + plotType;
+      var url = relBase + "_" + plotType + ".png";
       vm.popup.relBase = relBase;
       vm.popup.plotType = plotType;
       vm.popup.visible = true;
