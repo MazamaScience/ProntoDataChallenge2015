@@ -57,13 +57,18 @@
           <select-menu model="main.request.userType" options="main.forms.userType"></select-menu>
         </div>
 
-        <div class="col-md-2 margin-sm">
+        <div class="col-md-2 margin-sm" ng-show="main.request.userType == 'annual'">
           <select-menu model="main.request.age" options="main.forms.age"></select-menu>
         </div>
 
-        <div class="col-md-2 margin-sm">
+        <div class="col-md-2 margin-sm" ng-show="main.request.userType == 'annual'">
           <select-menu model="main.request.gender" options="main.forms.gender"></select-menu>
         </div>
+
+        <div class="col-md-4 margin-sm" ng-show="main.request.userType != 'annual'">
+          <p class="text-center">Age and gender only for annual users.</p>
+        </div>
+
 
     </div>
 
