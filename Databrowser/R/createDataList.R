@@ -12,6 +12,7 @@ createDataList <- function(infoList) {
   
   # Load data
   trip <- get(load(paste0(infoList$dataDir,'/Mazama_trip.RData')))
+  trip_full <- trip
   
   startingRowCount <- nrow(trip)
 
@@ -173,6 +174,7 @@ createDataList <- function(infoList) {
   
   # Create dataList
   dataList <- list(trip=trip,
+                   trip_full=trip_full,
                    station=station,
                    weather=weather)
   

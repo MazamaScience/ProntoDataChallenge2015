@@ -57,7 +57,10 @@ cumulative_coasting <- function(dataList, infoList, textList) {
   
   # Get dataframe from the dataList
   trip <- dataList$trip
+  trip_full <- dataList$trip_full
   station <- dataList$station
+  
+  tripFraction <- nrow(trip) / nrow(trip_full)
 
   # Calculate number of days in this subset
   JulianDay <- strftime(trip$startTime,"%Wj")
@@ -75,7 +78,7 @@ cumulative_coasting <- function(dataList, infoList, textList) {
     arrange(minuteOfDay) -> elevationDay
   
   initialElevation <- sum( (station$elevation * station$dockCount)/2 )
-  systemElevation <- initialElevation + cumsum(elevationDay$elevationGain) / dayCount
+  systemElevation <- initialElevation + cumsum(elevationDay$elevationGain) / dayCount / tripFraction
   systemElevation <- systemElevation / 500 # 500 bikes in system
   
   # Convert to feet
@@ -108,7 +111,7 @@ cumulative_coasting <- function(dataList, infoList, textList) {
   par(mar=c(10,10,4,10))
   
   xpos <- elevationDay$minuteOfDay
-  plot(xpos, systemElevation, xlim=c(1,60*24), ylim=c(-55,155), type='l',
+  plot(xpos, systemElevation, xlim=c(1,60*24), ylim=c(-105,155), type='l',
        axes=FALSE, xlab='', ylab='',
        lwd=3, xpd=NA)
   
