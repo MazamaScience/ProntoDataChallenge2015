@@ -21,6 +21,10 @@
       .state("about", {
         url: "/about",
         templateUrl: "views/about.html"
+      })
+      .state("dataStories", {
+        url: "/dataStories",
+        templateUrl: "views/dataStories.html"
       });
 
     $urlRouterProvider.otherwise("/");

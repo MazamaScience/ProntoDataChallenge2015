@@ -3,32 +3,247 @@
 
   <div class="container" ng-cloak>
 
-  	<div class="row margin-md">
+    <div class="row margin-md">
 
-  		<div class="col-md-8 col-md-offset-2 text-document">
+      <div class="col-md-8 col-md-offset-2 text-document">
 
-		    <h1> This is the About Page </h1>
+        <h1> Data Stories </h1>
 
-		    <h3> Subheader </h3>
+        <p>
+Finding stories in the Pronto data is now as easy as poking at a web page.
+Here, we tell a few of the stories we've found using graphics from the
+Pronto Databrowser.
+        </p>
 
-		    <p> You can put whatever you want in here. The paragraph font size is a bit larger so the content is more legible. The column occupies the center 2/3rds of the page so lines aren't too long.</p>
 
-		    <div class="row">
-			    <div class="col-sm-10 col-sm-offset-1">
-				    <img src="data_local/sample-image.png"/>
-				    <p class="caption">
-				    	This is an image caption.
-				    </p>
-				  </div>
-				</div>
+        <h3> Coasting Commuters </h3>
 
-		    <h3> Another Subheader </h3>
+        <p>
+Annual members made up 61% of total usage last year, and a crucial question is how, 
+where and why they are using Pronto bikes. To start answering these questions,
+let’s look at the Weekly Usage by Hour of Day graph. This graph 
+displays the number of bike rides at every hour of the day (y-axis) for
+every week of the year (x-axis). The more rides, the darker the shade of purple.
+        </p>
 
-		    <p> This is the second paragraph.</p>
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/annual_weeklyUsageByHourOfDay.png"/>
+          </div>
+        </div>
 
-		  </div>
+        <p>
+Highest use times for annual users are at precisely 8 am and 5 pm throughout the 
+year. As many hoped, annual users clearly use the cycle share system at 
+peak commuting hours.
+        </p>
 
-	  </div>
+        <p>
+Where are these commuters coming from and going to? Let’s look at the morning 
+commute first. Who are the hip cats who jump on a Pronto bike first thing in the 
+morning and where do they work?  In the following maps, dots represent stations 
+and are sized by the number of departures (red) or arrivals (blue) at each station. 
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/annual_amCommute_stationDepartures.png"/>
+          </div>
+        </div>
+
+        <p>
+Our hip cats live on Capitol Hill...
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/annual_amCommute_stationArrivals.png"/>
+          </div>
+        </div>
+
+        <p>
+...and work either downtown or South Lake Union. 
+A nice downhill ride!!
+        </p>
+
+        <p>
+Riding downhill is fun, but in a fit, young city like 
+Seattle, we would hope that at least some of these commuters also bike back up 
+the hill at the end of the day. So let’s take a look at station arrivals for the PM commute. 
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/annual_pmCommute_stationArrivals.png"/>
+          </div>
+        </div>
+
+        <p>
+Oh-oh. Only a few people seem to be riding bikes back up the hill after work.
+In fact, many of the stations with highest arrival count for the evening commute are even 
+closer to the water than those of the morning commute, continuing the Pronto 
+bicycles’ journey downhill.  Doesn’t anyone bike uphill?
+         </p>
+
+        <p>
+Let’s see what the trip data say about the elevation of the average Pronto bike over the course of a day.
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/annual_coasting.png"/>
+          </div>
+        </div>
+
+        <p>
+<b><i>Holy Crap!</i></b> Pronto bikes -- <i>on average</i> -- come screaming off of 
+Capitol Hill during the morning commute and continue
+downhill all the way to the bottom of Elliot Bay by the late eving.
+(Of course this doesn't actually happen. Through the wonders of "rebalancing",
+Pronto bikes are transported uphill without riders, ready to coast downhill again.
+But these riderless trips are not in the data.)
+        </p>
+
+        <p>
+While it’s fabulous that people are using Pronto bikes to commute, it’s a little 
+less fabulous that the system is dependent on shuttling bikes uphill to keep it going. 
+Still, as the old saying goes: <i>"A guy on a bike is worth two in a car!"</i>
+        </p>
+
+        <h3> Station Analyses </h3>
+
+        <p>
+The databrowser is also useful for examining specific stations and seeing 
+patterns of use that are similar and different between stations. 
+        </p>
+
+        <p>
+Let’s start by looking at an abbreviated bar graph of total station usage, 
+including annual and short-term users, to 
+see which stations have the highest usage and which stations have the lowest. 
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/station_barchart.png"/>
+          </div>
+        </div>
+
+        <p>
+Pier 69 is the winner in terms of total station usage, followed closely by several 
+others downtown and in South Lake Union. Taking Pier 69 as an example, let’s do 
+a closer analysis of how and by whom this particular station is used.
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/usage_Pier69.png"/>
+          </div>
+        </div>
+
+        <p>
+<i>(The chart above is for Pier 69 only. It could use better labeling!)</i>
+        </p>
+
+        <p>
+The vast majority of trips from the Pier 69 Station are made by short-term users,
+presumably tourists. In the density graph below, where a darker purple 
+indicates a higher number of trips, we can see that trips from Pier 69 are highly 
+correlated with season and spread throughout the middle of the day.
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/Pier69_weeklyUsageByHourOfDay.png"/>
+          </div>
+        </div>
+
+        <p>
+In the bar graph below, we can see that the primary destination from Pier 69 happens 
+to also be Pier 69.
+        </p>
+
+        <p>
+Why are so many short term users taking bikes from one station 
+and returning them to the same one? Probably because the waterfront is a lovely 
+bike ride, and Myrtle-Edwards Park extends north from the Pier 69 station, making 
+the natural return point for a casual bike ride Pier 69 yet again. The second most popular 
+destination is the Aquarium, also primarily a tourist attraction. 
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/Pier69_destinationBarchart.png"/>
+          </div>
+        </div>
+
+        <p>
+The third most popular destination, however, is King Street Station and this becomes 
+the most popular station when we subset for annual members and evening commute times. 
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/Pier69_annual_pmCommute_destinationBarchart.png"/>
+          </div>
+        </div>
+
+        <p>
+Why would King Street Station be such a popular destination? Probably as a part
+of the commute home:  downtown workers in a rush might walk down the hill and hop 
+on a Pronto bike to catch their train. (<i>Bikeshare and rail really do fit together well.
+When will we get Pronto stations at lightrail stations to address the "last mile" problem?</i>)
+        </p>
+
+        <p>
+For contrast, let’s examine a station on Capitol Hill: 12th Ave and East Denny 
+Way. The start station is not a popular end destination in this case and riders 
+are headed either downtown or to Cal Anderson Park.
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/CalAnderson_destinationBarchart.png"/>
+          </div>
+        </div>
+
+        <p>
+Also noteworthy: at this station the vast majority of users are annual pass holders.
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/usage_CalAnderson.png"/>
+          </div>
+        </div>
+
+        <p>
+This station also exhibits a different hourly use pattern. There are some very obvious 
+morning commuters from this Capitol Hill Station but there is no equivalent evening rush. 
+As we showed above, the ride up Capitol Hill is apparently too steep, even for Seattle's fit young people.
+        </p>
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-1">
+            <img src="data_local/CalAnderson_weeklyUsageByHourOfDay.png"/>
+          </div>
+        </div>
+
+        <h3> Data Analysis for Everyone </h3>
+
+        <p>
+Now it’s your turn! How are your favorite stations used? What other unique stories are
+out there? Are your suspicions about Pronto confirmed or denied?  Dig around
+until you find your answers.
+        </p>
+
+        <p>
+Good luck and Happy Hunting!
+        </p>
+
+      </div>
+
+    </div>
 
 
 

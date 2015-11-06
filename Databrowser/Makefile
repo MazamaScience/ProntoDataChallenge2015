@@ -93,6 +93,8 @@ install_data: FORCE
 	cp -r data_local $(DATABROWSER_PATH) 
 	# soft link installed 'data' directory
 	ln -fs $(DATA_DIR) $(DATABROWSER_PATH)/data
+	-chown $(OWNERSHIP) $(DATABROWSER_PATH)/data/*.png
+	-chmod 644 $(DATABROWSER_PATH)/data/*.png
 	# remove subversion directories
 	-find $(DATABROWSER_PATH) -depth -name .svn -exec rm -rf {} \;
 

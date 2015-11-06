@@ -21,13 +21,18 @@
       .state("about", {
         url: "/about",
         templateUrl: "views/about.html"
+      })
+      .state("dataStories", {
+        url: "/dataStories",
+        templateUrl: "views/dataStories.html"
       });
 
     $urlRouterProvider.otherwise("/");
 
   }
 
-})();// Main controller
+})();
+// Main controller
 // Exposes the model to the template
 // Contains plot options, map, and overlay options
 
