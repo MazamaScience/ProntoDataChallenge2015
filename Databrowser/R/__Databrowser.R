@@ -111,11 +111,13 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
       } else if (plotType == "barplot_hourByUser") { 
         
         textList$title <- 'Usage by Hour of Day'
+        if (infoList$stationId != 'all') textList$title <- paste0('Usage by Hour for ',infoList$stationId)
         returnValues <- barplot_hourByUser(dataList,infoList,textList)
 
       } else if (plotType == "barplot_monthByUser") { 
         
         textList$title <- 'Usage by Month'
+        if (infoList$stationId != 'all') textList$title <- paste0('Usage by Month for ',infoList$stationId)
         returnValues <- barplot_monthByUser(dataList,infoList,textList)
 
       } else if (plotType == "barplot_station") { 
@@ -126,6 +128,7 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
       } else if (plotType == "calendar_weather") { 
         
         textList$title <- 'Daily Usage and Weather'
+        if (infoList$stationId != 'all') textList$title <- paste0('Daily Usage for ',infoList$stationId)
         returnValues <- calendar_weather(dataList,infoList,textList)
 
       } else if (plotType == "cumulative_coasting") { 
@@ -135,21 +138,25 @@ __DATABROWSER__ <- function(jsonArgs='{}') {
         library(magrittr)
 
         textList$title <- 'Average Elevation Loss'
+        if (infoList$stationId != 'all') textList$title <- paste0('Elevation Loss for ',infoList$stationId)
         returnValues <- cumulative_coasting(dataList,infoList,textList)
         
       } else if (plotType == "heatmap_weekByHour") { 
         
         textList$title <- 'Weekly Usage by Hour of Day'
+        if (infoList$stationId != 'all') textList$title <- paste0('Weekly Hour of Day for ',infoList$stationId)
         returnValues <- heatmap_weekByHour(dataList,infoList,textList)
 
       } else if (plotType == "pie_user") { 
         
         textList$title <- 'Annual Usage'
+        if (infoList$stationId != 'all') textList$title <- paste0('Annual Usage for ',infoList$stationId)
         returnValues <- pie_user(dataList,infoList,textList)
         
       } else if (plotType == "pie_daylight") { 
         
         textList$title <- 'Daylight Preference'
+        if (infoList$stationId != 'all') textList$title <- paste0('Daylight for ',infoList$stationId)
         returnValues <- pie_daylight(dataList,infoList,textList)
         
       } else if (plotType == "bubble_stationFrom") {
