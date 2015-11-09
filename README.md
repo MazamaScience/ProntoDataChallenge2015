@@ -9,7 +9,7 @@ The Pronto cycle share [data challenge](http://www.prontocycleshare.com/datachal
 
 This project demonstrates a web-based tool for interactive interrogation of the Pronto trip and station data through a series of data visualizations that focus on station usage. The final site for submission to the contest is:
 
-[Pronto Databrowser](http://mazamascience.com/ProntoDataChallenge]
+[Pronto Databrowser](http://mazamascience.com/ProntoDataChallenge)
 
 
 
